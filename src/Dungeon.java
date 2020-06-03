@@ -3,10 +3,12 @@
  * A Hashtable is a class that makes it easy to look up entries by a "key" rather than by a numbered index,
  * as an ArrayList does.
  * @author Richard Volynski
- * @version 1.0
- * 1 June 2020
+ * @version 1.1
+ * 3 June 2020
  */
 
+
+import java.util.ArrayList;
 
 public class Dungeon {
     public String getTitle() {
@@ -14,15 +16,29 @@ public class Dungeon {
     }
 
     private String title;
+    private Room entry;
+    private ArrayList<Room> rooms = new ArrayList<Room>();
+
+
     public Dungeon(Room entry, String title) {
+        this.title = title;
+        this.entry = entry;
     }
+
     public Room getEntry() {
-        return null; //TODO return Room
+        return this.entry; //TODO return Room
     }
     public void add (Room room) {
+        rooms.add(room);
 
     }
     public Room getRoom(String roomName) {
+        for (int i = 0; i < rooms.size(); i++) {
+            if (rooms.get(i).getName() == roomName) {
+                return rooms.get(i);
+            }
+        }
         return null; //TODO return Room
     }
 }
+
