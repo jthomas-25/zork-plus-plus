@@ -6,7 +6,7 @@
  * inputs a command, it should use the CommandFactory to instantiate a new Command object and execute it.
  * If the user enters "q", it terminates the program.
  * @author Richard Volynski
- * @version 1.2
+ * @version 1.3
  * 4 June 2020
  */
 
@@ -18,20 +18,30 @@ public class Interpreter {
         Scanner stdin = new Scanner(System.in);
 
         Dungeon dungeon = buildSampleDungeon();    //TODO
-//        GameState gameState = new GameState(dungeon);
+        GameState.instance().initialize(dungeon);
+
 
 
         System.out.println(dungeon.getTitle());
 
         while (true) {
             System.out.print("Enter command: ");
-            String command = stdin.nextLine();
+            String commandEntered = stdin.nextLine();
 
-            if (command.toLowerCase().equals("q")) {
+            if (commandEntered.toLowerCase().equals("q")) {
                 break;
             }
+            else if (!(commandEntered.equalsIgnoreCase("N")
+                    || commandEntered.equalsIgnoreCase("W") || commandEntered.equalsIgnoreCase("E")
+                    || commandEntered.equalsIgnoreCase("S") || commandEntered.equalsIgnoreCase("U")
+                    || commandEntered.equalsIgnoreCase("D"))) {
+
+            }
             else {
-                System.out.println(dungeon.getEntry().getName());
+//                System.out.println(dungeon.getCurrentRoom().getName());
+                Command command = new Command (commandEntered);
+                String output = command.execute();
+                System.out.println(output);
             }
         }
     }
@@ -76,12 +86,30 @@ public class Interpreter {
         room5.setDesc(room5Desc);
 
         String room6Name = "Living Room";
-        String room6Desc = "This is the living room. You can see a doorway to the east, a wooden door with graffiti " +
-                "to the west, which appears to be nailed shut, and a trophy case. Below you is a trap door.";
+        String room6Desc = "This is the living room. You can see a doorway to the east, a wooden door " +
+                "with graffiti " + "to the west, which appears to be nailed shut, and a trophy case. " +
+                "Below you is a trap door.";
         Room room6 = new Room(room6Name);
         room6.setDesc(room6Desc);
 
+        room1.addExit(new Exit("S", room1, room2));
+        room1.addExit(new Exit("N", room1, room5));
+        room1.addExit(new Exit("W", room1, room6));
 
+        room2.addExit(new Exit("N", room2, room1));
+        room2.addExit(new Exit("E", room2, room3));
+
+        room3.addExit(new Exit("W", room3, room4));
+        room3.addExit(new Exit("S", room3, room2));
+        room3.addExit(new Exit("W", room3, room5));
+
+        room4.addExit(new Exit("E", room4, room3));
+        room4.addExit(new Exit("W", room4, room6));
+
+        room5.addExit(new Exit("E", room5, room3));
+        room5.addExit(new Exit("S", room5, room1));
+
+        room6.addExit(new Exit("E", room6, room4));
 
 
         Room startingRoom = room1;
@@ -93,7 +121,7 @@ public class Interpreter {
         dungeon.add(room4);
         dungeon.add(room5);
         dungeon.add(room6);
-        return dungeon; //TODO return Dungeon
+        return dungeon;
     }
 }
 

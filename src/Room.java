@@ -2,7 +2,7 @@
  * Room Class - represents every room in the dungeon (name, description), knows whether or not
  * the adventurer has already visited it. Also, the Room Class contains lists of Exits.
  * @author Richard Volynski
- * @version 1.2
+ * @version 1.3
  * 4 June 2020
  */
 
@@ -36,13 +36,13 @@ public class Room {
         String output = "";
         if (this.firstTimeWhenEnter) {
             this.firstTimeWhenEnter = false;
-            output = desc + "\n";
-        }
-        else {
             output = name + "\n";
         }
+        else {
+            output = name + "\n" + desc + "\n";
+        }
 
-        // Show all balances in hash table.
+        // Show all balances in hash table
         Enumeration directions = exits.keys();
 
         while (directions.hasMoreElements()) {
@@ -55,7 +55,12 @@ public class Room {
     }
 
     Room leaveBy(String dir) {
-        return null; //TODO return Room
+        if (exits.get(dir.toUpperCase()) == null) {
+            return this;
+        }
+        else {
+            return exits.get(dir.toUpperCase()).getDest();
+        }
     }
 
     public void addExit (Exit exit) {

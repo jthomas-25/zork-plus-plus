@@ -1,9 +1,9 @@
 /**
- * Dungeon Class - It holds on to a Hashtable collection of Room objects, and knows which one is the entry point.
+ * Dungeon Class - It holds on to a Hashtable collection of Room objects, and knows which one is the currentRoom point.
  * A Hashtable is a class that makes it easy to look up entries by a "key" rather than by a numbered index,
  * as an ArrayList does.
  * @author Richard Volynski
- * @version 1.2
+ * @version 1.3
  * 4 June 2020
  */
 
@@ -16,18 +16,19 @@ public class Dungeon {
     }
 
     private String title;
-    private Room entry;
+    private Room currentRoom;
     private ArrayList<Room> rooms = new ArrayList<Room>();
 
 
-    public Dungeon(Room entry, String title) {
+    public Dungeon(Room currentRoom, String title) {
         this.title = title;
-        this.entry = entry;
+        this.currentRoom = currentRoom;
     }
 
-    public Room getEntry() {
-        return this.entry; //TODO return Room
+    public Room getCurrentRoom() {
+        return this.currentRoom; //TODO return Room
     }
+
     public void add (Room room) {
         rooms.add(room);
 
