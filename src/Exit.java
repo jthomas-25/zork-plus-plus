@@ -2,8 +2,8 @@
  * Exit Class - Each Room object holds on to an ArrayList of the Exits from it, and each Exit holds on to the
  * Room that it leads to. An Exit can also describe itself, which generates and returns a String message.
  * @author Richard Volynski
- * @version 1.0
- * 1 June 2020
+ * @version 1.2
+ * 4 June 2020
  */
 
 
@@ -15,17 +15,24 @@ public class Exit {
         return dir;
     }
 
+    private Room src;
+    private Room dest;
+
     public Room getSrc() {
-        return null; //TODO return Room
+        return src;
     }
     public Room getDest() {
-        return null; //TODO return Room
+        return dest;
     }
 
     String describe() {
-        return ""; //TODO return String
+        return "You can go " + dir + dest.getName();
     }
 
     public Exit (String dir, Room src, Room dest) {
+        this.dir = dir;
+        this.src = src;
+        this.dest = dest;
     }
 }
+
