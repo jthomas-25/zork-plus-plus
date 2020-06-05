@@ -2,8 +2,8 @@
  * CommandFactory Class - A factory class whose purpose is to parse text strings
  * and produce the appropriate Command objects. Also, the CommandFactory is a Singleton class.
  * @author Richard Volynski
- * @version 1.3
- * 4 June 2020
+ * @version 1.4
+ * 5 June 2020
  */
 
 
@@ -20,7 +20,17 @@ class CommandFactory {
     }
 
     Command parse (String commandString) {
-        return null; //TODO return Command
+        switch (commandString.toUpperCase()) {
+            case "N":
+            case "S":
+            case "W":
+            case "E":
+            case "U":
+            case "D":
+                return new Command(commandString);
+            default:
+                return null;
+        }
     }
 }
 

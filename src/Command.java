@@ -2,8 +2,8 @@
  * Command Class - Objects of type Command represent (parsed) commands that the user has typed
  * and wants to invoke
  * @author Richard Volynski
- * @version 1.3
- * 4 June 2020
+ * @version 1.4
+ * 5 June 2020
  */
 
 

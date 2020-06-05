@@ -6,8 +6,8 @@
  * inputs a command, it should use the CommandFactory to instantiate a new Command object and execute it.
  * If the user enters "q", it terminates the program.
  * @author Richard Volynski
- * @version 1.3
- * 4 June 2020
+ * @version 1.4
+ * 5 June 2020
  */
 
 
@@ -35,11 +35,12 @@ public class Interpreter {
                     || commandEntered.equalsIgnoreCase("W") || commandEntered.equalsIgnoreCase("E")
                     || commandEntered.equalsIgnoreCase("S") || commandEntered.equalsIgnoreCase("U")
                     || commandEntered.equalsIgnoreCase("D"))) {
-
+                System.out.println("I'm sorry I don't understand the command '" + commandEntered + "'");
             }
             else {
 //                System.out.println(dungeon.getCurrentRoom().getName());
-                Command command = new Command (commandEntered);
+//                Command command = new Command (commandEntered);
+                Command command = CommandFactory.instance().parse(commandEntered);
                 String output = command.execute();
                 System.out.println(output);
             }
@@ -57,10 +58,10 @@ public class Interpreter {
         room1.setDesc(room1Desc);
 
         String room2Name = "South of House";
-        String room2Desc = "You are facing the south side of a white house. There are no doors, and the windows are" +
-                "locked";
+        String room2Desc = "You are facing the south side of a white house. There are no doors, and the " +
+                "windows are locked";
         Room room2 = new Room(room2Name);
-        room2.setDesc(room2Name);
+        room2.setDesc(room2Desc);
 
         String room3Name = "Behind House";
         String room3Desc = "You are behind the white house. There is an open window.";
