@@ -6,23 +6,27 @@
  * inputs a command, it should use the CommandFactory to instantiate a new Command object and execute it.
  * If the user enters "q", it terminates the program.
  * @author Richard Volynski
- * @version 1.4
- * 5 June 2020
+ * @version 1.5
+ * 6 June 2020
  */
 
 
 import java.util.Scanner;
 
 public class Interpreter {
+    private String commandEntered;
+
     public static void main(String[] args) {
         Scanner stdin = new Scanner(System.in);
 
-        Dungeon dungeon = buildSampleDungeon();    //TODO
+        Dungeon dungeon = buildSampleDungeon();
         GameState.instance().initialize(dungeon);
 
 
 
         System.out.println(dungeon.getTitle());
+        System.out.println();
+        System.out.println(dungeon.getCurrentRoom().describe());
 
         while (true) {
             System.out.print("Enter command: ");
@@ -35,7 +39,8 @@ public class Interpreter {
                     || commandEntered.equalsIgnoreCase("W") || commandEntered.equalsIgnoreCase("E")
                     || commandEntered.equalsIgnoreCase("S") || commandEntered.equalsIgnoreCase("U")
                     || commandEntered.equalsIgnoreCase("D"))) {
-                System.out.println("I'm sorry I don't understand the command '" + commandEntered + "'");
+                System.out.println("I'm sorry I don't understand the command " + "\"" + commandEntered + "\"" + " yet."
+                        + " " + "\"" + commandEntered.toUpperCase() + "\"" + " will be implemented soon.");
             }
             else {
 //                System.out.println(dungeon.getCurrentRoom().getName());
@@ -47,19 +52,22 @@ public class Interpreter {
         }
     }
 
+    /**
+     * buildSampleDungeon - this method creates rooms with names, descriptions, and directions
+     * */
     private static Dungeon buildSampleDungeon() {
 
         String dungeonName = "Dungeon";
         String dungeonDesc = "Welcome to the Dungeon. Enjoy but you won't come out how you came in!";
 
         String room1Name = "West of House";
-        String room1Desc = "You are standing in an open field west of a white house. The front door is locked";
+        String room1Desc = "You are standing in an open field west of a white house. The front door is locked.";
         Room room1 = new Room(room1Name);
         room1.setDesc(room1Desc);
 
         String room2Name = "South of House";
         String room2Desc = "You are facing the south side of a white house. There are no doors, and the " +
-                "windows are locked";
+                "windows are locked.";
         Room room2 = new Room(room2Name);
         room2.setDesc(room2Desc);
 
