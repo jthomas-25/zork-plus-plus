@@ -1,14 +1,17 @@
 /**
- * Dungeon Class - It holds on to a Hashtable collection of Room objects, and knows which one is the currentRoom point.
+ * Dungeon Class - It holds on to a Hashtable collection of Room objects, and knows which one is the entry point.
  * A Hashtable is a class that makes it easy to look up entries by a "key" rather than by a numbered index,
  * as an ArrayList does.
  * @author Richard Volynski
- * @version 1.5
- * 6 June 2020
+ * @version 1.6
+ * 12 June 2020
  */
 
+package com.company;
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Dungeon {
 
@@ -21,26 +24,27 @@ public class Dungeon {
     }
 
     private String title;
-    private Room currentRoom;
+    private Room entry;
     private ArrayList<Room> rooms = new ArrayList<Room>();
+
+    private String fileName;
+
+    public Dungeon (String fileName) {  //TODO implement
+    }
 
 
     /**
      * Dungeon
-     * @param currentRoom - room the user is currently in
+     * @param entry - room the user is currently in
      * @param title - Dungeon description
      */
-    public Dungeon(Room currentRoom, String title) {
+     Dungeon(Room entry, String title) {
         this.title = title;
-        this.currentRoom = currentRoom;
-    }
+        this.setEntry(entry);
+     }
 
-    /**
-     * getCurrentRoom - this method returns the room the user is currently in
-     */
-    public Room getCurrentRoom() {
-        return this.currentRoom;
-    }
+     private void init() {  //TODO implement
+     }
 
     /**
      * add - this method adds a room to Dungeon class
@@ -62,6 +66,26 @@ public class Dungeon {
             }
         }
         return null;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    void storeState(PrintWriter w) {   //TODO implement
+
+    }
+
+    void restoreState(Scanner r) {  //TODO implement
+
+    }
+
+    public Room getEntry() {
+        return entry;
+    }
+
+    public void setEntry(Room entry) {
+        this.entry = entry;
     }
 }
 

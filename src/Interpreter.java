@@ -1,15 +1,16 @@
 /**
  * CPSC 240
- * Homework 3 - Zork 1
+ * Homework 4 - Zork II
  * Interpreter Class -  this is the main() class that directs operations. It creates a Dungeon,
  * initializes the GameState with it, and repeatedly prompts the user for input. Each time the user
  * inputs a command, it should use the CommandFactory to instantiate a new Command object and execute it.
  * If the user enters "q", it terminates the program.
  * @author Richard Volynski
- * @version 1.5
- * 6 June 2020
+ * @version 1.6
+ * 12 June 2020
  */
 
+package com.company;
 
 import java.util.Scanner;
 
@@ -19,14 +20,21 @@ public class Interpreter {
     public static void main(String[] args) {
         Scanner stdin = new Scanner(System.in);
 
-        Dungeon dungeon = buildSampleDungeon();
-        GameState.instance().initialize(dungeon);
+        Dungeon dungeon = null;
+        try {
+            dungeon = buildSampleDungeon();
+            GameState.instance().initialize(dungeon);
+        }
+        catch (Exception e) {
+            e = e;  //TODO implement
+        }
+
 
 
 
         System.out.println(dungeon.getTitle());
         System.out.println();
-        System.out.println(dungeon.getCurrentRoom().describe());
+        System.out.println(dungeon.getEntry().describe());
 
         while (true) {
             System.out.print("Enter command: ");
@@ -43,7 +51,7 @@ public class Interpreter {
                         + " " + "\"" + commandEntered.toUpperCase() + "\"" + " will be implemented soon.");
             }
             else {
-//                System.out.println(dungeon.getCurrentRoom().getName());
+//                System.out.println(dungeon.getEntry().getName());
 //                Command command = new Command (commandEntered);
                 Command command = CommandFactory.instance().parse(commandEntered);
                 String output = command.execute();
@@ -55,7 +63,7 @@ public class Interpreter {
     /**
      * buildSampleDungeon - this method creates rooms with names, descriptions, and directions
      * */
-    private static Dungeon buildSampleDungeon() {
+    private static Dungeon buildSampleDungeon() throws NoExitException {
 
         String dungeonName = "Dungeon";
         String dungeonDesc = "Welcome to the Dungeon. Enjoy but you won't come out how you came in!";

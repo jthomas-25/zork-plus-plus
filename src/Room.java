@@ -2,17 +2,17 @@
  * Room Class - represents every room in the dungeon (name, description), knows whether or not
  * the adventurer has already visited it. Also, the Room Class contains lists of Exits.
  * @author Richard Volynski
- * @version 1.5
- * 6 June 2020
+ * @version 1.6
+ * 12 June 2020
  */
 
+package com.company;
 
 
-import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
-public class Room {
+public class Room{
 
     /**
      * getName - this method returns name of the room
@@ -42,7 +42,7 @@ public class Room {
      * Constructor Room - which stores room name in instance variable name
      * @param name
      */
-    Room (String name) {
+    Room (String name) throws NoExitException {
         this.name = name;
     }
 
