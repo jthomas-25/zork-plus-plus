@@ -3,8 +3,8 @@
  * A Hashtable is a class that makes it easy to look up entries by a "key" rather than by a numbered index,
  * as an ArrayList does.
  * @author Richard Volynski
- * @version 1.6
- * 12 June 2020
+ * @version 1.7
+ * 13 June 2020
  */
 
 package com.company;
@@ -26,10 +26,56 @@ public class Dungeon {
     private String title;
     private Room entry;
     private ArrayList<Room> rooms = new ArrayList<Room>();
+    private ArrayList<String> lines = new ArrayList<>();
 
     private String fileName;
 
     public Dungeon (String fileName) {  //TODO implement
+        Scanner stdin = new Scanner(fileName);
+
+//        boolean firstLine = true;
+//        boolean secondLine = false;
+//        boolean thirdLine = false;
+//        boolean fourthLine = false;
+
+        int lineNumber = 0;
+
+        while (stdin.hasNext()) {
+            String line = stdin.nextLine();
+            if (lineNumber == 0) {
+                this.title = line;
+                lineNumber++;
+                continue;
+            }
+            if (lineNumber == 1) {
+                if (line.equals("Zork II")) {
+                    lineNumber++;
+                    continue;
+                }
+                else {
+                    System.out.println("Dungeon file is incompatible with the current version of Zork");
+                    break;  //TODO exit gracefully
+                }
+            }
+
+            if (lineNumber == 2) {
+                if (line.equals("===")) {
+                    lineNumber++;
+                    continue;
+                }
+                else {
+                    System.out.println("Third line is wrong in the Dungeon file");
+                    break;  //TODO exit gracefully
+                }
+            }
+
+            if (lineNumber == 3) {
+                if (line.equals("Rooms:")) {    //TODO implement
+                }
+            }
+
+            lines.add(line);
+        }
     }
 
 

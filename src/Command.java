@@ -2,8 +2,8 @@
  * Command Class - Objects of type Command represent (parsed) commands that the user has typed
  * and wants to invoke
  * @author Richard Volynski
- * @version 1.6
- * 12 June 2020
+ * @version 1.7
+ * 13 June 2020
  */
 
 
@@ -16,7 +16,7 @@ class Command {
     /**
      * Command - For now, this constructor takes a valid move command entered by the user and stores it
      * as an instance variable
-     * @param dir - user inputted direction
+     * @param dir - user inputted direction, including save
      */
     Command (String dir) {
         this.dir = dir;
@@ -28,10 +28,16 @@ class Command {
      * @return text description where the user is going
      */
     String execute() {
-        Room room = GameState.instance().getAdventurersCurrentRoom().leaveBy(dir);
-        GameState.instance().setAdventurersCurrentRoom(room);
-        String execute = GameState.instance().getAdventurersCurrentRoom().describe();
-        return execute;
+
+        if (dir.toLowerCase().equals("save")) { //TODO implement
+            return null;
+        }
+        else {
+            Room room = GameState.instance().getAdventurersCurrentRoom().leaveBy(dir);
+            GameState.instance().setAdventurersCurrentRoom(room);
+            String execute = GameState.instance().getAdventurersCurrentRoom().describe();
+            return execute;
+        }
     }
 }
 

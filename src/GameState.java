@@ -2,8 +2,8 @@
  * GameState Class - represents the current state of the game: which dungeon is being played
  * and what room the adventurer is currently in.
  * @author Richard Volynski
- * @version 1.6
- * 12 June 2020
+ * @version 1.7
+ * 13 June 2020
  */
 
 package com.company;
@@ -13,6 +13,7 @@ class GameState {
     private Dungeon dungeon = null;
     private Room currentRoom = null;
     private String dungeonDesc = "Welcome to the Dungeon. Enjoy but you won't come out how you came in!";
+    private String gameFile = null;
 
 
     //Singleton instance of GameState class
@@ -41,7 +42,7 @@ class GameState {
      * initialize - This method initializes the dungeon and name of the starting room.
      * @param dungeon - controls entire game function
      */
-    public void initialize(Dungeon dungeon) {
+    void initialize(Dungeon dungeon) {
         this.dungeon = new Dungeon(currentRoom, dungeonDesc);
         this.currentRoom = dungeon.getEntry();
     }
@@ -51,7 +52,7 @@ class GameState {
      * user moves.
      * @return currentRoom
      */
-    public Room getAdventurersCurrentRoom() {
+    Room getAdventurersCurrentRoom() {
         return currentRoom;
     }
 
@@ -60,15 +61,20 @@ class GameState {
      * user moves.
      * @param room - new current room
      */
-    public void setAdventurersCurrentRoom(Room room) {
+    void setAdventurersCurrentRoom(Room room) {
         this.currentRoom = room;
     }
 
     /**
      * getDungeon - this method gets the Dungeon
      */
-    public Dungeon getDungeon() {
+    Dungeon getDungeon() {
         return dungeon;
+    }
+    void store(String saveName) {
+        this.gameFile = saveName;
+    }
+    void restore(String fileName) { //TODO make file
     }
 }
 
