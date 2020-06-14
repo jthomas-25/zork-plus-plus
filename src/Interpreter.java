@@ -6,27 +6,31 @@
  * inputs a command, it should use the CommandFactory to instantiate a new Command object and execute it.
  * If the user enters "q", it terminates the program.
  * @author Richard Volynski
- * @version 1.7
- * 13 June 2020
+ * @version 1.8
+ * 14 June 2020
  */
 
 package com.company;
 
+import java.io.File;
 import java.util.Scanner;
 
 public class Interpreter {
     private String commandEntered;
 
     public static void main(String[] args) {
+        String currentDirectory = System.getProperty("User.dir");
         Scanner stdin = new Scanner(System.in);
 
         Dungeon dungeon = null;
         try {
-            dungeon = buildSampleDungeon();
+//            dungeon = buildSampleDungeon();
+            dungeon = new Dungeon("C:\\Temp\\ZorkII.zork");
             GameState.instance().initialize(dungeon);
         }
         catch (Exception e) {
             e = e;  //TODO implement
+            return;
         }
 
 

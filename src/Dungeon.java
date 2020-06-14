@@ -3,13 +3,16 @@
  * A Hashtable is a class that makes it easy to look up entries by a "key" rather than by a numbered index,
  * as an ArrayList does.
  * @author Richard Volynski
- * @version 1.7
- * 13 June 2020
+ * @version 1.8
+ * 14 June 2020
  */
 
 package com.company;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.nio.file.NoSuchFileException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -30,8 +33,9 @@ public class Dungeon {
 
     private String fileName;
 
-    public Dungeon (String fileName) {  //TODO implement
-        Scanner stdin = new Scanner(fileName);
+    public Dungeon (String fileName) throws NoRoomException, NoExitException, FileNotFoundException {  //TODO implement
+        File file = new File(fileName);
+        Scanner stdin = new Scanner(file);
 
 //        boolean firstLine = true;
 //        boolean secondLine = false;
@@ -40,16 +44,15 @@ public class Dungeon {
 
         int lineNumber = 0;
 
-        while (stdin.hasNext()) {
+        while (stdin.hasNextLine()) {
             String line = stdin.nextLine();
-            if (lineNumber == 0) {
+            lineNumber++;
+            if (lineNumber == 1) {
                 this.title = line;
-                lineNumber++;
                 continue;
             }
-            if (lineNumber == 1) {
+            if (lineNumber == 2) {
                 if (line.equals("Zork II")) {
-                    lineNumber++;
                     continue;
                 }
                 else {
@@ -58,9 +61,8 @@ public class Dungeon {
                 }
             }
 
-            if (lineNumber == 2) {
+            if (lineNumber == 3) {
                 if (line.equals("===")) {
-                    lineNumber++;
                     continue;
                 }
                 else {
@@ -69,11 +71,39 @@ public class Dungeon {
                 }
             }
 
-            if (lineNumber == 3) {
+            if (lineNumber == 4) {
                 if (line.equals("Rooms:")) {    //TODO implement
+                    while (!line.equals("===")) {
+                        Room room = new Room(stdin);
+                        line = stdin.nextLine();
+                        lineNumber +=3;
+                        rooms.add(room);
+                    }
+                }
+
+                if (line.equals("===")) {
+                    line = stdin.nextLine();
+                    lineNumber++;
+                    if (line.equals("Exits:")) {
+                        while (!line.equals("===")) {
+                            Exit exit = new Exit(stdin, this);
+                            line = stdin.nextLine();
+                            Room exitSrc = exit.getSrc();
+                            String exitSrcRoomName = exitSrc.getName();
+
+                            for (int i = 0; i < rooms.size(); i++) {
+                                Room currentRoom = rooms.get(i);
+                                if (currentRoom.getName().equals( exitSrcRoomName)) {
+                                    currentRoom.addExit(exit);
+                                    break;
+                                }
+                            }
+
+                            lineNumber+=4;
+                        }
+                    }
                 }
             }
-
             lines.add(line);
         }
     }

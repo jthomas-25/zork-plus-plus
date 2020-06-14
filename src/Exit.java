@@ -2,8 +2,8 @@
  * Exit Class - Each Room object holds on to an ArrayList of the Exits from it, and each Exit holds on to the
  * Room that it leads to. An Exit can also describe itself, which generates and returns a String message.
  * @author Richard Volynski
- * @version 1.7
- * 13 June 2020
+ * @version 1.8
+ * 14 June 2020
  */
 
 package com.company;
@@ -63,9 +63,13 @@ public class Exit {
         this.dest = dest;
     }
 
-    public Exit (Scanner s, Dungeon d) {
-        this.s = s;
-        this.d = d;
+    public Exit (Scanner s, Dungeon d) throws NoExitException  {
+        String line = s.nextLine();
+        this.src = new Room(line);
+        line = s.nextLine();
+        this.dir = line;
+        line = s.nextLine();
+        this.dest = new Room(line);
     }
 }
 

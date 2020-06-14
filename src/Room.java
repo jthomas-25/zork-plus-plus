@@ -2,8 +2,8 @@
  * Room Class - represents every room in the dungeon (name, description), knows whether or not
  * the adventurer has already visited it. Also, the Room Class contains lists of Exits.
  * @author Richard Volynski
- * @version 1.7
- * 13 June 2020
+ * @version 1.8
+ * 14 June 2020
  */
 
 package com.company;
@@ -42,7 +42,11 @@ public class Room{
     private boolean beenHere;
 
     public Room (Scanner s) throws NoRoomException {
-        this.s = s;
+        String line = s.nextLine();
+        this.name = line;
+        line = s.nextLine();
+        this.desc = line;
+        line = s.nextLine();
     }
 
 
