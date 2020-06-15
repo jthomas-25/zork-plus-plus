@@ -3,11 +3,10 @@
  * A Hashtable is a class that makes it easy to look up entries by a "key" rather than by a numbered index,
  * as an ArrayList does.
  * @author Richard Volynski
- * @version 1.8
- * 14 June 2020
+ * @version 1.9
+ * 15 June 2020
  */
 
-package com.company;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -35,7 +34,11 @@ public class Dungeon {
 
     public Dungeon (String fileName) throws NoRoomException, NoExitException, FileNotFoundException {  //TODO implement
         File file = new File(fileName);
-        Scanner stdin = new Scanner(file);
+        
+	System.out.println("Dungeon file is " + fileName + " File path: " + file.getAbsolutePath() +
+                " File size " + file.length());
+	
+	Scanner stdin = new Scanner(file);
 
 //        boolean firstLine = true;
 //        boolean secondLine = false;
@@ -71,6 +74,8 @@ public class Dungeon {
                 }
             }
 
+            boolean firstRoom = true;
+
             if (lineNumber == 4) {
                 if (line.equals("Rooms:")) {    //TODO implement
                     while (!line.equals("===")) {
@@ -78,6 +83,10 @@ public class Dungeon {
                         line = stdin.nextLine();
                         lineNumber +=3;
                         rooms.add(room);
+                        if (firstRoom) {
+                            this.entry = room;
+                            firstRoom = false;
+                        }
                     }
                 }
 
@@ -86,7 +95,14 @@ public class Dungeon {
                     lineNumber++;
                     if (line.equals("Exits:")) {
                         while (!line.equals("===")) {
-                            Exit exit = new Exit(stdin, this);
+
+                            Exit exit = null;
+                            try {
+                                exit = new Exit(stdin,this);
+                            }
+                            catch (NoExitException ex) {
+                                break;
+                            }
                             line = stdin.nextLine();
                             Room exitSrc = exit.getSrc();
                             String exitSrcRoomName = exitSrc.getName();

@@ -2,11 +2,10 @@
  * Exit Class - Each Room object holds on to an ArrayList of the Exits from it, and each Exit holds on to the
  * Room that it leads to. An Exit can also describe itself, which generates and returns a String message.
  * @author Richard Volynski
- * @version 1.8
- * 14 June 2020
+ * @version 1.9
+ * 15 June 2020
  */
 
-package com.company;
 
 import java.util.Scanner;
 
@@ -65,6 +64,9 @@ public class Exit {
 
     public Exit (Scanner s, Dungeon d) throws NoExitException  {
         String line = s.nextLine();
+        if (line.equals("===")) {
+            throw new NoExitException();
+        }
         this.src = new Room(line);
         line = s.nextLine();
         this.dir = line;

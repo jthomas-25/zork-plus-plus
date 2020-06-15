@@ -6,11 +6,10 @@
  * inputs a command, it should use the CommandFactory to instantiate a new Command object and execute it.
  * If the user enters "q", it terminates the program.
  * @author Richard Volynski
- * @version 1.8
- * 14 June 2020
+ * @version 1.9
+ * 15 June 2020
  */
 
-package com.company;
 
 import java.io.File;
 import java.util.Scanner;
@@ -19,18 +18,25 @@ public class Interpreter {
     private String commandEntered;
 
     public static void main(String[] args) {
-        String currentDirectory = System.getProperty("User.dir");
+      
         Scanner stdin = new Scanner(System.in);
 
+        String defaultZorkFile = "trinkle.zork";
+        if (args.length > 0) {
+            defaultZorkFile = args[0];
+        }
+        else {
+            System.out.println("Zork file not provided, using \"trinkle.zork\"");
+        }
         Dungeon dungeon = null;
         try {
 //            dungeon = buildSampleDungeon();
-            dungeon = new Dungeon("C:\\Temp\\ZorkII.zork");
+            dungeon = new Dungeon(defaultZorkFile);
             GameState.instance().initialize(dungeon);
         }
         catch (Exception e) {
-            e = e;  //TODO implement
-            return;
+           System.out.println("Exception happened: " + e.toString());
+	   return;
         }
 
 
