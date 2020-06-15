@@ -8,6 +8,10 @@
 
 
 
+import com.sun.source.tree.BreakTree;
+
+import java.io.IOException;
+
 class Command {
 
     private String dir;
@@ -26,9 +30,10 @@ class Command {
      * in response to that command being executed
      * @return text description where the user is going
      */
-    String execute() {
+    String execute() throws IOException {
 
-        if (dir.toLowerCase().equals("save")) { //TODO implement
+        if (dir.toLowerCase().equals("save")) {
+            GameState.instance().store("Richard_state.sav");
             return null;
         }
         else {

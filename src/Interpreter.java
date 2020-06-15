@@ -12,21 +12,22 @@
 
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Interpreter {
     private String commandEntered;
 
-    public static void main(String[] args) {
-      
+    public static void main(String[] args) throws IOException {
+        String currentDirectory = System.getProperty("User.dir");
         Scanner stdin = new Scanner(System.in);
 
-        String defaultZorkFile = "trinkle.zork";
+        String defaultZorkFile = "C:\\Temp\\ZorkII.zork";
         if (args.length > 0) {
             defaultZorkFile = args[0];
         }
         else {
-            System.out.println("Zork file not provided, using \"trinkle.zork\"");
+            System.out.println("Zork file not provided, using \"ZorkII.zork\"");
         }
         Dungeon dungeon = null;
         try {
@@ -35,8 +36,8 @@ public class Interpreter {
             GameState.instance().initialize(dungeon);
         }
         catch (Exception e) {
-           System.out.println("Exception happened: " + e.toString());
-	   return;
+            System.out.println("Exception happened: " + e.toString());
+            return;
         }
 
 
@@ -46,9 +47,10 @@ public class Interpreter {
         System.out.println();
         System.out.println(dungeon.getEntry().describe());
 
-        while (true) {
+        String commandEntered = "";
+        while (!commandEntered.equalsIgnoreCase("save")) {
             System.out.print("Enter command: ");
-            String commandEntered = stdin.nextLine();
+            commandEntered = stdin.nextLine();
 
             if (commandEntered.toLowerCase().equals("q")) {
                 break;
@@ -56,16 +58,23 @@ public class Interpreter {
             else if (!(commandEntered.equalsIgnoreCase("N")
                     || commandEntered.equalsIgnoreCase("W") || commandEntered.equalsIgnoreCase("E")
                     || commandEntered.equalsIgnoreCase("S") || commandEntered.equalsIgnoreCase("U")
-                    || commandEntered.equalsIgnoreCase("D"))) {
+                    || commandEntered.equalsIgnoreCase("D") || commandEntered.equalsIgnoreCase("save"))) {
                 System.out.println("I'm sorry I don't understand the command " + "\"" + commandEntered + "\"" + " yet."
-                        + " " + "\"" + commandEntered.toUpperCase() + "\"" + " will be implemented soon.");
+                        + " " + "\"" + commandEntered.toLowerCase() + "\"" + " will be implemented soon.");
             }
             else {
 //                System.out.println(dungeon.getEntry().getName());
 //                Command command = new Command (commandEntered);
                 Command command = CommandFactory.instance().parse(commandEntered);
-                String output = command.execute();
-                System.out.println(output);
+                if (command != null) {
+                    String output = command.execute();
+                    if (output == null) {
+                        System.out.println("See you next time!");
+                    }
+                    else {
+                        System.out.println(output);
+                    }
+                }
             }
         }
     }

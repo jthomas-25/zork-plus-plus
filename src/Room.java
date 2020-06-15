@@ -38,14 +38,17 @@ public class Room{
     }
 
     private String desc;
-    private boolean beenHere;
+    private boolean beenHere = false;
 
     public Room (Scanner s) throws NoRoomException {
         String line = s.nextLine();
+        if (line.equals("===")) {
+            throw new NoRoomException();
+        }
         this.name = line;
         line = s.nextLine();
         this.desc = line;
-        line = s.nextLine();
+//        line = s.nextLine();
     }
 
 
@@ -89,11 +92,13 @@ public class Room{
      * @return room
      */
     Room leaveBy(String dir) {
-        if (exits.get(dir.toUpperCase()) == null) {
+        if (exits.get(dir.toLowerCase()) == null) {
             return this;
         }
         else {
-            return exits.get(dir.toUpperCase()).getDest();
+            Room newRoom = exits.get(dir.toLowerCase()).getDest();
+            newRoom.beenHere = true;
+            return newRoom;
         }
     }
 
@@ -106,10 +111,17 @@ public class Room{
         exits.put(exit.getDir(), exit);
     }
 
-    void storeState(PrintWriter w) {    //TODO implement
+    void storeState(PrintWriter w) {
+        w.write(getName() + "\n");
+        w.write("beenHere=true" + "\n");
+        w.write("---" + "\n");
     }
 
-    void restoreState(Scanner r) {     //TODO implement
+    void restoreState(Scanner r) {
+    }
+
+    public boolean isBeenHere() {
+        return beenHere;
     }
 }
 

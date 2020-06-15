@@ -67,11 +67,16 @@ public class Exit {
         if (line.equals("===")) {
             throw new NoExitException();
         }
-        this.src = new Room(line);
+
+        String roomName = line;
+        this.src = d.getRoom(roomName);
+
         line = s.nextLine();
         this.dir = line;
+
         line = s.nextLine();
-        this.dest = new Room(line);
+        roomName = line;
+        this.dest = d.getRoom(roomName);
     }
 }
 

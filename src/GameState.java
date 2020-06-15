@@ -7,6 +7,11 @@
  */
 
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+
 class GameState {
 
     private Dungeon dungeon = null;
@@ -42,7 +47,8 @@ class GameState {
      * @param dungeon - controls entire game function
      */
     void initialize(Dungeon dungeon) {
-        this.dungeon = new Dungeon(currentRoom, dungeonDesc);
+//        this.dungeon = new Dungeon(currentRoom, dungeonDesc);
+        this.dungeon = dungeon;
         this.currentRoom = dungeon.getEntry();
     }
 
@@ -70,10 +76,18 @@ class GameState {
     Dungeon getDungeon() {
         return dungeon;
     }
-    void store(String saveName) {
+
+    void store(String saveName) throws IOException {
         this.gameFile = saveName;
+        PrintWriter printWriter = new PrintWriter(saveName);
+        printWriter.write("Zork II save data\n" + "Dungeon file: C:\\Temp\\ZorkII.zork\n");
+        dungeon.storeState(printWriter);
+        printWriter.write(currentRoom.getName());
+        printWriter.flush();
+        printWriter.close();
     }
-    void restore(String fileName) { //TODO make file
+
+    void restore(String fileName) {
     }
 }
 

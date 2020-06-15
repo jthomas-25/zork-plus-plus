@@ -32,13 +32,16 @@ public class Dungeon {
 
     private String fileName;
 
-    public Dungeon (String fileName) throws NoRoomException, NoExitException, FileNotFoundException {  //TODO implement
+    public Dungeon (String fileName) throws NoRoomException, NoExitException, FileNotFoundException {
+
+        this.fileName = fileName;
         File file = new File(fileName);
-        
-	System.out.println("Dungeon file is " + fileName + " File path: " + file.getAbsolutePath() +
+
+
+        System.out.println("Dungeon file is " + fileName + " File path: " + file.getAbsolutePath() +
                 " File size " + file.length());
-	
-	Scanner stdin = new Scanner(file);
+
+        Scanner stdin = new Scanner(file);
 
 //        boolean firstLine = true;
 //        boolean secondLine = false;
@@ -60,7 +63,7 @@ public class Dungeon {
                 }
                 else {
                     System.out.println("Dungeon file is incompatible with the current version of Zork");
-                    break;  //TODO exit gracefully
+                    break;
                 }
             }
 
@@ -70,16 +73,24 @@ public class Dungeon {
                 }
                 else {
                     System.out.println("Third line is wrong in the Dungeon file");
-                    break;  //TODO exit gracefully
+                    break;
                 }
             }
 
             boolean firstRoom = true;
 
             if (lineNumber == 4) {
-                if (line.equals("Rooms:")) {    //TODO implement
+                if (line.equals("Rooms:")) {
                     while (!line.equals("===")) {
-                        Room room = new Room(stdin);
+
+                        Room room;
+                        try {
+                            room = new Room(stdin);
+                        }
+                        catch (NoRoomException rex) {
+                            break;
+                        }
+
                         line = stdin.nextLine();
                         lineNumber +=3;
                         rooms.add(room);
@@ -89,40 +100,39 @@ public class Dungeon {
                         }
                     }
                 }
+                line = stdin.nextLine();
+                lineNumber++;
+                if (line.equals("Exits:")) {
+                    while (!line.equals("===")) {
 
-                if (line.equals("===")) {
-                    line = stdin.nextLine();
-                    lineNumber++;
-                    if (line.equals("Exits:")) {
-                        while (!line.equals("===")) {
+                        Exit exit;
+                        try {
+                            exit = new Exit(stdin,this);
+                        }
+                        catch (NoExitException ex) {
+                            break;
+                        }
+                        line = stdin.nextLine();
+                        Room exitSrc = exit.getSrc();
+                        String exitSrcRoomName = exitSrc.getName();
 
-                            Exit exit = null;
-                            try {
-                                exit = new Exit(stdin,this);
-                            }
-                            catch (NoExitException ex) {
+                        for (int i = 0; i < rooms.size(); i++) {
+                            Room currentRoom = rooms.get(i);
+                            if (currentRoom.getName().equals( exitSrcRoomName)) {
+                                currentRoom.addExit(exit);
                                 break;
                             }
-                            line = stdin.nextLine();
-                            Room exitSrc = exit.getSrc();
-                            String exitSrcRoomName = exitSrc.getName();
-
-                            for (int i = 0; i < rooms.size(); i++) {
-                                Room currentRoom = rooms.get(i);
-                                if (currentRoom.getName().equals( exitSrcRoomName)) {
-                                    currentRoom.addExit(exit);
-                                    break;
-                                }
-                            }
-
-                            lineNumber+=4;
                         }
+                        lineNumber+=4;
                     }
                 }
             }
             lines.add(line);
         }
     }
+
+
+
 
 
     /**
@@ -135,7 +145,7 @@ public class Dungeon {
         this.setEntry(entry);
      }
 
-     private void init() {  //TODO implement
+     private void init() {
      }
 
     /**
@@ -164,8 +174,15 @@ public class Dungeon {
         return fileName;
     }
 
-    void storeState(PrintWriter w) {   //TODO implement
-
+    void storeState(PrintWriter w) {
+        w.write("Dungeon file: " + getFileName() + "\n");
+        w.write("Room states:" + "\n");
+        for (int i = 0; i < rooms.size(); i++) {
+            if (rooms.get(i).isBeenHere()) {
+                rooms.get(i).storeState(w);
+            }
+        }
+        w.write("===");
     }
 
     void restoreState(Scanner r) {  //TODO implement

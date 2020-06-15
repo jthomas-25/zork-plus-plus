@@ -6,6 +6,7 @@
  * 15 June 2020
  */
 
+
 class CommandFactory {
     private static CommandFactory single_instance = null;
 
@@ -31,13 +32,14 @@ class CommandFactory {
      * @return - Command objects
      */
     Command parse (String commandString) {
-        switch (commandString.toUpperCase()) {
-            case "N":
-            case "S":
-            case "W":
-            case "E":
-            case "U":
-            case "D":
+        switch (commandString.toLowerCase()) {
+            case "n":
+            case "s":
+            case "w":
+            case "e":
+            case "u":
+            case "d":
+            case "save":
                 return new Command(commandString);
             default:
                 return null;
