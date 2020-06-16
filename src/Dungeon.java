@@ -3,8 +3,8 @@
  * A Hashtable is a class that makes it easy to look up entries by a "key" rather than by a numbered index,
  * as an ArrayList does.
  * @author Richard Volynski
- * @version 1.9
- * 15 June 2020
+ * @version 2.0
+ * 16 June 2020
  */
 
 
@@ -182,11 +182,11 @@ public class Dungeon {
                 rooms.get(i).storeState(w);
             }
         }
-        w.write("===");
+        w.write("===" + "\n");
     }
 
     void restoreState(Scanner r) {  //TODO implement
-
+//        while
     }
 
     public Room getEntry() {

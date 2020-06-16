@@ -2,8 +2,8 @@
  * CommandFactory Class - A factory class whose purpose is to parse text strings
  * and produce the appropriate Command objects. Also, the CommandFactory is a Singleton class.
  * @author Richard Volynski
- * @version 1.9
- * 15 June 2020
+ * @version 2.0
+ * 16 June 2020
  */
 
 

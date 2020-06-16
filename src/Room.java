@@ -2,8 +2,8 @@
  * Room Class - represents every room in the dungeon (name, description), knows whether or not
  * the adventurer has already visited it. Also, the Room Class contains lists of Exits.
  * @author Richard Volynski
- * @version 1.9
- * 15 June 2020
+ * @version 2.0
+ * 16 June 2020
  */
 
 
@@ -112,7 +112,7 @@ public class Room{
     }
 
     void storeState(PrintWriter w) {
-        w.write(getName() + "\n");
+        w.write(getName() + ":\n");
         w.write("beenHere=true" + "\n");
         w.write("---" + "\n");
     }

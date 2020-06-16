@@ -2,8 +2,8 @@
  * GameState Class - represents the current state of the game: which dungeon is being played
  * and what room the adventurer is currently in.
  * @author Richard Volynski
- * @version 1.9
- * 15 June 2020
+ * @version 2.0
+ * 16 June 2020
  */
 
 
@@ -80,9 +80,9 @@ class GameState {
     void store(String saveName) throws IOException {
         this.gameFile = saveName;
         PrintWriter printWriter = new PrintWriter(saveName);
-        printWriter.write("Zork II save data\n" + "Dungeon file: C:\\Temp\\ZorkII.zork\n");
+        printWriter.write("Zork II save data\n");
         dungeon.storeState(printWriter);
-        printWriter.write(currentRoom.getName());
+        printWriter.write("Current room: " + currentRoom.getName());
         printWriter.flush();
         printWriter.close();
     }
