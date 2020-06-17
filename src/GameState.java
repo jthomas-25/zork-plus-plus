@@ -2,15 +2,13 @@
  * GameState Class - represents the current state of the game: which dungeon is being played
  * and what room the adventurer is currently in.
  * @author Richard Volynski
- * @version 2.0
- * 16 June 2020
+ * @version 2.1
+ * 17 June 2020
  */
 
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
+import java.util.Scanner;
 
 class GameState {
 
@@ -77,17 +75,64 @@ class GameState {
         return dungeon;
     }
 
-    void store(String saveName) throws IOException {
-        this.gameFile = saveName;
-        PrintWriter printWriter = new PrintWriter(saveName);
-        printWriter.write("Zork II save data\n");
-        dungeon.storeState(printWriter);
-        printWriter.write("Current room: " + currentRoom.getName());
-        printWriter.flush();
-        printWriter.close();
+    /**
+     * store - this method stores the input from the file so that when the user saves the game, the user wll be
+     * able to resume playing where they left off.
+     * @param saveName
+     * @exception IOException
+     */
+    void store(String saveName) throws IllegalSaveFormatException {
+        try {
+            this.gameFile = saveName;
+            PrintWriter printWriter = new PrintWriter(saveName);
+            printWriter.write("Zork II save data\n");
+            dungeon.storeState(printWriter);
+            printWriter.write("Current room: " + currentRoom.getName());
+            printWriter.flush();
+            printWriter.close();
+        }
+        catch (Exception ex) {
+            throw new IllegalSaveFormatException("Failed to save game state");
+        }
     }
 
-    void restore(String fileName) {
+    /**
+     * restore - this method restores the game at the state which it was saved.
+     * @param fileName
+     * @exception IllegalSaveFormatException
+     * @exception NoExitException
+     * @exception FileNotFoundException
+     * */
+    void restore(String fileName) throws FileNotFoundException, NoRoomException, IllegalDungeonFormatException {
+        File file = new File(fileName);
+        Scanner gameScanner = new Scanner(file);
+        String firstLine = gameScanner.nextLine();    //skip first line because it has generic comment
+        String secLine = gameScanner.nextLine();  //reads Dungeon file name
+        String[] secLineSplit = secLine.split(": ");    //parse by colon and space
+        String zorkFileName = secLineSplit[1];  //Zork file name
+        dungeon = new Dungeon(zorkFileName);
+        initialize(dungeon);
+
+        dungeon.restoreState(gameScanner);
+
+        String currentRoomLine = gameScanner.nextLine();
+        String[] currentRoomSplit = currentRoomLine.split(": ");
+        String currentRoomName = currentRoomSplit[1];
+        currentRoom = dungeon.getRoom(currentRoomName);
+        dungeon.setEntry(currentRoom);
+        gameScanner.close();
+    }
+}
+
+/**
+ * class IllegalDungeonFormatException is a custom exception
+ */
+class IllegalSaveFormatException extends Exception {
+
+    /**
+     * IllegalDungeonFormatException - default constructor
+     */
+    public IllegalSaveFormatException(String errorMsg) {
     }
 }
 

@@ -2,8 +2,8 @@
  * Command Class - Objects of type Command represent (parsed) commands that the user has typed
  * and wants to invoke
  * @author Richard Volynski
- * @version 2.0
- * 16 June 2020
+ * @version 2.1
+ * 17 June 2020
  */
 
 
@@ -30,7 +30,7 @@ class Command {
      * in response to that command being executed
      * @return text description where the user is going
      */
-    String execute() throws IOException {
+    String execute() throws IllegalSaveFormatException {
 
         if (dir.toLowerCase().equals("save")) {
             GameState.instance().store("Richard_state.sav");

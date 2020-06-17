@@ -3,15 +3,14 @@
  * A Hashtable is a class that makes it easy to look up entries by a "key" rather than by a numbered index,
  * as an ArrayList does.
  * @author Richard Volynski
- * @version 2.0
- * 16 June 2020
+ * @version 2.1
+ * 17 June 2020
  */
 
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-import java.nio.file.NoSuchFileException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -25,21 +24,27 @@ public class Dungeon {
         return title;
     }
 
-    private String title;
+    private String title = "Simple Dungeon";    //default
     private Room entry;
     private ArrayList<Room> rooms = new ArrayList<Room>();
     private ArrayList<String> lines = new ArrayList<>();
 
     private String fileName;
 
-    public Dungeon (String fileName) throws NoRoomException, NoExitException, FileNotFoundException {
+    /**
+     * Dungeon constructor
+     * @param fileName - file to read Dungeon data from
+     * @exception IllegalDungeonFormatException
+     * @exception FileNotFoundException
+     */
+    public Dungeon (String fileName) throws IllegalDungeonFormatException, FileNotFoundException, NoRoomException {
 
         this.fileName = fileName;
         File file = new File(fileName);
 
 
-        System.out.println("Dungeon file is " + fileName + " File path: " + file.getAbsolutePath() +
-                " File size " + file.length());
+//        System.out.println("Dungeon file is " + fileName + " File path: " + file.getAbsolutePath() +
+//                " File size " + file.length());
 
         Scanner stdin = new Scanner(file);
 
@@ -62,8 +67,8 @@ public class Dungeon {
                     continue;
                 }
                 else {
-                    System.out.println("Dungeon file is incompatible with the current version of Zork");
-                    break;
+                    throw new IllegalDungeonFormatException("Dungeon file is incompatible with the current version of Zork");
+//                    System.out.println("Dungeon file is incompatible with the current version of Zork");
                 }
             }
 
@@ -72,7 +77,7 @@ public class Dungeon {
                     continue;
                 }
                 else {
-                    System.out.println("Third line is wrong in the Dungeon file");
+//                    System.out.println("Third line is wrong in the Dungeon file");
                     break;
                 }
             }
@@ -87,7 +92,7 @@ public class Dungeon {
                         try {
                             room = new Room(stdin);
                         }
-                        catch (NoRoomException rex) {
+                        catch (NoRoomException ex) {
                             break;
                         }
 
@@ -160,7 +165,7 @@ public class Dungeon {
      * getRoom - this method returns a Room by roomName
      * @param roomName
      * @return room found
-     * */
+     */
     public Room getRoom(String roomName) {
         for (int i = 0; i < rooms.size(); i++) {
             if (rooms.get(i).getName().equals(roomName)) {
@@ -169,11 +174,18 @@ public class Dungeon {
         }
         return null;
     }
-
+    /**
+     * getFileName - this method returns the filename
+     * @return fileName
+     */
     public String getFileName() {
         return fileName;
     }
 
+    /**
+     * storeState - this method checks if next line is equal to "===". If yes, then write current room
+     * @param w - PrintWriter
+     */
     void storeState(PrintWriter w) {
         w.write("Dungeon file: " + getFileName() + "\n");
         w.write("Room states:" + "\n");
@@ -185,16 +197,50 @@ public class Dungeon {
         w.write("===" + "\n");
     }
 
+    /**
+     * restoreState - this method allow the user to resume the game from the state it was saved
+     * @param r - Scanner
+     */
     void restoreState(Scanner r) {  //TODO implement
-//        while
+        String line = r.nextLine(); //Room states
+        while (!line.equals("===")) {   //loop through all rooms
+            line = r.nextLine(); //room name
+            if (line.equals("===")) {
+                break;
+            }
+            String[] currentRoomSplit = line.split(":");    //parse room name by colon
+            String currentRoomName = currentRoomSplit[0];   //Room name
+            this.getRoom(currentRoomName).restoreState(r);  //Get room and restore it
+            line = r.nextLine();   //skip ---
+        }
     }
 
+    /**
+     * getEntry - this method returns the room the user is entering
+     * @return entry
+     */
     public Room getEntry() {
         return entry;
     }
 
+    /**
+     * setEntry - this method sets the room the user is entering
+     * @param entry - room
+     */
     public void setEntry(Room entry) {
         this.entry = entry;
+    }
+}
+
+/**
+ * class IllegalDungeonFormatException is a custom exception
+ */
+class IllegalDungeonFormatException extends Exception {
+
+    /**
+     * IllegalDungeonFormatException - default constructor
+     */
+    public IllegalDungeonFormatException(String errorMsg) {
     }
 }
 

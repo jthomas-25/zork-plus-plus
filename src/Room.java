@@ -2,8 +2,8 @@
  * Room Class - represents every room in the dungeon (name, description), knows whether or not
  * the adventurer has already visited it. Also, the Room Class contains lists of Exits.
  * @author Richard Volynski
- * @version 2.0
- * 16 June 2020
+ * @version 2.1
+ * 17 June 2020
  */
 
 
@@ -40,6 +40,10 @@ public class Room{
     private String desc;
     private boolean beenHere = false;
 
+    /**
+     * Room - constructor
+     * @param s - Scanner
+     */
     public Room (Scanner s) throws NoRoomException {
         String line = s.nextLine();
         if (line.equals("===")) {
@@ -111,22 +115,49 @@ public class Room{
         exits.put(exit.getDir(), exit);
     }
 
+    /**
+     * storeState - this method stores the state of the room in the file, whether it was visited or not
+     * @param w - PrintWriter to write to file
+     */
     void storeState(PrintWriter w) {
         w.write(getName() + ":\n");
         w.write("beenHere=true" + "\n");
         w.write("---" + "\n");
     }
 
+    /**
+     * restoreState - this method restores the state of the room from the file, whether it was visited or not
+     * @param r - PrintWriter to write to file
+     */
     void restoreState(Scanner r) {
+        String beenHereLine = r.nextLine(); //beenHere = true
+        String[] beenHereSplit = beenHereLine.split("=");   //parse by =
+        String newBeenHere = beenHereSplit[1];  //beenHere flag
+        if (newBeenHere.equals("true")) {
+            beenHere = true;
+        }
+        else {
+            beenHere = false;
+        }
     }
 
+    /**
+     * isBeenHere - this method determines whether or not the user visited the room
+     * @return beenHere
+     */
     public boolean isBeenHere() {
         return beenHere;
     }
 }
 
+/**
+ * class NoRoomException is a custom exception
+ */
 class NoRoomException extends Exception {
 
+    /**
+     * NoRoomException - default constructor
+     */
     NoRoomException() {
 
     }

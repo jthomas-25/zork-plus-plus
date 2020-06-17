@@ -2,8 +2,8 @@
  * Exit Class - Each Room object holds on to an ArrayList of the Exits from it, and each Exit holds on to the
  * Room that it leads to. An Exit can also describe itself, which generates and returns a String message.
  * @author Richard Volynski
- * @version 2.0
- * 16 June 2020
+ * @version 2.1
+ * 17 June 2020
  */
 
 
@@ -62,6 +62,12 @@ public class Exit {
         this.dest = dest;
     }
 
+    /**
+     * Exit - this method throws an exception if a line doesn't contain "===" (indicating the current room)
+     * @param s - Scanner
+     * @param d - room in Dungeon class
+     * @throws NoExitException
+     */
     public Exit (Scanner s, Dungeon d) throws NoExitException  {
         String line = s.nextLine();
         if (line.equals("===")) {
@@ -80,10 +86,16 @@ public class Exit {
     }
 }
 
+
+/**
+ * class NoExitException is a custom exception
+ */
 class NoExitException extends Exception {
 
+    /**
+     * NoExitException - default constructor
+     */
     NoExitException() {
-
     }
 }
 

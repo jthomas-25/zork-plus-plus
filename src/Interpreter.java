@@ -6,42 +6,48 @@
  * inputs a command, it should use the CommandFactory to instantiate a new Command object and execute it.
  * If the user enters "q", it terminates the program.
  * @author Richard Volynski
- * @version 2.0
- * 16 June 2020
+ * @version 2.1
+ * 17 June 2020
  */
 
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
+import java.util.*;
 
 public class Interpreter {
     private String commandEntered;
 
-    public static void main(String[] args) throws IOException {
-        String currentDirectory = System.getProperty("User.dir");
+    /**
+     * Main class - Argument can be either a .sav file or .ZORK file
+     */
+    public static void main(String[] args) throws IllegalSaveFormatException {
         Scanner stdin = new Scanner(System.in);
 
-        String defaultZorkFile = "C:\\Temp\\ZorkII.zork";
+        String defaultZorkFile = "trinkle.zork";
         if (args.length > 0) {
             defaultZorkFile = args[0];
         }
         else {
-            System.out.println("Zork file not provided, using \"ZorkII.zork\"");
+//            System.out.println("Zork file not provided, using \"ZorkII.zork\"");
         }
         Dungeon dungeon = null;
         try {
 //            dungeon = buildSampleDungeon();
-            dungeon = new Dungeon(defaultZorkFile);
-            GameState.instance().initialize(dungeon);
+            if (defaultZorkFile.endsWith(".sav")) {
+                GameState.instance().restore(defaultZorkFile);
+                dungeon = GameState.instance().getDungeon();
+            }
+            else {
+                dungeon = new Dungeon(defaultZorkFile);
+                GameState.instance().initialize(dungeon);
+            }
         }
         catch (Exception e) {
             System.out.println("Exception happened: " + e.toString());
             return;
         }
-
-
-
 
         System.out.println(dungeon.getTitle());
         System.out.println();
