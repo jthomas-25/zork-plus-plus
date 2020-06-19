@@ -1,0 +1,11 @@
+Zork III save data
+Dungeon file: trinkle.zork
+Room states:
+Basement hallway:
+beenHere=true
+---
+Room B6:
+beenHere=true
+---
+===
+Current room: Room B6
