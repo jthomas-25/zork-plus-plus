@@ -2,8 +2,8 @@
  * Room Class - represents every room in the dungeon (name, description), knows whether or not
  * the adventurer has already visited it. Also, the Room Class contains lists of Exits.
  * @author Richard Volynski
- * @version 2.1
- * 17 June 2020
+ * @version 2.2
+ * 20 June 2020
  */
 
 
@@ -27,6 +27,7 @@ public class Room{
 
     private String name;
     private boolean firstTimeWhenEnter = true;
+    private boolean roomDescriptionNeeded = false;
     private Scanner s;
 
     /**
@@ -72,6 +73,10 @@ public class Room{
         String output = "";
         if (this.firstTimeWhenEnter) {
             this.firstTimeWhenEnter = false;
+            output = name + "\n" + desc + "\n";
+        }
+        else if (this.roomDescriptionNeeded) {
+            this.roomDescriptionNeeded = false;
             output = name + "\n" + desc + "\n";
         }
         else {
@@ -148,6 +153,31 @@ public class Room{
     public boolean isBeenHere() {
         return beenHere;
     }
+
+    public Room(Scanner s, Dungeon d, boolean initState) {
+    }
+
+    void restoreState(Scanner s, Dungeon d) {
+    }
+
+    void add(Item item) {
+    }
+
+    void remove(Item item) {
+    }
+
+    Room getItemNamed(String name) {
+        return null;    //TODO return item;
+    }
+
+    Room getContents() {
+        return null;    //TODO return ArrayList<item>
+    }
+
+
+    public void setRoomDescriptionNeeded() {
+        this.roomDescriptionNeeded = true;
+    }
 }
 
 /**
@@ -159,7 +189,6 @@ class NoRoomException extends Exception {
      * NoRoomException - default constructor
      */
     NoRoomException() {
-
     }
 }
 

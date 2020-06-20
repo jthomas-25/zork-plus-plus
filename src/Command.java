@@ -2,8 +2,8 @@
  * Command Class - Objects of type Command represent (parsed) commands that the user has typed
  * and wants to invoke
  * @author Richard Volynski
- * @version 2.1
- * 17 June 2020
+ * @version 2.2
+ * 20 June 2020
  */
 
 
@@ -15,6 +15,9 @@ import java.io.IOException;
 class Command {
 
     private String dir;
+
+    Command () {
+    }
 
     /**
      * Command - For now, this constructor takes a valid move command entered by the user and stores it
@@ -42,6 +45,94 @@ class Command {
             String execute = GameState.instance().getAdventurersCurrentRoom().describe();
             return execute;
         }
+    }
+}
+
+class TakeCommand extends Command {
+
+    private String itemName;
+    TakeCommand() {
+        //TODO implement
+    }
+    String execute() {
+        return null;    //TODO implement
+    }
+}
+
+class DropCommand extends Command {
+
+    private String itemName;
+    DropCommand() {
+        //TODO implement
+    }
+    String execute() {
+        return null;    //TODO implement
+    }
+}
+
+class MovementCommand extends Command {
+
+    private String dir;
+    MovementCommand(String dir) {
+        super(dir); //TODO implement
+    }
+    String execute() throws IllegalSaveFormatException {
+        return super.execute();    //TODO implement
+    }
+}
+
+class SaveCommand extends Command {
+
+    private String saveFileName;
+    SaveCommand() {
+        //TODO implement
+    }
+    String execute() {
+        return null;    //TODO implement
+    }
+}
+
+class UnknownCommand extends Command {
+
+    private String bogusCommand;
+    UnknownCommand(String dir) {
+        super(dir); //TODO implement
+    }
+    String execute() {
+        return null;    //TODO implement
+    }
+}
+
+class InventoryCommand extends Command {
+    InventoryCommand(String dir) {
+        super(dir);
+    }
+    String execute() {
+        return null;    //TODO implement
+    }
+}
+
+class ItemSpecificCommand extends Command {
+
+    private String verb;
+    private String noun;
+    ItemSpecificCommand(String dir) {
+        super(dir); //TODO implement
+    }
+    String execute() {
+        return null;    //TODO implement
+    }
+}
+
+class LookCommand extends Command {
+
+    LookCommand() {
+        //TODO implement
+    }
+    String execute() {
+        GameState.instance().getAdventurersCurrentRoom().setRoomDescriptionNeeded();
+        String execute = GameState.instance().getAdventurersCurrentRoom().describe();
+        return execute;
     }
 }
 

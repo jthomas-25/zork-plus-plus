@@ -1,13 +1,13 @@
 /**
  * CPSC 240
- * Homework 4 - Zork II
+ * Team Programming Assignment #1 — "Zork III"
  * Interpreter Class -  this is the main() class that directs operations. It creates a Dungeon,
  * initializes the GameState with it, and repeatedly prompts the user for input. Each time the user
  * inputs a command, it should use the CommandFactory to instantiate a new Command object and execute it.
  * If the user enters "q", it terminates the program.
  * @author Richard Volynski
- * @version 2.1
- * 17 June 2020
+ * @version 2.2
+ * 20 June 2020
  */
 
 
@@ -25,7 +25,7 @@ public class Interpreter {
     public static void main(String[] args) throws IllegalSaveFormatException {
         Scanner stdin = new Scanner(System.in);
 
-        String defaultZorkFile = "trinkle.zork";
+        String defaultZorkFile = "ZorkII.zork";
         if (args.length > 0) {
             defaultZorkFile = args[0];
         }
@@ -40,7 +40,7 @@ public class Interpreter {
                 dungeon = GameState.instance().getDungeon();
             }
             else {
-                dungeon = new Dungeon(defaultZorkFile);
+                dungeon = new Dungeon(defaultZorkFile,true);    //TODO check if file hydrates or not
                 GameState.instance().initialize(dungeon);
             }
         }
@@ -61,13 +61,20 @@ public class Interpreter {
             if (commandEntered.toLowerCase().equals("q")) {
                 break;
             }
-            else if (!(commandEntered.equalsIgnoreCase("N")
-                    || commandEntered.equalsIgnoreCase("W") || commandEntered.equalsIgnoreCase("E")
-                    || commandEntered.equalsIgnoreCase("S") || commandEntered.equalsIgnoreCase("U")
-                    || commandEntered.equalsIgnoreCase("D") || commandEntered.equalsIgnoreCase("save"))) {
-                System.out.println("I'm sorry I don't understand the command " + "\"" + commandEntered + "\"" + " yet."
-                        + " " + "\"" + commandEntered.toLowerCase() + "\"" + " will be implemented soon.");
-            }
+//            else if (!(commandEntered.equalsIgnoreCase("N")
+//                    || commandEntered.equalsIgnoreCase("W")
+//                    || commandEntered.equalsIgnoreCase("E")
+//                    || commandEntered.equalsIgnoreCase("S")
+//                    || commandEntered.equalsIgnoreCase("U")
+//                    || commandEntered.equalsIgnoreCase("D")
+//                    || commandEntered.equalsIgnoreCase("look")
+//                    || commandEntered.equalsIgnoreCase("take")
+//                    || commandEntered.equalsIgnoreCase("drop")
+//                    || commandEntered.equalsIgnoreCase("i")
+//                    || commandEntered.equalsIgnoreCase("save"))) {
+//                System.out.println("I'm sorry I don't understand the command " + "\"" + commandEntered + "\"" + " yet."
+//                        + " " + "\"" + commandEntered.toLowerCase() + "\"" + " will be implemented soon.");
+//            }
             else {
 //                System.out.println(dungeon.getEntry().getName());
 //                Command command = new Command (commandEntered);

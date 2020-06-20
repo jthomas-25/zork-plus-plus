@@ -3,8 +3,8 @@
  * A Hashtable is a class that makes it easy to look up entries by a "key" rather than by a numbered index,
  * as an ArrayList does.
  * @author Richard Volynski
- * @version 2.1
- * 17 June 2020
+ * @version 2.2
+ * 20 June 2020
  */
 
 
@@ -18,6 +18,7 @@ public class Dungeon {
 
     /**
      * getTitle - this method returns title
+     *
      * @return title;
      */
     public String getTitle() {
@@ -33,11 +34,13 @@ public class Dungeon {
 
     /**
      * Dungeon constructor
+     *
      * @param fileName - file to read Dungeon data from
-     * @exception IllegalDungeonFormatException
-     * @exception FileNotFoundException
+     * @throws IllegalDungeonFormatException
+     * @throws FileNotFoundException
      */
-    public Dungeon (String fileName) throws IllegalDungeonFormatException, FileNotFoundException, NoRoomException {
+    public Dungeon(String fileName, boolean initState) throws IllegalDungeonFormatException, FileNotFoundException, NoRoomException {
+        //TODO implement initState
 
         this.fileName = fileName;
         File file = new File(fileName);
@@ -65,8 +68,7 @@ public class Dungeon {
             if (lineNumber == 2) {
                 if (line.equals("Zork II")) {
                     continue;
-                }
-                else {
+                } else {
                     throw new IllegalDungeonFormatException("Dungeon file is incompatible with the current version of Zork");
 //                    System.out.println("Dungeon file is incompatible with the current version of Zork");
                 }
@@ -75,8 +77,7 @@ public class Dungeon {
             if (lineNumber == 3) {
                 if (line.equals("===")) {
                     continue;
-                }
-                else {
+                } else {
 //                    System.out.println("Third line is wrong in the Dungeon file");
                     break;
                 }
@@ -91,13 +92,12 @@ public class Dungeon {
                         Room room;
                         try {
                             room = new Room(stdin);
-                        }
-                        catch (NoRoomException ex) {
+                        } catch (NoRoomException ex) {
                             break;
                         }
 
                         line = stdin.nextLine();
-                        lineNumber +=3;
+                        lineNumber += 3;
                         rooms.add(room);
                         if (firstRoom) {
                             this.entry = room;
@@ -112,9 +112,8 @@ public class Dungeon {
 
                         Exit exit;
                         try {
-                            exit = new Exit(stdin,this);
-                        }
-                        catch (NoExitException ex) {
+                            exit = new Exit(stdin, this);
+                        } catch (NoExitException ex) {
                             break;
                         }
                         line = stdin.nextLine();
@@ -123,12 +122,12 @@ public class Dungeon {
 
                         for (int i = 0; i < rooms.size(); i++) {
                             Room currentRoom = rooms.get(i);
-                            if (currentRoom.getName().equals( exitSrcRoomName)) {
+                            if (currentRoom.getName().equals(exitSrcRoomName)) {
                                 currentRoom.addExit(exit);
                                 break;
                             }
                         }
-                        lineNumber+=4;
+                        lineNumber += 4;
                     }
                 }
             }
@@ -137,32 +136,32 @@ public class Dungeon {
     }
 
 
-
-
-
     /**
      * Dungeon
+     *
      * @param entry - room the user is currently in
      * @param title - Dungeon description
      */
-     Dungeon(Room entry, String title) {
+    Dungeon(Room entry, String title) {
         this.title = title;
         this.setEntry(entry);
-     }
+    }
 
-     private void init() {
-     }
+    private void init() {
+    }
 
     /**
      * add - this method adds a room to Dungeon class
+     *
      * @param room
      */
-    public void add (Room room) {
+    public void add(Room room) {
         rooms.add(room);
     }
 
     /**
      * getRoom - this method returns a Room by roomName
+     *
      * @param roomName
      * @return room found
      */
@@ -174,8 +173,10 @@ public class Dungeon {
         }
         return null;
     }
+
     /**
      * getFileName - this method returns the filename
+     *
      * @return fileName
      */
     public String getFileName() {
@@ -184,6 +185,7 @@ public class Dungeon {
 
     /**
      * storeState - this method checks if next line is equal to "===". If yes, then write current room
+     *
      * @param w - PrintWriter
      */
     void storeState(PrintWriter w) {
@@ -199,6 +201,7 @@ public class Dungeon {
 
     /**
      * restoreState - this method allow the user to resume the game from the state it was saved
+     *
      * @param r - Scanner
      */
     void restoreState(Scanner r) {  //TODO implement
@@ -217,6 +220,7 @@ public class Dungeon {
 
     /**
      * getEntry - this method returns the room the user is entering
+     *
      * @return entry
      */
     public Room getEntry() {
@@ -225,10 +229,19 @@ public class Dungeon {
 
     /**
      * setEntry - this method sets the room the user is entering
+     *
      * @param entry - room
      */
     public void setEntry(Room entry) {
         this.entry = entry;
+    }
+
+    public Item getItem(String primaryName) {
+        return null;    //TODO implement return Item
+    }
+
+    public void add (Item item) {
+        //TODO implement
     }
 }
 

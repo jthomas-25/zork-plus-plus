@@ -2,12 +2,13 @@
  * GameState Class - represents the current state of the game: which dungeon is being played
  * and what room the adventurer is currently in.
  * @author Richard Volynski
- * @version 2.1
- * 17 June 2020
+ * @version 2.2
+ * 20 June 2020
  */
 
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 class GameState {
@@ -16,6 +17,7 @@ class GameState {
     private Room currentRoom = null;
     private String dungeonDesc = "Welcome to the Dungeon. Enjoy but you won't come out how you came in!";
     private String gameFile = null;
+    private ArrayList<Item> items = new ArrayList<Item>();
 
 
     //Singleton instance of GameState class
@@ -110,7 +112,7 @@ class GameState {
         String secLine = gameScanner.nextLine();  //reads Dungeon file name
         String[] secLineSplit = secLine.split(": ");    //parse by colon and space
         String zorkFileName = secLineSplit[1];  //Zork file name
-        dungeon = new Dungeon(zorkFileName);
+        dungeon = new Dungeon(zorkFileName, true); //TODO check if file hydrates or not
         initialize(dungeon);
 
         dungeon.restoreState(gameScanner);
@@ -121,6 +123,21 @@ class GameState {
         currentRoom = dungeon.getRoom(currentRoomName);
         dungeon.setEntry(currentRoom);
         gameScanner.close();
+    }
+
+    ArrayList<Item> getInventory() {
+        return items;
+    }
+    void addToInventory(Item item) {
+        //TODO implement
+    }
+
+    void removeFromInventory(Item item) {
+        //TODO implement
+    }
+    GameState getItemInVicinityNamed(String name) {
+        return null;    //TODO return item;
+
     }
 }
 
