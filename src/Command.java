@@ -52,11 +52,17 @@ class Command {
 class TakeCommand extends Command {
 
     private String itemName;
-    TakeCommand() {
-        //TODO implement
-    }
+    TakeCommand(String itemName) { this.itemName = itemName;}
     String execute() {
-        return null;    //TODO implement
+        Room currentRoom = GameState.instance().getAdventurersCurrentRoom();
+        if (currentRoom.getItemNamed(itemName) != null) {
+            Item item = currentRoom.getItemNamed(itemName);
+            GameState.instance().addToInventory(item);
+            currentRoom.remove(item);
+            return String.format("Took %s from %s", itemName, currentRoom.getName());
+        } else {
+            return String.format("%s not found in %s", itemName, currentRoom.getName());
+        }
     }
 }
 
