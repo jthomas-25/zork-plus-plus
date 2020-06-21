@@ -99,7 +99,7 @@ class DropCommand extends Command {
                 result = "Drop what?";
                 break;
             case "all":
-                ArrayList<Item> inventory = GameState.instance().getInventory()
+                ArrayList<Item> inventory = GameState.instance().getInventory();
                 for (Item item : inventory) {
                     GameState.instance().removeFromInventory(item);
                     Room currentRoom = GameState.instance().getAdventurersCurrentRoom();
@@ -158,11 +158,20 @@ class UnknownCommand extends Command {
 }
 
 class InventoryCommand extends Command {
-    InventoryCommand(String dir) {
-        super(dir);
+    InventoryCommand() {
     }
+
     String execute() {
-        return null;    //TODO implement
+        ArrayList<Item> inventory = GameState.instance().getInventory();
+        if (inventory.isEmpty()) {
+            return "You have no items.";
+        } else {
+            String result = "You are carrying:\n";
+            for (Item item : inventory) {
+                result += ("  " + item.getPrimaryName() + "\n");
+            }
+            return result;
+        }
     }
 }
 
