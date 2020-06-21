@@ -10,8 +10,8 @@ Team Programming Assignment #1 — "Zork III"
 - [ ] Custom Dungeons (0/3)
 - [ ] Make all the changes to the Dungeon class, including hydrating items. (Same note as in Room above about keeping both hydration constructors.) Make sure you can hydrate trinklev3.zork. (Richard)
 
-- [ ] Step 5 ()
+- [ ] Step 5 (John)
 - [X] Step 6 (Done)
-- [ ] Step 7 ()
-- [ ] Update room describe method to include items.
-- [ ] Add git ignore file and remove compiled .class files.
+- [ ] Step 7 (Rob)
+- [ ] Update room describe method to include items. (Rob)
+- [ ] Add git ignore file and remove compiled .class files. (Rob)
