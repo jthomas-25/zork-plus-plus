@@ -3,8 +3,8 @@
  * A Hashtable is a class that makes it easy to look up entries by a "key" rather than by a numbered index,
  * as an ArrayList does.
  * @author Richard Volynski
- * @version 2.2
- * 20 June 2020
+ * @version 2.3
+ * 21 June 2020
  */
 
 

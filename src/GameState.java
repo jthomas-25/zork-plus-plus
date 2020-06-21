@@ -2,8 +2,8 @@
  * GameState Class - represents the current state of the game: which dungeon is being played
  * and what room the adventurer is currently in.
  * @author Richard Volynski
- * @version 2.2
- * 20 June 2020
+ * @version 2.3
+ * 21 June 2020
  */
 
 
@@ -137,7 +137,10 @@ class GameState {
     }
     GameState getItemInVicinityNamed(String name) {
         return null;    //TODO return item;
+    }
 
+    Item getItemFromInventoryNamed (String name) {
+        return null; //TODO return item;
     }
 }
 

@@ -2,8 +2,8 @@
  * Room Class - represents every room in the dungeon (name, description), knows whether or not
  * the adventurer has already visited it. Also, the Room Class contains lists of Exits.
  * @author Richard Volynski
- * @version 2.2
- * 20 June 2020
+ * @version 2.3
+ * 21 June 2020
  */
 
 
@@ -166,7 +166,7 @@ public class Room{
     void remove(Item item) {
     }
 
-    Room getItemNamed(String name) {
+    Item getItemNamed(String name) {
         return null;    //TODO return item;
     }
 

@@ -1,8 +1,8 @@
 /**
  * Item Class - An Item has a name, weight, and a Hashtable of verb/message pairs (called "messages").
  * @author Richard Volynski
- * @version 2.2
- * 20 June 2020
+ * @version 2.3
+ * 21 June 2020
  */
 
 

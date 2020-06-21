@@ -2,16 +2,17 @@
  * Command Class - Objects of type Command represent (parsed) commands that the user has typed
  * and wants to invoke
  * @author Richard Volynski
- * @version 2.2
- * 20 June 2020
+ * @version 2.3
+ * 21 June 2020
  */
-
 
 
 import com.sun.source.tree.BreakTree;
 
 import java.io.IOException;
 import java.util.ArrayList;
+
+
 
 class Command {
 
@@ -87,15 +88,16 @@ class DropCommand extends Command {
             }
             return result;
         } else {
-            try {
+//            try {
                 Item item = GameState.instance().getItemFromInventoryNamed(this.itemName);
                 GameState.instance().removeFromInventory(item);
                 Room currentRoom = GameState.instance().getAdventurersCurrentRoom();
                 currentRoom.add(item);
                 return this.itemName + " dropped.";
-            } catch (NoItemException e) {
-                return e.getMessage();
-            }
+//            }
+//             catch (NoItemException e) {
+//                return e.getMessage();
+//            }
         }
 /*
     //Alternate version of the if-else code if you prefer switch statements instead
@@ -164,7 +166,8 @@ class UnknownCommand extends Command {
 }
 
 class InventoryCommand extends Command {
-    InventoryCommand() {
+    InventoryCommand(String inventory) {
+        //TODO implement inventory
     }
 
     String execute() {
@@ -204,4 +207,5 @@ class LookCommand extends Command {
         return execute;
     }
 }
+
 
