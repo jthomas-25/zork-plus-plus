@@ -9,3 +9,7 @@ Team Programming Assignment #1 — "Zork III"
 - [X] Add inventory command (anyone)
 - [ ] Custom Dungeons (0/3)
 - [ ] Make all the changes to the Dungeon class, including hydrating items. (Same note as in Room above about keeping both hydration constructors.) Make sure you can hydrate trinklev3.zork. (Richard)
+
+- [ ] Step 5 ()
+- [X] Step 6 (Done)
+- [ ] Step 7 ()
