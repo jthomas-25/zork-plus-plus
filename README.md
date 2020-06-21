@@ -5,6 +5,6 @@ Team Programming Assignment #1 — "Zork III"
 
 - [X] Add look command (Richard)
 - [ ] Add take command (Rob)
-- [ ] Add drop command (John)
+- [X] Add drop command (John)
 - [ ] Add inventory command (anyone)
 - [ ] Custom Dungeons (0/3)

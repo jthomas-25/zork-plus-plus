@@ -11,6 +11,7 @@
 import com.sun.source.tree.BreakTree;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 class Command {
 
@@ -60,13 +61,66 @@ class TakeCommand extends Command {
 }
 
 class DropCommand extends Command {
-
     private String itemName;
-    DropCommand() {
-        //TODO implement
+    
+    DropCommand(String itemName) {
+        this.itemName = itemName;
     }
+
     String execute() {
-        return null;    //TODO implement
+        if (this.itemName.equals("")) {
+            return "Drop what?";
+        } else if (this.itemName.equals("all")) {
+            String result = "";
+            ArrayList<Item> inventory = GameState.instance().getInventory();
+            for (Item item : inventory) {
+                GameState.instance().removeFromInventory(item);
+                Room currentRoom = GameState.instance().getAdventurersCurrentRoom();
+                currentRoom.add(item);
+                result += (item.getPrimaryName() + " dropped.\n");
+            }
+            return result;
+        } else {
+            try {
+                Item item = GameState.instance().getItemFromInventoryNamed(this.itemName);
+                GameState.instance().removeFromInventory(item);
+                Room currentRoom = GameState.instance().getAdventurersCurrentRoom();
+                currentRoom.add(item);
+                return this.itemName + " dropped.";
+            } catch (NoItemException e) {
+                return e.getMessage();
+            }
+        }
+/*
+    //Alternate version of the if-else code if you prefer switch statements instead
+        String result = "";
+        switch (this.itemName) {
+            case "":
+                result = "Drop what?";
+                break;
+            case "all":
+                ArrayList<Item> inventory = GameState.instance().getInventory()
+                for (Item item : inventory) {
+                    GameState.instance().removeFromInventory(item);
+                    Room currentRoom = GameState.instance().getAdventurersCurrentRoom();
+                    currentRoom.add(item);
+                    result += (item.getPrimaryName() + " dropped.\n";
+                }
+                break;
+            default:
+                try {
+                    Item item = GameState.instance().getItemFromInventoryNamed(this.itemName);
+                    GameState.instance().removeFromInventory(item);
+                    Room currentRoom = GameState.instance().getAdventurersCurrentRoom();
+                    currentRoom.add(item);
+                    result = this.itemName + " dropped.";
+                } catch (NoItemException e) {
+                    result = e.getMessage();
+                }
+                break;
+        }
+        return result;
+*/
     }
 }
 

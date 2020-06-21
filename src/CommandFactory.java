@@ -35,6 +35,39 @@ class CommandFactory {
      * @return - Command objects
      */
     Command parse (String commandString) {
+        String[] words = commandString.split(" ");
+        switch (words.length) {
+            case 1:
+                switch (words[0]) {
+                    case "n":
+                    case "s":
+                    case "w":
+                    case "e":
+                    case "u":
+                    case "d":
+                        return new MovementCommand(words[0]);
+                    case "look":
+                        return new LookCommand();
+                    case "save":
+                        return new SaveCommand();
+                    case "take":
+                        return new TakeCommand("");
+                    case "drop":
+                        return new DropCommand("");
+                    case "i": case "inventory":
+                        return new InventoryCommand();
+                    default:
+                        return new UnknownCommand(words[0]);
+                }
+            default:
+                switch (words[0]) {
+                    case "take":
+                        return new TakeCommand(words[1]);
+                    case "drop":
+                        return new DropCommand(words[1]);
+                }
+        }
+/*
         switch (commandString.toLowerCase()) {
             case "n":
             case "s":
@@ -51,11 +84,12 @@ class CommandFactory {
                 return new TakeCommand();
             case "drop":
                 return new DropCommand();
-            case "i":
-                return new InventoryCommand(commandString);
+            case "i": case "inventory":
+                return new InventoryCommand();
             default:
                 return new UnknownCommand(commandString);
         }
+*/
     }
 }
 
