@@ -6,8 +6,8 @@
  * inputs a command, it should use the CommandFactory to instantiate a new Command object and execute it.
  * If the user enters "q", it terminates the program.
  * @author Richard Volynski
- * @version 2.3
- * 21 June 2020
+ * @version 2.4
+ * 22 June 2020
  */
 
 
@@ -24,6 +24,7 @@ public class Interpreter {
      */
     public static void main(String[] args) throws IllegalSaveFormatException {
         Scanner stdin = new Scanner(System.in);
+
 
         String defaultZorkFile = "trinklev3.zork";
         if (args.length > 0) {

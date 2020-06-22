@@ -1,28 +1,28 @@
 /**
  * Item Class - An Item has a name, weight, and a Hashtable of verb/message pairs (called "messages").
  * @author Richard Volynski
- * @version 2.3
- * 21 June 2020
+ * @version 2.4
+ * 22 June 2020
  */
-
 
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.Scanner;
 
 public class Item {
     private String primaryName;
     private int weight;
-    private Hashtable messages;
-    private ArrayList<String> aliases;
+    private Hashtable messages = new Hashtable();
+    private ArrayList<String> aliases = new ArrayList<>();
 
 
 
     public Item (Scanner s) throws NoItemException {
         String line = s.nextLine(); //name, aliases
-        if (line.equals("===")) {
+        if (line.equals("===") || line.equals("---")) {
             throw new NoItemException();
         }
         String[] itemNameSplit = line.split(",");
@@ -32,12 +32,17 @@ public class Item {
             aliases.add(itemNameSplit[i]);
         }
 
-
         line = s.nextLine();
         this.weight = Integer.parseInt(line);
 
-        for (int i = 0; i < weight; i++) {
-            
+        while (!line.equals("---")) {
+            line = s.nextLine();
+
+            if (line.equals("---")) {
+                break;
+            }
+            String[] keyToSplit = line.split(":");
+            messages.put(keyToSplit[0],keyToSplit[1]);
         }
     }
 
@@ -53,6 +58,12 @@ public class Item {
         }
         w.write(primaryNameAndAliases + ":\n");
         w.write(weight);
+        Iterator keys = messages.keySet().iterator();
+        while (keys.hasNext()) {
+            String key = (String) keys.next();
+            String value = (String) messages.get(key);
+            w.write(key + ":" + value);
+        }
         w.write("---" + "\n");
     }
 

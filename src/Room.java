@@ -2,8 +2,8 @@
  * Room Class - represents every room in the dungeon (name, description), knows whether or not
  * the adventurer has already visited it. Also, the Room Class contains lists of Exits.
  * @author Richard Volynski
- * @version 2.3
- * 21 June 2020
+ * @version 2.4
+ * 22 June 2020
  */
 
 
@@ -28,7 +28,6 @@ public class Room{
     private String name;
     private boolean firstTimeWhenEnter = true;
     private boolean roomDescriptionNeeded = false;
-    private Scanner s;
 
     /**
      * setDesc - this method sets room description
@@ -45,16 +44,21 @@ public class Room{
      * Room - constructor
      * @param s - Scanner
      */
-    public Room (Scanner s) throws NoRoomException {
-        String line = s.nextLine();
-        if (line.equals("===")) {
-            throw new NoRoomException();
-        }
-        this.name = line;
-        line = s.nextLine();
-        this.desc = line;
+//    public Room (Scanner s) throws NoRoomException {
+//        String line = s.nextLine();
+//        if (line.equals("===")) {
+//            throw new NoRoomException();
+//        }
+//        this.name = line;
 //        line = s.nextLine();
-    }
+//        if (line.contains("Contents: ")) {
+//            String[] contents = line.split(" ");
+//            String itemName = contents[1];
+//
+//        }
+//        this.desc = line;
+////        line = s.nextLine();
+//    }
 
 
     /**
@@ -154,7 +158,25 @@ public class Room{
         return beenHere;
     }
 
-    public Room(Scanner s, Dungeon d, boolean initState) {
+    public Room(Scanner s, Dungeon d, boolean initState) throws NoRoomException, NoItemException {
+        String line = s.nextLine();
+        if (line.equals("===")) {
+            throw new NoRoomException();
+        }
+        this.name = line;
+        line = s.nextLine();
+        if (line.contains("Contents: ")) {
+            String[] contents = line.split(" ");
+            String itemName = contents[1];
+            String[] afterSplitItemName = itemName.split(",");
+            for (int i = 0; i < afterSplitItemName.length; i++) {
+                Item item = d.getItem(afterSplitItemName[i]);
+                add(item);
+            }
+            line = s.nextLine();
+        }
+        this.desc = line;
+//        line = s.nextLine();
     }
 
     void restoreState(Scanner s, Dungeon d) {

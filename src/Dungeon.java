@@ -3,8 +3,8 @@
  * A Hashtable is a class that makes it easy to look up entries by a "key" rather than by a numbered index,
  * as an ArrayList does.
  * @author Richard Volynski
- * @version 2.3
- * 21 June 2020
+ * @version 2.4
+ * 22 June 2020
  */
 
 
@@ -91,9 +91,8 @@ public class Dungeon {
 
             if (lineNumber == 4) {
 
-                if (line.equals("Items")) {
+                if (line.equals("Items:")) {
                     while (!line.equals("===")) {
-
                         Item item;
                         try {
                             item = new Item(stdin);
@@ -101,19 +100,19 @@ public class Dungeon {
                             break;
                         }
 
-                        line = stdin.nextLine();
                         lineNumber += 3;
                         this.add(item);
                     }
                 }
 
+                line = stdin.nextLine();
                 if (line.equals("Rooms:")) {
                     while (!line.equals("===")) {
 
                         Room room;
                         try {
-                            room = new Room(stdin);
-                        } catch (NoRoomException ex) {
+                            room = new Room(stdin, this,true);  //TODO check initState
+                        } catch (NoRoomException | NoItemException ex) {
                             break;
                         }
 
@@ -138,7 +137,7 @@ public class Dungeon {
                             break;
                         }
                         line = stdin.nextLine();
-                        Room exitSrc = exit.getSrc();
+                        Room exitSrc = exit.getSrc();   //exit src = null
                         String exitSrcRoomName = exitSrc.getName();
 
                         for (int i = 0; i < rooms.size(); i++) {
@@ -159,7 +158,6 @@ public class Dungeon {
 
     /**
      * Dungeon
-     *
      * @param entry - room the user is currently in
      * @param title - Dungeon description
      */
@@ -257,15 +255,19 @@ public class Dungeon {
 
     /**
      * setEntry - this method sets the room the user is entering
-     *
      * @param entry - room
      */
     public void setEntry(Room entry) {
         this.entry = entry;
     }
 
-    public Item getItem(String primaryName) {
-        return null;    //TODO implement return Item
+    public Item getItem(String primaryName) throws NoItemException {
+        for (int i = 0; i < items.size(); i++) {
+            if (items.get(i).getPrimaryName().equals(primaryName)) {
+                return items.get(i);
+            }
+        }
+        throw new NoItemException();
     }
 
     public void add (Item item) {
