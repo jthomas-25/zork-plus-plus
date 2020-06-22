@@ -25,7 +25,7 @@ public class Interpreter {
     public static void main(String[] args) throws IllegalSaveFormatException {
         Scanner stdin = new Scanner(System.in);
 
-        String defaultZorkFile = "ZorkII.zork";
+        String defaultZorkFile = "trinklev3.zork";
         if (args.length > 0) {
             defaultZorkFile = args[0];
         }

@@ -7,6 +7,7 @@
  */
 
 
+
 import com.sun.source.tree.BreakTree;
 
 import java.io.IOException;
@@ -147,10 +148,12 @@ class SaveCommand extends Command {
 
     private String saveFileName;
     SaveCommand() {
-        //TODO implement
+
     }
-    String execute() {
-        return null;    //TODO implement
+
+    String execute() throws IllegalSaveFormatException {
+        GameState.instance().store("Richard_state.sav");
+        return null;
     }
 }
 

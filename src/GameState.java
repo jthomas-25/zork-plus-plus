@@ -7,6 +7,7 @@
  */
 
 
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -87,7 +88,7 @@ class GameState {
         try {
             this.gameFile = saveName;
             PrintWriter printWriter = new PrintWriter(saveName);
-            printWriter.write("Zork II save data\n");
+            printWriter.write("Zork III save data\n");
             dungeon.storeState(printWriter);
             printWriter.write("Current room: " + currentRoom.getName());
             printWriter.flush();

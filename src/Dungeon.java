@@ -8,9 +8,11 @@
  */
 
 
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -31,6 +33,8 @@ public class Dungeon {
     private ArrayList<String> lines = new ArrayList<>();
 
     private String fileName;
+
+    private ArrayList<Item> items = new ArrayList<>();
 
     /**
      * Dungeon constructor
@@ -66,7 +70,7 @@ public class Dungeon {
                 continue;
             }
             if (lineNumber == 2) {
-                if (line.equals("Zork II")) {
+                if (line.equals("Zork III")) {
                     continue;
                 } else {
                     throw new IllegalDungeonFormatException("Dungeon file is incompatible with the current version of Zork");
@@ -86,6 +90,23 @@ public class Dungeon {
             boolean firstRoom = true;
 
             if (lineNumber == 4) {
+
+                if (line.equals("Items")) {
+                    while (!line.equals("===")) {
+
+                        Item item;
+                        try {
+                            item = new Item(stdin);
+                        } catch (NoItemException ex) {
+                            break;
+                        }
+
+                        line = stdin.nextLine();
+                        lineNumber += 3;
+                        this.add(item);
+                    }
+                }
+
                 if (line.equals("Rooms:")) {
                     while (!line.equals("===")) {
 
@@ -190,6 +211,13 @@ public class Dungeon {
      */
     void storeState(PrintWriter w) {
         w.write("Dungeon file: " + getFileName() + "\n");
+
+        w.write("Item states:" + "\n");
+        for (int i = 0; i < items.size(); i++) {
+            items.get(i).storeState(w);
+        }
+        w.write("===" + "\n");
+
         w.write("Room states:" + "\n");
         for (int i = 0; i < rooms.size(); i++) {
             if (rooms.get(i).isBeenHere()) {
@@ -241,7 +269,7 @@ public class Dungeon {
     }
 
     public void add (Item item) {
-        //TODO implement
+        items.add(item);
     }
 }
 
