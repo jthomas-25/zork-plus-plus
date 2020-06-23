@@ -13,5 +13,5 @@ Team Programming Assignment #1 — "Zork III"
 - [ ] Step 5 (John)
 - [X] Step 6 (Done)
 - [ ] Step 7 (Rob)
-- [ ] Update room describe method to include items. (Rob)
-- [ ] Add git ignore file and remove compiled .class files. (Rob)
+- [X] Update room describe method to include items. (Rob)
+- [X] Add git ignore file and remove compiled .class files. (Rob)
