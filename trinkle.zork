@@ -1,0 +1,69 @@
+Trinkle
+Zork II
+===
+Rooms:
+Rotunda
+You are in a beautiful round entry chamber, with tall white pillars that
+seemingly reach to the skies. There is an elevator here.
+---
+Basement hallway
+A long, white hallway stretches to the east and west. It is cold here, and you
+can detect the faint smell of body odor. A vending machine hums softly in the
+corner.
+---
+Stephen's office
+This is a cluttered office, with many geeky toys sprawling on a desk.
+---
+Room B6
+Sunlight streams through tall windows and illuminates a brilliant classroom.
+---
+Room B13
+The scent of unwashed bodies is stronger in this place. Rows of
+state-of-the-art computers line the room, with happy young people typing
+merrily away at several of them. They look up and wave hello to you.
+The door locks behind you.
+---
+Rotunda balcony
+You stand on a circular white balcony overlooking an entry hall.
+Columnar bannisters in ancient Grecian style stand between you and the
+precipice.
+---
+===
+Exits:
+Rotunda
+u
+Rotunda balcony
+---
+Rotunda balcony
+d
+Rotunda
+---
+Rotunda
+d
+Basement hallway
+---
+Basement hallway
+u
+Rotunda
+---
+Basement hallway
+s
+Room B13
+---
+Room B6
+w
+Basement hallway
+---
+Basement hallway
+e
+Room B6
+---
+Basement hallway
+w
+Stephen's office
+---
+Stephen's office
+e
+Basement hallway
+---
+===
