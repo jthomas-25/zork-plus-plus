@@ -14,28 +14,20 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.Scanner;
 
 public class Dungeon {
-
-    /**
-     * getTitle - this method returns title
-     *
-     * @return title;
-     */
-    public String getTitle() {
-        return title;
-    }
-
     private String title = "Simple Dungeon";    //default
     private Room entry;
     private ArrayList<Room> rooms = new ArrayList<Room>();
-    private ArrayList<String> lines = new ArrayList<>();
-
     private String fileName;
+    private Hashtable<String, Item> items = new Hashtable<String, Item>();
 
-    private ArrayList<Item> items = new ArrayList<>();
 
+    public Dungeon(String fileName) throws IllegalDungeonFormatException, FileNotFoundException, NoRoomException {
+        this(fileName, true);
+    }
     /**
      * Dungeon constructor
      *
@@ -44,7 +36,6 @@ public class Dungeon {
      * @throws FileNotFoundException
      */
     public Dungeon(String fileName, boolean initState) throws IllegalDungeonFormatException, FileNotFoundException, NoRoomException {
-        //TODO implement initState
 
         this.fileName = fileName;
         File file = new File(fileName);
@@ -54,14 +45,7 @@ public class Dungeon {
 //                " File size " + file.length());
 
         Scanner stdin = new Scanner(file);
-
-//        boolean firstLine = true;
-//        boolean secondLine = false;
-//        boolean thirdLine = false;
-//        boolean fourthLine = false;
-
         int lineNumber = 0;
-
         while (stdin.hasNextLine()) {
             String line = stdin.nextLine();
             lineNumber++;
@@ -90,8 +74,7 @@ public class Dungeon {
             boolean firstRoom = true;
 
             if (lineNumber == 4) {
-
-                if (line.equals("Items")) {
+                if (line.equals("Items:")) {
                     while (!line.equals("===")) {
 
                         Item item;
@@ -101,24 +84,21 @@ public class Dungeon {
                             break;
                         }
 
-                        line = stdin.nextLine();
-                        lineNumber += 3;
                         this.add(item);
                     }
                 }
 
+                line = stdin.nextLine();
                 if (line.equals("Rooms:")) {
                     while (!line.equals("===")) {
 
                         Room room;
                         try {
-                            room = new Room(stdin);
+                            room = new Room(stdin, this, initState);
                         } catch (NoRoomException ex) {
                             break;
                         }
 
-                        line = stdin.nextLine();
-                        lineNumber += 3;
                         rooms.add(room);
                         if (firstRoom) {
                             this.entry = room;
@@ -126,8 +106,8 @@ public class Dungeon {
                         }
                     }
                 }
+
                 line = stdin.nextLine();
-                lineNumber++;
                 if (line.equals("Exits:")) {
                     while (!line.equals("===")) {
 
@@ -148,11 +128,9 @@ public class Dungeon {
                                 break;
                             }
                         }
-                        lineNumber += 4;
                     }
                 }
             }
-            lines.add(line);
         }
     }
 
@@ -169,6 +147,15 @@ public class Dungeon {
     }
 
     private void init() {
+    }
+
+    /**
+     * getTitle - this method returns title
+     *
+     * @return title;
+     */
+    public String getTitle() {
+        return title;
     }
 
     /**
@@ -211,13 +198,6 @@ public class Dungeon {
      */
     void storeState(PrintWriter w) {
         w.write("Dungeon file: " + getFileName() + "\n");
-
-        w.write("Item states:" + "\n");
-        for (int i = 0; i < items.size(); i++) {
-            items.get(i).storeState(w);
-        }
-        w.write("===" + "\n");
-
         w.write("Room states:" + "\n");
         for (int i = 0; i < rooms.size(); i++) {
             if (rooms.get(i).isBeenHere()) {
@@ -232,17 +212,14 @@ public class Dungeon {
      *
      * @param r - Scanner
      */
-    void restoreState(Scanner r) {  //TODO implement
-        String line = r.nextLine(); //Room states
+    void restoreState(Scanner r) {
+        r.nextLine(); //Skip "Room states:" line
+        String line = r.nextLine(); //room name
         while (!line.equals("===")) {   //loop through all rooms
-            line = r.nextLine(); //room name
-            if (line.equals("===")) {
-                break;
-            }
             String[] currentRoomSplit = line.split(":");    //parse room name by colon
-            String currentRoomName = currentRoomSplit[0];   //Room name
-            this.getRoom(currentRoomName).restoreState(r);  //Get room and restore it
-            line = r.nextLine();   //skip ---
+            String currentRoomName = currentRoomSplit[0];
+            this.getRoom(currentRoomName).restoreState(r, this);
+            line = r.nextLine(); //room name
         }
     }
 
@@ -265,11 +242,11 @@ public class Dungeon {
     }
 
     public Item getItem(String primaryName) {
-        return null;    //TODO implement return Item
+        return items.get(primaryName);
     }
 
-    public void add (Item item) {
-        items.add(item);
+    public void add(Item item) {
+        items.put(item.getPrimaryName(), item);
     }
 }
 

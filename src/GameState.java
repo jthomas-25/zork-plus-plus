@@ -6,19 +6,16 @@
  * 21 June 2020
  */
 
-
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.Iterator;
 
 class GameState {
-
     private Dungeon dungeon = null;
     private Room currentRoom = null;
     private String dungeonDesc = "Welcome to the Dungeon. Enjoy but you won't come out how you came in!";
-    private String gameFile = null;
-    private ArrayList<Item> items = new ArrayList<Item>();
+    private ArrayList<Item> inventory = new ArrayList<Item>();
 
 
     //Singleton instance of GameState class
@@ -29,7 +26,7 @@ class GameState {
      * instance - this method returns single instance of GameState class
      * @return single instance of GameState class
      * */
-    public static GameState instance() {
+    public static synchronized GameState instance() {
         if (single_instance == null)
             single_instance = new GameState();
 
@@ -86,16 +83,28 @@ class GameState {
      */
     void store(String saveName) throws IllegalSaveFormatException {
         try {
-            this.gameFile = saveName;
-            PrintWriter printWriter = new PrintWriter(saveName);
+            File saveFile = new File(saveName + ".sav");
+            PrintWriter printWriter = new PrintWriter(saveFile);
             printWriter.write("Zork III save data\n");
             dungeon.storeState(printWriter);
-            printWriter.write("Current room: " + currentRoom.getName());
+            printWriter.write("Adventurer:\n");
+            printWriter.write("Current room: " + currentRoom.getName() + "\n");
+            if (!inventory.isEmpty()) {
+                printWriter.write("Inventory: ");
+                for (int i = 0; i < inventory.size(); i++) {
+                    Item item = inventory.get(i);
+                    printWriter.write(item.getPrimaryName());
+                    if (i < inventory.size() - 1) {
+                        printWriter.write(",");
+                    }
+                }
+                printWriter.write("\n");
+            }
             printWriter.flush();
             printWriter.close();
         }
         catch (Exception ex) {
-            throw new IllegalSaveFormatException("Failed to save game state");
+            throw new IllegalSaveFormatException("Failed to save game state.");
         }
     }
 
@@ -106,42 +115,85 @@ class GameState {
      * @exception NoExitException
      * @exception FileNotFoundException
      * */
-    void restore(String fileName) throws FileNotFoundException, NoRoomException, IllegalDungeonFormatException {
+    void restore(String fileName) throws FileNotFoundException, NoRoomException, IllegalDungeonFormatException, IllegalSaveFormatException {
         File file = new File(fileName);
         Scanner gameScanner = new Scanner(file);
-        String firstLine = gameScanner.nextLine();    //skip first line because it has generic comment
+        String version = gameScanner.nextLine().split(" save data")[0];
+        if (!version.equals("Zork III")) {
+            throw new IllegalSaveFormatException("Save file incompatible with current version of Zork (Zork III).");
+        }
         String secLine = gameScanner.nextLine();  //reads Dungeon file name
         String[] secLineSplit = secLine.split(": ");    //parse by colon and space
-        String zorkFileName = secLineSplit[1];  //Zork file name
-        dungeon = new Dungeon(zorkFileName, true); //TODO check if file hydrates or not
+        String zorkFileName = secLineSplit[1];
+        dungeon = new Dungeon(zorkFileName, false);
         initialize(dungeon);
 
         dungeon.restoreState(gameScanner);
 
+        gameScanner.nextLine(); //Skip "Adventurer:" line
         String currentRoomLine = gameScanner.nextLine();
         String[] currentRoomSplit = currentRoomLine.split(": ");
         String currentRoomName = currentRoomSplit[1];
         currentRoom = dungeon.getRoom(currentRoomName);
         dungeon.setEntry(currentRoom);
+        String[] splitLine = gameScanner.nextLine().split(": ");
+        if (splitLine[0].equals("Inventory")) {
+            String[] itemNames = splitLine[1].split(",");
+            for (String itemName : itemNames) {
+                Item item = dungeon.getItem(itemName);
+                this.addToInventory(item);
+            }
+        }
         gameScanner.close();
     }
 
     ArrayList<Item> getInventory() {
-        return items;
+        return this.inventory;
     }
+
     void addToInventory(Item item) {
-        //TODO implement
+        this.inventory.add(item);
     }
 
     void removeFromInventory(Item item) {
-        //TODO implement
+        this.inventory.remove(item);
     }
-    GameState getItemInVicinityNamed(String name) {
-        return null;    //TODO return item;
+    /**
+     * This method will actually let you remove multiple items while iterating
+     * over them, thereby avoiding a ConcurrentModificationException.
+     * @param itr the iterator which will do the removing.
+     */
+    void removeFromInventory(Iterator<Item> itr) {
+        itr.remove();
     }
 
-    Item getItemFromInventoryNamed (String name) {
-        return null; //TODO return item;
+    Item getItemInVicinityNamed(String name) throws NoItemException {
+        Item item = currentRoom.getItemNamed(name);
+        if (item == null) {
+            try {
+                item = getItemFromInventoryNamed(name);
+                return item;
+            } catch (NoItemException e) {
+                //throw new NoItemException();
+                throw e;
+            }
+        } else {
+            return item;
+        }
+    }
+
+    Item getItemFromInventoryNamed(String name) throws NoItemException {
+        for (Item item : inventory) {
+            if (item.goesBy(name)) {
+                return item;
+            }
+        }
+        if ("aeiou".contains(name.toLowerCase().charAt(0) + "")) {
+            throw new NoItemException("You don't have an " + name + ".");
+        } else {
+            throw new NoItemException("You don't have a " + name + ".");
+        }
+        //throw new NoItemException(String.format("You don't have a(n) %s.", name));
     }
 }
 
@@ -156,4 +208,3 @@ class IllegalSaveFormatException extends Exception {
     public IllegalSaveFormatException(String errorMsg) {
     }
 }
-

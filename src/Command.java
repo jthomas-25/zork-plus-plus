@@ -6,64 +6,49 @@
  * 21 June 2020
  */
 
-
-
 import com.sun.source.tree.BreakTree;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 
-
-
-class Command {
-
-    private String dir;
-
-    Command () {
-    }
-
-    /**
-     * Command - For now, this constructor takes a valid move command entered by the user and stores it
-     * as an instance variable
-     * @param dir - user inputted direction, including save
-     */
-    Command (String dir) {
-        this.dir = dir;
-    }
-
-    /**
-     * execute() - this method executes Command and returns the text that should be printed to the user
-     * in response to that command being executed
-     * @return text description where the user is going
-     */
-    String execute() throws IllegalSaveFormatException {
-
-        if (dir.toLowerCase().equals("save")) {
-            GameState.instance().store("Richard_state.sav");
-            return null;
-        }
-        else {
-            Room room = GameState.instance().getAdventurersCurrentRoom().leaveBy(dir);
-            GameState.instance().setAdventurersCurrentRoom(room);
-            String execute = GameState.instance().getAdventurersCurrentRoom().describe();
-            return execute;
-        }
-    }
+abstract class Command {
+    abstract String execute();
 }
 
 class TakeCommand extends Command {
 
     private String itemName;
-    TakeCommand(String itemName) { this.itemName = itemName;}
+    TakeCommand(String itemName) { this.itemName = itemName; }
     String execute() {
         Room currentRoom = GameState.instance().getAdventurersCurrentRoom();
-        if (currentRoom.getItemNamed(itemName) != null) {
-            Item item = currentRoom.getItemNamed(itemName);
-            GameState.instance().addToInventory(item);
-            currentRoom.remove(item);
-            return String.format("Took %s from %s", itemName, currentRoom.getName());
-        } else {
-            return String.format("%s not found in %s", itemName, currentRoom.getName());
+        switch (this.itemName) {
+            case "":
+                return "Take what?";
+            case "all":
+                String result = "";
+                ArrayList<Item> currentRoomContents = currentRoom.getContents();
+                if (!currentRoomContents.isEmpty()) {
+                    Iterator<Item> itr = currentRoomContents.iterator();
+                    while (itr.hasNext()) {
+                        Item item = itr.next();
+                        GameState.instance().addToInventory(item);
+                        currentRoom.remove(itr);
+                        result += String.format("Took %s from %s.\n", item.getPrimaryName(), currentRoom.getName());
+                    }
+                } else {
+                    result = String.format("There are no items in %s.", currentRoom.getName());
+                }
+                return result;
+            default:
+                Item item = currentRoom.getItemNamed(itemName);
+                if (item != null) {
+                    GameState.instance().addToInventory(item);
+                    currentRoom.remove(item);
+                    return String.format("Took %s from %s.", item.getPrimaryName(), currentRoom.getName());
+                } else {
+                    return String.format("%s not found in %s.", itemName, currentRoom.getName());
+                }
         }
     }
 }
@@ -76,59 +61,67 @@ class DropCommand extends Command {
     }
 
     String execute() {
-        if (this.itemName.equals("")) {
-            return "Drop what?";
-        } else if (this.itemName.equals("all")) {
-            String result = "";
-            ArrayList<Item> inventory = GameState.instance().getInventory();
-            for (Item item : inventory) {
-                GameState.instance().removeFromInventory(item);
-                Room currentRoom = GameState.instance().getAdventurersCurrentRoom();
-                currentRoom.add(item);
-                result += (item.getPrimaryName() + " dropped.\n");
-            }
-            return result;
-        } else {
-//            try {
-                Item item = GameState.instance().getItemFromInventoryNamed(this.itemName);
-                GameState.instance().removeFromInventory(item);
-                Room currentRoom = GameState.instance().getAdventurersCurrentRoom();
-                currentRoom.add(item);
-                return this.itemName + " dropped.";
-//            }
-//             catch (NoItemException e) {
-//                return e.getMessage();
-//            }
-        }
-/*
-    //Alternate version of the if-else code if you prefer switch statements instead
-        String result = "";
-        switch (this.itemName) {
+        switch(this.itemName) {
             case "":
-                result = "Drop what?";
-                break;
+                return "Drop what?";
             case "all":
+                String result = "";
                 ArrayList<Item> inventory = GameState.instance().getInventory();
-                for (Item item : inventory) {
-                    GameState.instance().removeFromInventory(item);
-                    Room currentRoom = GameState.instance().getAdventurersCurrentRoom();
-                    currentRoom.add(item);
-                    result += (item.getPrimaryName() + " dropped.\n";
+                if (!inventory.isEmpty()) {
+                    Iterator<Item> itr = inventory.iterator();
+                    while (itr.hasNext()) {
+                        Item item = itr.next();
+                        GameState.instance().removeFromInventory(itr);
+                        Room currentRoom = GameState.instance().getAdventurersCurrentRoom();
+                        currentRoom.add(item);
+                        result += (item.getPrimaryName() + " dropped.\n");
+                    }
+                } else {
+                    result = "You have no items to drop.";
                 }
-                break;
+                return result;
             default:
                 try {
                     Item item = GameState.instance().getItemFromInventoryNamed(this.itemName);
                     GameState.instance().removeFromInventory(item);
                     Room currentRoom = GameState.instance().getAdventurersCurrentRoom();
                     currentRoom.add(item);
-                    result = this.itemName + " dropped.";
+                    return item.getPrimaryName() + " dropped.";
                 } catch (NoItemException e) {
-                    result = e.getMessage();
+                    return e.getMessage();
                 }
-                break;
         }
-        return result;
+/*
+        //Alternate if-else version of above switch statement
+        if (this.itemName.equals("")) {
+            return "Drop what?";
+        } else if (this.itemName.equals("all")) {
+            String result = "";
+            ArrayList<Item> inventory = GameState.instance().getInventory();
+            if (!inventory.isEmpty()) {
+                Iterator<Item> itr = inventory.iterator();
+                while (itr.hasNext()) {
+                    Item item = itr.next();
+                    GameState.instance().removeFromInventory(itr);
+                    Room currentRoom = GameState.instance().getAdventurersCurrentRoom();
+                    currentRoom.add(item);
+                    result += (item.getPrimaryName() + " dropped.\n");
+                }
+            } else {
+                result = "You have no items to drop.\n";
+            }
+            return result;
+        } else {
+            try {
+                Item item = GameState.instance().getItemFromInventoryNamed(this.itemName);
+                GameState.instance().removeFromInventory(item);
+                Room currentRoom = GameState.instance().getAdventurersCurrentRoom();
+                currentRoom.add(item);
+                return item.getPrimaryName() + " dropped.\n";
+            } catch (NoItemException e) {
+                return e.getMessage();
+            }
+        }
 */
     }
 }
@@ -136,41 +129,59 @@ class DropCommand extends Command {
 class MovementCommand extends Command {
 
     private String dir;
+    /**
+     * MovementCommand - For now, this constructor takes a valid move command entered by the user and stores it
+     * as an instance variable
+     * @param dir - user inputted direction, including save
+     */
     MovementCommand(String dir) {
-        super(dir); //TODO implement
+        this.dir = dir;
     }
-    String execute() throws IllegalSaveFormatException {
-        return super.execute();    //TODO implement
+
+    /**
+     * execute() - this method executes command and returns the text that should be printed to the user
+     * in response to that command being executed
+     * @return text description where the user is going
+     */
+    String execute() {
+        Room room = GameState.instance().getAdventurersCurrentRoom().leaveBy(dir);
+        GameState.instance().setAdventurersCurrentRoom(room);
+        String execute = GameState.instance().getAdventurersCurrentRoom().describe();
+        return execute;
     }
 }
 
 class SaveCommand extends Command {
 
-    private String saveFileName;
-    SaveCommand() {
-
+    private String saveFilename;
+    SaveCommand(String saveFilename) {
+        this.saveFilename = saveFilename;
     }
 
-    String execute() throws IllegalSaveFormatException {
-        GameState.instance().store("Richard_state.sav");
-        return null;
+    String execute() {
+        try {
+            GameState.instance().store(this.saveFilename);
+            return "Game saved successfully.";
+        } catch (IllegalSaveFormatException e) {
+            return e.getMessage(); 
+        }
     }
 }
 
 class UnknownCommand extends Command {
 
     private String bogusCommand;
-    UnknownCommand(String dir) {
-        super(dir); //TODO implement
+    UnknownCommand(String bogusCommand) {
+        this.bogusCommand = bogusCommand;
     }
+
     String execute() {
         return null;    //TODO implement
     }
 }
 
 class InventoryCommand extends Command {
-    InventoryCommand(String inventory) {
-        //TODO implement inventory
+    InventoryCommand() {
     }
 
     String execute() {
@@ -191,9 +202,10 @@ class ItemSpecificCommand extends Command {
 
     private String verb;
     private String noun;
-    ItemSpecificCommand(String dir) {
-        super(dir); //TODO implement
+    ItemSpecificCommand() {
+        //TODO implement
     }
+
     String execute() {
         return null;    //TODO implement
     }
@@ -202,8 +214,8 @@ class ItemSpecificCommand extends Command {
 class LookCommand extends Command {
 
     LookCommand() {
-        //TODO implement
     }
+
     String execute() {
         GameState.instance().getAdventurersCurrentRoom().setRoomDescriptionNeeded();
         String execute = GameState.instance().getAdventurersCurrentRoom().describe();

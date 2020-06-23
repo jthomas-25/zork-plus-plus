@@ -15,9 +15,8 @@ import java.util.Scanner;
 public class Item {
     private String primaryName;
     private int weight;
-    private Hashtable messages;
-    private ArrayList<String> aliases;
-
+    private Hashtable<String, String> messages = new Hashtable<String, String>();
+    private ArrayList<String> aliases = new ArrayList<String>();
 
 
     public Item (Scanner s) throws NoItemException {
@@ -32,12 +31,16 @@ public class Item {
             aliases.add(itemNameSplit[i]);
         }
 
-
         line = s.nextLine();
         this.weight = Integer.parseInt(line);
 
-        for (int i = 0; i < weight; i++) {
-            
+        line = s.nextLine();
+        while (!line.equals("---")) {
+            String[] commandParts = line.split(":");
+            String verb = commandParts[0];
+            String message = commandParts[1];
+            messages.put(verb, message);
+            line = s.nextLine();
         }
     }
 
@@ -49,7 +52,7 @@ public class Item {
         String primaryNameAndAliases = getPrimaryName();
 
         for (int i = 0; i < aliases.size(); i++) {
-            primaryNameAndAliases+= aliases.get(i);
+            primaryNameAndAliases += aliases.get(i);
         }
         w.write(primaryNameAndAliases + ":\n");
         w.write(weight);
@@ -58,7 +61,7 @@ public class Item {
 
 
     public boolean goesBy(String name) {
-        return false;   //TODO implement
+        return primaryName.equals(name) || aliases.contains(name);
     }
 
     public String getPrimaryName() {
@@ -66,11 +69,11 @@ public class Item {
     }
 
     public String getMessageForVerb(String verb) {
-        return "";  //TODO implement
+        return messages.get(verb);
     }
 
     public String toString() {
-        return null;    //TODO implement
+        return primaryName;
     }
 
     public int getWeight() {
@@ -83,5 +86,9 @@ class NoItemException extends Exception {
      * NoItemException - default constructor
      */
     NoItemException() {
+    }
+
+    NoItemException(String message) {
+        super(message);
     }
 }

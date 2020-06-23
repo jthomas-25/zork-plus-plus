@@ -6,40 +6,56 @@
  * 21 June 2020
  */
 
-
-
 import java.io.PrintWriter;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.Iterator;
 
-public class Room{
 
-    /**
-     * getName - this method returns name of the room
-     * @return room name
-     */
-    public String getName() {
-        return name;
-    }
-
+public class Room {
     private Hashtable <String, Exit> exits = new Hashtable<>();
-
     private String name;
-    private boolean firstTimeWhenEnter = true;
     private boolean roomDescriptionNeeded = false;
-    private Scanner s;
-
-    /**
-     * setDesc - this method sets room description
-     * @param desc
-     */
-    public void setDesc(String desc) {
-        this.desc = desc;
-    }
-
     private String desc;
-    private boolean beenHere = false;
+    private boolean beenHere;
+    private ArrayList<Item> contents = new ArrayList<Item>();
+
+
+    Room(Scanner s, Dungeon d) throws NoRoomException {
+       this(s, d, true);
+    } 
+    public Room(Scanner s, Dungeon d, boolean initState) throws NoRoomException {
+        String line = s.nextLine();
+        if (line.equals("===")) {
+            throw new NoRoomException();
+        }
+        this.name = line;
+
+        line = s.nextLine();
+        //Decide whether to reset room state (i.e. contents)
+        if (initState) {
+            beenHere = false;
+            String[] splitLine = line.split(": ");
+            if (splitLine[0].equals("Contents")) {
+                String[] itemNames = splitLine[1].split(",");
+                for (String itemName : itemNames) {
+                    Item item = d.getItem(itemName);
+                    this.add(item);
+                }
+                this.desc = s.nextLine();
+            } else {
+                this.desc = line;
+            }
+        }
+
+        line = s.nextLine();
+        while (!line.equals("---")) {
+            this.desc += ("\n" + line);
+            line = s.nextLine();
+        }
+    }
 
     /**
      * Room - constructor
@@ -53,9 +69,7 @@ public class Room{
         this.name = line;
         line = s.nextLine();
         this.desc = line;
-//        line = s.nextLine();
     }
-
 
     /**
      * Constructor Room - which stores room name in instance variable name
@@ -66,13 +80,29 @@ public class Room{
     }
 
     /**
+     * getName - this method returns name of the room
+     * @return room name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * setDesc - this method sets room description
+     * @param desc
+     */
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
+
+    /**
      * describe - this method generates room description
      * @return output
      */
     String describe() {
         String output = "";
-        if (this.firstTimeWhenEnter) {
-            this.firstTimeWhenEnter = false;
+        if (!beenHere) {
+            beenHere = true;
             output = name + "\n" + desc + "\n";
         }
         else if (this.roomDescriptionNeeded) {
@@ -106,7 +136,6 @@ public class Room{
         }
         else {
             Room newRoom = exits.get(dir.toLowerCase()).getDest();
-            newRoom.beenHere = true;
             return newRoom;
         }
     }
@@ -115,7 +144,6 @@ public class Room{
      * addExit - this method stores exit in class Room
      * @param exit - exit
      */
-
     public void addExit (Exit exit) {
         exits.put(exit.getDir(), exit);
     }
@@ -127,6 +155,17 @@ public class Room{
     void storeState(PrintWriter w) {
         w.write(getName() + ":\n");
         w.write("beenHere=true" + "\n");
+        if (!contents.isEmpty()) {
+            w.write("Contents: ");
+            for (int i = 0; i < contents.size(); i++) {
+                Item item = contents.get(i);
+                w.write(item.getPrimaryName());
+                if (i < contents.size() - 1) {
+                    w.write(",");
+                }
+            }
+            w.write("\n");
+        }
         w.write("---" + "\n");
     }
 
@@ -138,12 +177,50 @@ public class Room{
         String beenHereLine = r.nextLine(); //beenHere = true
         String[] beenHereSplit = beenHereLine.split("=");   //parse by =
         String newBeenHere = beenHereSplit[1];  //beenHere flag
-        if (newBeenHere.equals("true")) {
-            beenHere = true;
+        beenHere = (newBeenHere.equals("true")) ? true : false;
+    }
+
+    void restoreState(Scanner s, Dungeon d) {
+        restoreState(s);
+        String line = s.nextLine();
+        String[] splitLine = line.split(": "); 
+        if (splitLine[0].equals("Contents")) {
+            String[] itemNames = splitLine[1].split(",");
+            for (String itemName : itemNames) {
+                Item item = d.getItem(itemName);
+                this.add(item);
+            }
+            s.nextLine();   //Skip "---" delimiter
         }
-        else {
-            beenHere = false;
+    }
+
+    void add(Item item) {
+        this.contents.add(item);
+    }
+
+    void remove(Item item) {
+        this.contents.remove(item);
+    }
+    /**
+     * This method will actually let you remove multiple items while iterating
+     * over them, thereby avoiding a ConcurrentModificationException.
+     * @param itr the iterator which will do the removing.
+     */
+    void remove(Iterator<Item> itr) {
+        itr.remove();
+    }
+
+    Item getItemNamed(String name) {
+        for (Item item : contents) {
+            if (item.goesBy(name)) {
+                return item;
+            }
         }
+        return null;
+    }
+
+    ArrayList<Item> getContents() {
+        return this.contents;
     }
 
     /**
@@ -153,27 +230,6 @@ public class Room{
     public boolean isBeenHere() {
         return beenHere;
     }
-
-    public Room(Scanner s, Dungeon d, boolean initState) {
-    }
-
-    void restoreState(Scanner s, Dungeon d) {
-    }
-
-    void add(Item item) {
-    }
-
-    void remove(Item item) {
-    }
-
-    Item getItemNamed(String name) {
-        return null;    //TODO return item;
-    }
-
-    Room getContents() {
-        return null;    //TODO return ArrayList<item>
-    }
-
 
     public void setRoomDescriptionNeeded() {
         this.roomDescriptionNeeded = true;
@@ -191,4 +247,3 @@ class NoRoomException extends Exception {
     NoRoomException() {
     }
 }
-
