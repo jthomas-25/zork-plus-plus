@@ -2,8 +2,8 @@
  * Command Class - Objects of type Command represent (parsed) commands that the user has typed
  * and wants to invoke
  * @author Richard Volynski
- * @version 2.4
- * 22 June 2020
+ * @version 2.5
+ * 23 June 2020
  */
 
 import com.sun.source.tree.BreakTree;
@@ -11,6 +11,7 @@ import com.sun.source.tree.BreakTree;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+
 
 abstract class Command {
     abstract String execute();
@@ -222,5 +223,3 @@ class LookCommand extends Command {
         return execute;
     }
 }
-
-

@@ -1,8 +1,8 @@
 /**
  * Item Class - An Item has a name, weight, and a Hashtable of verb/message pairs (called "messages").
  * @author Richard Volynski
- * @version 2.4
- * 22 June 2020
+ * @version 2.5
+ * 23 June 2020
  */
 
 
@@ -52,15 +52,15 @@ public class Item {
         String primaryNameAndAliases = getPrimaryName();
 
         for (int i = 0; i < aliases.size(); i++) {
-            primaryNameAndAliases += aliases.get(i);
+            primaryNameAndAliases+= "," + aliases.get(i);
         }
-        w.write(primaryNameAndAliases + ":\n");
-        w.write(weight);
+        w.write(primaryNameAndAliases + "\n");
+        w.write(Integer.toString(weight) + "\n");
         Iterator keys = messages.keySet().iterator();
         while (keys.hasNext()) {
             String key = (String) keys.next();
             String value = (String) messages.get(key);
-            w.write(key + ":" + value);
+            w.write(key + ":" + value + "\n");
         }
         w.write("---" + "\n");
     }
