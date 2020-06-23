@@ -19,7 +19,6 @@ public class Item {
     private ArrayList<String> aliases = new ArrayList<>();
 
 
-
     public Item (Scanner s) throws NoItemException {
         String line = s.nextLine(); //name, aliases
         if (line.equals("===") || line.equals("---")) {
@@ -33,7 +32,14 @@ public class Item {
         }
 
         line = s.nextLine();
-        this.weight = Integer.parseInt(line);
+
+        try {
+            this.weight = Integer.parseInt(line);
+        }
+        catch (Exception e) {
+            e = e;
+        }
+
 
         while (!line.equals("---")) {
             line = s.nextLine();

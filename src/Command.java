@@ -136,10 +136,10 @@ class MovementCommand extends Command {
 
     private String dir;
     MovementCommand(String dir) {
-        super(dir); //TODO implement
+        super(dir);
     }
     String execute() throws IllegalSaveFormatException {
-        return super.execute();    //TODO implement
+        return super.execute();
     }
 }
 
@@ -147,7 +147,6 @@ class SaveCommand extends Command {
 
     private String saveFileName;
     SaveCommand() {
-
     }
 
     String execute() throws IllegalSaveFormatException {

@@ -105,7 +105,7 @@ class GameState {
      * @exception NoExitException
      * @exception FileNotFoundException
      * */
-    void restore(String fileName) throws FileNotFoundException, NoRoomException, IllegalDungeonFormatException {
+    void restore(String fileName) throws FileNotFoundException, NoRoomException, IllegalDungeonFormatException, NoItemException {
         File file = new File(fileName);
         Scanner gameScanner = new Scanner(file);
         String firstLine = gameScanner.nextLine();    //skip first line because it has generic comment
@@ -129,11 +129,11 @@ class GameState {
         return items;
     }
     void addToInventory(Item item) {
-        //TODO implement
+        items.add(item);
     }
 
     void removeFromInventory(Item item) {
-        //TODO implement
+        items.remove(item);
     }
     GameState getItemInVicinityNamed(String name) {
         return null;    //TODO return item;

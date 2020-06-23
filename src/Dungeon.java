@@ -210,8 +210,10 @@ public class Dungeon {
         w.write("Dungeon file: " + getFileName() + "\n");
 
         w.write("Item states:" + "\n");
-        for (int i = 0; i < items.size(); i++) {
-            items.get(i).storeState(w);
+        ArrayList<Item> inventory = GameState.instance().getInventory();
+
+        for (int i = 0; i < inventory.size(); i++) {
+            inventory.get(i).storeState(w);
         }
         w.write("===" + "\n");
 
@@ -229,21 +231,20 @@ public class Dungeon {
      *
      * @param r - Scanner
      */
-    void restoreState(Scanner r) {  //TODO implement
+    void restoreState(Scanner r) throws NoItemException {  //TODO implement
         String line = r.nextLine();
 
         if (line.equals("Item states:")) {  //Item states
             while (!line.equals("===")) {   //loop through all item
-                line = r.nextLine(); //item
-                if (line.equals("===")) {
+
+                try {
+                    Item item = new Item(r);
+                    GameState.instance().addToInventory(item);
+                }
+                catch (NoItemException e) {
                     break;
                 }
-                String[] currentItemSplit = line.split(",");    //parse item name by comma
-
-                //TODO restore item
-//                String currentItemName = currentItemSplit[0];   //Room name
-//                this.getRoom(currentItemName).restoreState(r);  //Get room and restore it
-                line = r.nextLine();   //skip ---
+//                line = r.nextLine();   //skip ---
             }
         }
 

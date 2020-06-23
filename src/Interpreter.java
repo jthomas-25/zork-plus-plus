@@ -26,7 +26,7 @@ public class Interpreter {
         Scanner stdin = new Scanner(System.in);
 
 
-        String defaultZorkFile = "trinklev3.zork";
+        String defaultZorkFile = "ZorkIII_Test_File.zork";
         if (args.length > 0) {
             defaultZorkFile = args[0];
         }
@@ -80,6 +80,9 @@ public class Interpreter {
             else {
 //                System.out.println(dungeon.getEntry().getName());
 //                Command command = new Command (commandEntered);
+                if (commandEntered.isEmpty()) {
+                    continue;
+                }
                 Command command = CommandFactory.instance().parse(commandEntered);
                 if (command != null) {
                     String output = command.execute();
