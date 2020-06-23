@@ -29,7 +29,7 @@ public class Room{
     private String name;
     private boolean firstTimeWhenEnter = true;
     private boolean roomDescriptionNeeded = false;
-    private ArrayList<Item> contents;
+    private ArrayList<Item> contents = new ArrayList<>();
 
     /**
      * setDesc - this method sets room description
