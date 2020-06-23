@@ -9,6 +9,7 @@
 
 
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Scanner;
@@ -28,6 +29,7 @@ public class Room{
     private String name;
     private boolean firstTimeWhenEnter = true;
     private boolean roomDescriptionNeeded = false;
+    private ArrayList<Item> contents;
 
     /**
      * setDesc - this method sets room description
@@ -96,6 +98,11 @@ public class Room{
             output+= exit.describe() + "\n";
 
         }
+
+        for (Item i : contents) {
+            output = output + "\n" + String.format("There is a %s here.", i.getPrimaryName());
+        }
+
         return output;
     }
 

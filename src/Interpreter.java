@@ -47,6 +47,7 @@ public class Interpreter {
         }
         catch (Exception e) {
             System.out.println("Exception happened: " + e.toString());
+            e.printStackTrace();
             return;
         }
 
