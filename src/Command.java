@@ -2,8 +2,8 @@
  * Command Class - Objects of type Command represent (parsed) commands that the user has typed
  * and wants to invoke
  * @author Richard Volynski
- * @version 2.3
- * 21 June 2020
+ * @version 2.4
+ * 22 June 2020
  */
 
 import com.sun.source.tree.BreakTree;

@@ -3,6 +3,7 @@ Team Programming Assignment #1 — "Zork III"
 
 ### To do:
 
+<<<<<<< HEAD
 - [X] Add look command. (Richard)
 - [X] Add take command. (Rob)
 - [X] Add drop command. (John)

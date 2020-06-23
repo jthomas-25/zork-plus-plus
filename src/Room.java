@@ -2,11 +2,12 @@
  * Room Class - represents every room in the dungeon (name, description), knows whether or not
  * the adventurer has already visited it. Also, the Room Class contains lists of Exits.
  * @author Richard Volynski
- * @version 2.3
- * 21 June 2020
+ * @version 2.4
+ * 22 June 2020
  */
 
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Scanner;
@@ -20,7 +21,7 @@ public class Room {
     private boolean roomDescriptionNeeded = false;
     private String desc;
     private boolean beenHere;
-    private ArrayList<Item> contents = new ArrayList<Item>();
+    private ArrayList<Item> contents;
 
 
     Room(Scanner s, Dungeon d) throws NoRoomException {
@@ -32,6 +33,7 @@ public class Room {
             throw new NoRoomException();
         }
         this.name = line;
+        contents = new ArrayList<Item>();
 
         line = s.nextLine();
         //Decide whether to reset room state (i.e. contents)
@@ -122,6 +124,11 @@ public class Room {
             output+= exit.describe() + "\n";
 
         }
+
+        for (Item i : contents) {
+            output = output + "\n" + String.format("There is a %s here.", i.getPrimaryName());
+        }
+
         return output;
     }
 

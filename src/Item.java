@@ -1,15 +1,15 @@
 /**
  * Item Class - An Item has a name, weight, and a Hashtable of verb/message pairs (called "messages").
  * @author Richard Volynski
- * @version 2.3
- * 21 June 2020
+ * @version 2.4
+ * 22 June 2020
  */
-
 
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.Scanner;
 
 public class Item {
@@ -21,7 +21,7 @@ public class Item {
 
     public Item (Scanner s) throws NoItemException {
         String line = s.nextLine(); //name, aliases
-        if (line.equals("===")) {
+        if (line.equals("===") || line.equals("---")) {
             throw new NoItemException();
         }
         String[] itemNameSplit = line.split(",");
@@ -56,6 +56,12 @@ public class Item {
         }
         w.write(primaryNameAndAliases + ":\n");
         w.write(weight);
+        Iterator keys = messages.keySet().iterator();
+        while (keys.hasNext()) {
+            String key = (String) keys.next();
+            String value = (String) messages.get(key);
+            w.write(key + ":" + value);
+        }
         w.write("---" + "\n");
     }
 
