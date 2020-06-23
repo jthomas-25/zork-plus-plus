@@ -15,7 +15,7 @@ class CommandFactory {
      * instance() - this method is represented by the Singleton CommandFactory Class
      * @return single_instance
      */
-    public static synchronized CommandFactory instance() {
+    public static CommandFactory instance() {
         if (single_instance == null)
             single_instance = new CommandFactory();
         return single_instance;
@@ -35,39 +35,27 @@ class CommandFactory {
      * @return - Command objects
      */
     Command parse (String commandString) {
-        String[] words = commandString.split(" ");
-        switch (words.length) {
-            case 1:
-                switch (words[0]) {
-                    case "n":
-                    case "s":
-                    case "w":
-                    case "e":
-                    case "u":
-                    case "d":
-                        return new MovementCommand(words[0]);
-                    case "look":
-                        return new LookCommand();
-                    case "take":
-                        return new TakeCommand("");
-                    case "drop":
-                        return new DropCommand("");
-                    case "i": case "inventory":
-                        return new InventoryCommand();
-                    default:
-                        return new UnknownCommand(words[0]);
-                }
+        switch (commandString.toLowerCase()) {
+            case "n":
+            case "s":
+            case "w":
+            case "e":
+            case "u":
+            case "d":
+                return new MovementCommand(commandString);
+            case "look":
+                return new LookCommand();
+            case "save":
+                return new SaveCommand();
+            case "take":
+                return new TakeCommand(commandString);  //TODO implement item to take
+            case "drop":
+                return new DropCommand(commandString);  //TODO implement item to drop
+            case "i":
+                return new InventoryCommand(commandString);
             default:
-                switch (words[0]) {
-                    case "take":
-                        return new TakeCommand(words[1]);
-                    case "drop":
-                        return new DropCommand(words[1]);
-                    case "save":
-                        return new SaveCommand(words[1]);
-                    default:
-                        return new ItemSpecificCommand();
-                }
+                return new UnknownCommand(commandString);
         }
     }
 }
+

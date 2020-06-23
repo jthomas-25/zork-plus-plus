@@ -15,8 +15,9 @@ import java.util.Scanner;
 public class Item {
     private String primaryName;
     private int weight;
-    private Hashtable<String, String> messages = new Hashtable<String, String>();
-    private ArrayList<String> aliases = new ArrayList<String>();
+    private Hashtable messages = new Hashtable();
+    private ArrayList<String> aliases = new ArrayList<>();
+
 
     public Item (Scanner s) throws NoItemException {
         String line = s.nextLine(); //name, aliases
@@ -40,13 +41,14 @@ public class Item {
         }
 
 
-        line = s.nextLine();
         while (!line.equals("---")) {
-            String[] commandParts = line.split(":");
-            String verb = commandParts[0];
-            String message = commandParts[1];
-            messages.put(verb, message);
             line = s.nextLine();
+
+            if (line.equals("---")) {
+                break;
+            }
+            String[] keyToSplit = line.split(":");
+            messages.put(keyToSplit[0],keyToSplit[1]);
         }
     }
 
@@ -73,7 +75,7 @@ public class Item {
 
 
     public boolean goesBy(String name) {
-        return primaryName.equals(name) || aliases.contains(name);
+        return false;   //TODO implement
     }
 
     public String getPrimaryName() {
@@ -81,11 +83,11 @@ public class Item {
     }
 
     public String getMessageForVerb(String verb) {
-        return messages.get(verb);
+        return "";  //TODO implement
     }
 
     public String toString() {
-        return primaryName;
+        return null;    //TODO implement
     }
 
     public int getWeight() {
@@ -98,9 +100,5 @@ class NoItemException extends Exception {
      * NoItemException - default constructor
      */
     NoItemException() {
-    }
-
-    NoItemException(String message) {
-        super(message);
     }
 }
