@@ -13,4 +13,5 @@ Team Programming Assignment #1 — "Zork III"
 - [ ] Step 7 (Rob)
 - [X] Update room describe method to include items. (Rob)
 - [X] Add git ignore file and remove compiled .class files. (Rob)
-- [ ] Custom Dungeons (0/3)
+- [ ] Custom Dungeons (1/3)
+- [ ] Fix Glitches (Rob)
