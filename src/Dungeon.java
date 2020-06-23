@@ -3,10 +3,9 @@
  * A Hashtable is a class that makes it easy to look up entries by a "key" rather than by a numbered index,
  * as an ArrayList does.
  * @author Richard Volynski
- * @version 2.4
- * 22 June 2020
+ * @version 2.5
+ * 23 June 2020
  */
-
 
 
 import java.io.File;
@@ -231,16 +230,35 @@ public class Dungeon {
      * @param r - Scanner
      */
     void restoreState(Scanner r) {  //TODO implement
-        String line = r.nextLine(); //Room states
-        while (!line.equals("===")) {   //loop through all rooms
-            line = r.nextLine(); //room name
-            if (line.equals("===")) {
-                break;
+        String line = r.nextLine();
+
+        if (line.equals("Item states:")) {  //Item states
+            while (!line.equals("===")) {   //loop through all item
+                line = r.nextLine(); //item
+                if (line.equals("===")) {
+                    break;
+                }
+                String[] currentItemSplit = line.split(",");    //parse item name by comma
+
+                //TODO restore item
+//                String currentItemName = currentItemSplit[0];   //Room name
+//                this.getRoom(currentItemName).restoreState(r);  //Get room and restore it
+                line = r.nextLine();   //skip ---
             }
-            String[] currentRoomSplit = line.split(":");    //parse room name by colon
-            String currentRoomName = currentRoomSplit[0];   //Room name
-            this.getRoom(currentRoomName).restoreState(r);  //Get room and restore it
-            line = r.nextLine();   //skip ---
+        }
+
+        line = r.nextLine();
+        if (line.equals("Room states:")) {  //Room states
+            while (!line.equals("===")) {   //loop through all rooms
+                line = r.nextLine(); //room name
+                if (line.equals("===")) {
+                    break;
+                }
+                String[] currentRoomSplit = line.split(":");    //parse room name by colon
+                String currentRoomName = currentRoomSplit[0];   //Room name
+                this.getRoom(currentRoomName).restoreState(r);  //Get room and restore it
+                line = r.nextLine();   //skip ---
+            }
         }
     }
 

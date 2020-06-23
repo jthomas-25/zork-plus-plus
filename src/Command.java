@@ -2,10 +2,9 @@
  * Command Class - Objects of type Command represent (parsed) commands that the user has typed
  * and wants to invoke
  * @author Richard Volynski
- * @version 2.4
- * 22 June 2020
+ * @version 2.5
+ * 23 June 2020
  */
-
 
 
 import com.sun.source.tree.BreakTree;
@@ -39,7 +38,7 @@ class Command {
     String execute() throws IllegalSaveFormatException {
 
         if (dir.toLowerCase().equals("save")) {
-            GameState.instance().store("Richard_state.sav");
+            GameState.instance().store("ZorkIII_OOO_state.sav");
             return null;
         }
         else {
@@ -152,7 +151,7 @@ class SaveCommand extends Command {
     }
 
     String execute() throws IllegalSaveFormatException {
-        GameState.instance().store("Richard_state.sav");
+        GameState.instance().store("ZorkIII_OOO_state.sav");
         return null;
     }
 }

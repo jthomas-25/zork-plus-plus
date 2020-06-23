@@ -2,8 +2,8 @@
  * GameState Class - represents the current state of the game: which dungeon is being played
  * and what room the adventurer is currently in.
  * @author Richard Volynski
- * @version 2.4
- * 22 June 2020
+ * @version 2.5
+ * 23 June 2020
  */
 
 

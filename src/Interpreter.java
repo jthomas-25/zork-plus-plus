@@ -6,8 +6,8 @@
  * inputs a command, it should use the CommandFactory to instantiate a new Command object and execute it.
  * If the user enters "q", it terminates the program.
  * @author Richard Volynski
- * @version 2.4
- * 22 June 2020
+ * @version 2.5
+ * 23 June 2020
  */
 
 
@@ -117,11 +117,6 @@ public class Interpreter {
         String room3Desc = "You are behind the white house. There is an open window.";
         Room room3 = new Room(room3Name);
         room3.setDesc(room3Desc);
-
-        //when user opens window, user should type "Enter house", afterwards a description of the kitchen will be given
-        //description should be "You are in the kitchen. A table seems to been recently used. There is a passage
-        //to the west and a staircase going up. A chimney will lead you down. Should you decide to go East, there is
-        //an open window (the window you came from to get into the house)
 
         String room4Name = "Kitchen";
         String room4Desc = "This is the kitchen. It seems like a table has been recently used. There is a passage" +
