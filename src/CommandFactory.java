@@ -66,7 +66,7 @@ class CommandFactory {
                     case "save":
                         return new SaveCommand(words[1]);
                     default:
-                        return new ItemSpecificCommand();
+                        return new ItemSpecificCommand(words[0], words[1]);
                 }
         }
     }
