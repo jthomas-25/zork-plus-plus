@@ -98,6 +98,11 @@ public class Room{
             output+= exit.describe() + "\n";
 
         }
+
+        for (Item i : this.contents) {
+            output = output + "\n" + String.format("There is a %s here.", i.getPrimaryName());
+        }
+
         return output;
     }
 
