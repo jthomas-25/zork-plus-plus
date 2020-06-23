@@ -203,12 +203,22 @@ class ItemSpecificCommand extends Command {
 
     private String verb;
     private String noun;
-    ItemSpecificCommand() {
-        //TODO implement
+    ItemSpecificCommand(String verb, String noun) {
+        this.noun = noun;
+        this.verb = verb;
     }
 
     String execute() {
-        return null;    //TODO implement
+
+        for (Item i : GameState.instance().getInventory()) {
+            if (i.getPrimaryName().equals(this.noun)) {
+                return i.getMessageForVerb(this.verb);
+            } else {
+                return "Couldn't find " + this.noun;
+            }
+        }
+
+        return "???";
     }
 }
 
