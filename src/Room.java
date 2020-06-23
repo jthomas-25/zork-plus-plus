@@ -121,9 +121,13 @@ public class Room {
         while (directions.hasMoreElements()) {
             String dir = (String)directions.nextElement();
             Exit exit = exits.get(dir);
-            output+= exit.describe() + "\n";
-
+            output += exit.describe() + "\n";
         }
+
+        for (Item i : contents) {
+            output = output + "\n" + String.format("There is a %s here.", i.getPrimaryName());
+        }
+
         return output;
     }
 
