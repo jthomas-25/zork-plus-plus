@@ -41,14 +41,14 @@ public class Interpreter {
                 dungeon = GameState.instance().getDungeon();
             }
             else {
-                dungeon = new Dungeon(defaultZorkFile,true);    //TODO check if file hydrates or not
+                dungeon = new Dungeon(defaultZorkFile, true);
                 GameState.instance().initialize(dungeon);
             }
         }
         catch (Exception e) {
-            System.out.println("Exception happened: " + e.toString());
+            System.out.println("Exception happened: " + e);
             e.printStackTrace();
-            return;
+            System.exit(1);
         }
 
         System.out.println(dungeon.getTitle());
@@ -56,13 +56,18 @@ public class Interpreter {
         System.out.println(dungeon.getEntry().describe());
 
         String commandEntered = "";
-        while (!commandEntered.equalsIgnoreCase("save")) {
+        while (!commandEntered.equalsIgnoreCase("q")) {
             System.out.print("Enter command: ");
             commandEntered = stdin.nextLine();
-
-            if (commandEntered.toLowerCase().equals("q")) {
-                break;
+            Command command;
+            if (commandEntered.toLowerCase().equals("save")) {
+                System.out.print("Enter the name of your save file: ");
+                String saveFilename = stdin.nextLine();
+                command = CommandFactory.instance().parse(commandEntered + " " + saveFilename);
+            } else {
+                command = CommandFactory.instance().parse(commandEntered);
             }
+<<<<<<< HEAD
 //            else if (!(commandEntered.equalsIgnoreCase("N")
 //                    || commandEntered.equalsIgnoreCase("W")
 //                    || commandEntered.equalsIgnoreCase("E")
@@ -92,6 +97,15 @@ public class Interpreter {
                     else {
                         System.out.println(output);
                     }
+=======
+            if (command != null) {
+                String output = command.execute();
+                if (output == null) {
+                    System.out.println("See you next time!");
+                }
+                else {
+                    System.out.println(output);
+>>>>>>> 1254504de6ee5d4c6279071c61cdeba079982e26
                 }
             }
         }

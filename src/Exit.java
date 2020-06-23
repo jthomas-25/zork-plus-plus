@@ -11,6 +11,44 @@ import java.util.Scanner;
 
 public class Exit {
     private String dir;
+    private Room src;
+    private Room dest;
+    
+    /**
+     * Exit - this method throws an exception if a line doesn't contain "===" (indicating the current room)
+     * @param s - Scanner
+     * @param d - room in Dungeon class
+     * @throws NoExitException
+     */
+    public Exit(Scanner s, Dungeon d) throws NoExitException  {
+        String line = s.nextLine();
+        if (line.equals("===")) {
+            throw new NoExitException();
+        }
+
+        String roomName = line;
+        this.src = d.getRoom(roomName);
+
+        line = s.nextLine();
+        this.dir = line;
+
+        line = s.nextLine();
+        roomName = line;
+        this.dest = d.getRoom(roomName);
+    }
+    
+    /**
+     * Exit - this constructor stores current direction, source room, and target room
+     * @param dir - direction of the room
+     * @param src - room where the user is coming room
+     * @param dest - room the user is going into, using input direction
+     */
+    Exit(String dir, Room src, Room dest) throws NoExitException {
+        this.dir = dir;
+        this.src = src;
+        this.dest = dest;
+    }
+
 
     /**
      * getDir - this method returns the direction of the room that the user moves towards
@@ -19,11 +57,6 @@ public class Exit {
     public String getDir() {
         return dir;
     }
-
-    private Room src;
-    private Room dest;
-    private Scanner s;
-    private Dungeon d;
 
     /**
      * getSrc - this method returns the room source
@@ -49,43 +82,7 @@ public class Exit {
     String describe() {
         return "You can go " + dir + " to " + dest.getName();
     }
-
-    /**
-     * Exit - this constructor stores current direction, source room, and target room
-     * @param dir - direction of the room
-     * @param src - room where the user is coming room
-     * @param dest - room the user is going into, using input direction
-     */
-    public Exit (String dir, Room src, Room dest) throws NoExitException {
-        this.dir = dir;
-        this.src = src;
-        this.dest = dest;
-    }
-
-    /**
-     * Exit - this method throws an exception if a line doesn't contain "===" (indicating the current room)
-     * @param s - Scanner
-     * @param d - room in Dungeon class
-     * @throws NoExitException
-     */
-    public Exit (Scanner s, Dungeon d) throws NoExitException  {
-        String line = s.nextLine();
-        if (line.equals("===")) {
-            throw new NoExitException();
-        }
-
-        String roomName = line;
-        this.src = d.getRoom(roomName);
-
-        line = s.nextLine();
-        this.dir = line;
-
-        line = s.nextLine();
-        roomName = line;
-        this.dest = d.getRoom(roomName);
-    }
 }
-
 
 /**
  * class NoExitException is a custom exception
@@ -98,4 +95,3 @@ class NoExitException extends Exception {
     NoExitException() {
     }
 }
-
