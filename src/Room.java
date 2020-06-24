@@ -85,7 +85,7 @@ public class Room {
      * getName - this method returns name of the room
      * @return room name
      */
-    public String getName() {
+    String getName() {
         return name;
     }
 
@@ -93,7 +93,7 @@ public class Room {
      * setDesc - this method sets room description
      * @param desc
      */
-    public void setDesc(String desc) {
+    void setDesc(String desc) {
         this.desc = desc;
     }
 
@@ -105,11 +105,11 @@ public class Room {
         String output = "";
         if (!beenHere) {
             beenHere = true;
-            output = name + "\n" + desc + "\n";
+            output = name + "\n" + this.desc + "\n";
         }
         else if (this.roomDescriptionNeeded) {
             this.roomDescriptionNeeded = false;
-            output = name + "\n" + desc + "\n";
+            output = name + "\n" + this.desc + "\n";
         }
         else {
             output = name + "\n";
@@ -183,7 +183,8 @@ public class Room {
         String beenHereLine = r.nextLine(); //beenHere = true
         String[] beenHereSplit = beenHereLine.split("=");   //parse by =
         String newBeenHere = beenHereSplit[1];  //beenHere flag
-        beenHere = (newBeenHere.equals("true")) ? true : false;
+//        beenHere = newBeenHere.equals("true");
+        beenHere = true;
     }
 
     void restoreState(Scanner s, Dungeon d) {

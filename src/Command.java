@@ -201,7 +201,7 @@ class ItemSpecificCommand extends Command {
                 return String.format("You don't have '%s'", noun);
             }
         }
-        return "What?";
+        return "What? (Command not recognized)";
     }
 }
 

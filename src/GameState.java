@@ -18,6 +18,7 @@ class GameState {
     private ArrayList<Item> inventory = new ArrayList<Item>();
     private final int MAX_INVENTORY_WEIGHT = 40;
     private int inventoryWeight = 0;
+    private String fileDir = "files/";
 
 
     //Singleton instance of GameState class
@@ -85,7 +86,7 @@ class GameState {
      */
     void store(String saveName) throws IllegalSaveFormatException {
         try {
-            File saveFile = new File(saveName + ".sav");
+            File saveFile = new File(fileDir + saveName + ".sav");
             PrintWriter printWriter = new PrintWriter(saveFile);
             printWriter.write("Zork III save data\n");
             dungeon.storeState(printWriter);
@@ -118,7 +119,7 @@ class GameState {
      * @exception FileNotFoundException
      * */
     void restore(String fileName) throws FileNotFoundException, NoRoomException, IllegalDungeonFormatException, IllegalSaveFormatException {
-        File file = new File(fileName);
+        File file = new File(fileDir + fileName);
         Scanner gameScanner = new Scanner(file);
         String version = gameScanner.nextLine().split(" save data")[0];
         if (!version.equals("Zork III")) {
