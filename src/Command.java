@@ -18,11 +18,13 @@ abstract class Command {
 }
 
 class TakeCommand extends Command {
-
     private String itemName;
+
     TakeCommand(String itemName) { this.itemName = itemName; }
+
     String execute() {
-        Room currentRoom = GameState.instance().getAdventurersCurrentRoom();
+        GameState state = GameState.instance();
+        Room currentRoom = state.getAdventurersCurrentRoom();
         switch (this.itemName) {
             case "":
                 return "Take what?";
@@ -33,9 +35,13 @@ class TakeCommand extends Command {
                     Iterator<Item> itr = currentRoomContents.iterator();
                     while (itr.hasNext()) {
                         Item item = itr.next();
-                        GameState.instance().addToInventory(item);
-                        currentRoom.remove(itr);
-                        result += String.format("Took %s from %s.\n", item.getPrimaryName(), currentRoom.getName());
+                        if (state.inventoryWeightLimitReached(item)) {
+                            result += String.format("You tried to take the %s, but your load was too heavy.\n", item);
+                        } else {
+                            state.addToInventory(item);
+                            currentRoom.remove(itr);
+                            result += String.format("Took %s from %s.\n", item, currentRoom.getName());
+                        }
                     }
                 } else {
                     result = String.format("There are no items in %s.", currentRoom.getName());
@@ -44,9 +50,13 @@ class TakeCommand extends Command {
             default:
                 Item item = currentRoom.getItemNamed(itemName);
                 if (item != null) {
-                    GameState.instance().addToInventory(item);
-                    currentRoom.remove(item);
-                    return String.format("Took %s from %s.", item.getPrimaryName(), currentRoom.getName());
+                    if (state.inventoryWeightLimitReached(item)) {
+                        return String.format("Your load is too heavy.");
+                    } else {
+                        state.addToInventory(item);
+                        currentRoom.remove(item);
+                        return String.format("Took %s from %s.", item, currentRoom.getName());
+                    }
                 } else {
                     return String.format("%s not found in %s.", itemName, currentRoom.getName());
                 }
@@ -62,20 +72,21 @@ class DropCommand extends Command {
     }
 
     String execute() {
+        GameState state = GameState.instance();
         switch(this.itemName) {
             case "":
                 return "Drop what?";
             case "all":
                 String result = "";
-                ArrayList<Item> inventory = GameState.instance().getInventory();
+                ArrayList<Item> inventory = state.getInventory();
                 if (!inventory.isEmpty()) {
                     Iterator<Item> itr = inventory.iterator();
                     while (itr.hasNext()) {
                         Item item = itr.next();
-                        GameState.instance().removeFromInventory(itr);
-                        Room currentRoom = GameState.instance().getAdventurersCurrentRoom();
+                        state.removeFromInventory(itr, item);
+                        Room currentRoom = state.getAdventurersCurrentRoom();
                         currentRoom.add(item);
-                        result += (item.getPrimaryName() + " dropped.\n");
+                        result += (item + " dropped.\n");
                     }
                 } else {
                     result = "You have no items to drop.";
@@ -83,53 +94,21 @@ class DropCommand extends Command {
                 return result;
             default:
                 try {
-                    Item item = GameState.instance().getItemFromInventoryNamed(this.itemName);
-                    GameState.instance().removeFromInventory(item);
-                    Room currentRoom = GameState.instance().getAdventurersCurrentRoom();
+                    Item item = state.getItemFromInventoryNamed(this.itemName);
+                    state.removeFromInventory(item);
+                    Room currentRoom = state.getAdventurersCurrentRoom();
                     currentRoom.add(item);
-                    return item.getPrimaryName() + " dropped.";
+                    return item + " dropped.";
                 } catch (NoItemException e) {
                     return e.getMessage();
                 }
         }
-/*
-        //Alternate if-else version of above switch statement
-        if (this.itemName.equals("")) {
-            return "Drop what?";
-        } else if (this.itemName.equals("all")) {
-            String result = "";
-            ArrayList<Item> inventory = GameState.instance().getInventory();
-            if (!inventory.isEmpty()) {
-                Iterator<Item> itr = inventory.iterator();
-                while (itr.hasNext()) {
-                    Item item = itr.next();
-                    GameState.instance().removeFromInventory(itr);
-                    Room currentRoom = GameState.instance().getAdventurersCurrentRoom();
-                    currentRoom.add(item);
-                    result += (item.getPrimaryName() + " dropped.\n");
-                }
-            } else {
-                result = "You have no items to drop.\n";
-            }
-            return result;
-        } else {
-            try {
-                Item item = GameState.instance().getItemFromInventoryNamed(this.itemName);
-                GameState.instance().removeFromInventory(item);
-                Room currentRoom = GameState.instance().getAdventurersCurrentRoom();
-                currentRoom.add(item);
-                return item.getPrimaryName() + " dropped.\n";
-            } catch (NoItemException e) {
-                return e.getMessage();
-            }
-        }
-*/
     }
 }
 
 class MovementCommand extends Command {
-
     private String dir;
+
     /**
      * MovementCommand - For now, this constructor takes a valid move command entered by the user and stores it
      * as an instance variable
@@ -153,8 +132,8 @@ class MovementCommand extends Command {
 }
 
 class SaveCommand extends Command {
-
     private String saveFilename;
+
     SaveCommand(String saveFilename) {
         this.saveFilename = saveFilename;
     }
@@ -170,8 +149,8 @@ class SaveCommand extends Command {
 }
 
 class UnknownCommand extends Command {
-
     private String bogusCommand;
+
     UnknownCommand(String bogusCommand) {
         this.bogusCommand = bogusCommand;
     }
@@ -182,6 +161,7 @@ class UnknownCommand extends Command {
 }
 
 class InventoryCommand extends Command {
+
     InventoryCommand() {
     }
 
@@ -192,7 +172,7 @@ class InventoryCommand extends Command {
         } else {
             String result = "You are carrying:\n";
             for (Item item : inventory) {
-                result += ("  " + item.getPrimaryName() + "\n");
+                result += ("  " + item + "\n");
             }
             return result;
         }
@@ -200,17 +180,15 @@ class InventoryCommand extends Command {
 }
 
 class ItemSpecificCommand extends Command {
-
     private String verb;
     private String noun;
+
     ItemSpecificCommand(String verb, String noun) {
         this.noun = noun;
         this.verb = verb;
-
     }
 
     String execute() {
-
         for (Item i : GameState.instance().getInventory()) {
             if (i.getPrimaryName().equals(this.noun)) {
                 return i.getMessageForVerb(this.verb);

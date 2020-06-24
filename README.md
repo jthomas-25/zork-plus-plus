@@ -16,4 +16,4 @@ Team Programming Assignment #1 — "Zork III"
 - [ ] Fix "save" message (anyone)
 - [ ] Fix Glitches (Rob)
 - [ ] Custom Dungeons (0/3)
-- [ ] Add weight limit (John)
+- [X] Add weight limit (John)

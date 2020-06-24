@@ -125,7 +125,7 @@ public class Room {
         }
 
         for (Item i : contents) {
-            output = output + "\n" + String.format("There is a %s here.", i.getPrimaryName());
+            output = output + "\n" + String.format("There is a(n) %s here.", i);
         }
 
         return output;

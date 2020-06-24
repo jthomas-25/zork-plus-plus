@@ -16,6 +16,8 @@ class GameState {
     private Room currentRoom = null;
     private String dungeonDesc = "Welcome to the Dungeon. Enjoy but you won't come out how you came in!";
     private ArrayList<Item> inventory = new ArrayList<Item>();
+    private final int MAX_INVENTORY_WEIGHT = 40;
+    private int inventoryWeight = 0;
 
 
     //Singleton instance of GameState class
@@ -153,18 +155,21 @@ class GameState {
 
     void addToInventory(Item item) {
         this.inventory.add(item);
+        inventoryWeight += item.getWeight();
     }
 
     void removeFromInventory(Item item) {
         this.inventory.remove(item);
+        inventoryWeight -= item.getWeight();
     }
     /**
      * This method will actually let you remove multiple items while iterating
      * over them, thereby avoiding a ConcurrentModificationException.
      * @param itr the iterator which will do the removing.
      */
-    void removeFromInventory(Iterator<Item> itr) {
+    void removeFromInventory(Iterator<Item> itr, Item item) {
         itr.remove();
+        inventoryWeight -= item.getWeight();
     }
 
     Item getItemInVicinityNamed(String name) throws NoItemException {
@@ -174,7 +179,6 @@ class GameState {
                 item = getItemFromInventoryNamed(name);
                 return item;
             } catch (NoItemException e) {
-                //throw new NoItemException();
                 throw e;
             }
         } else {
@@ -188,12 +192,15 @@ class GameState {
                 return item;
             }
         }
-        if ("aeiou".contains(name.toLowerCase().charAt(0) + "")) {
-            throw new NoItemException("You don't have an " + name + ".");
-        } else {
-            throw new NoItemException("You don't have a " + name + ".");
-        }
-        //throw new NoItemException(String.format("You don't have a(n) %s.", name));
+        throw new NoItemException(String.format("You're not carrying a(n) %s.", name));
+    }
+
+    boolean inventoryWeightLimitReached(Item item) {
+        return inventoryWeight + item.getWeight() > MAX_INVENTORY_WEIGHT;
+    }
+
+    int getInventoryWeight() {
+        return inventoryWeight;
     }
 }
 
