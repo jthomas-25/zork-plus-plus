@@ -13,7 +13,8 @@ Team Programming Assignment #1 — "Zork III"
 - [X] Step 7 (Rob)
 - [X] Update room describe method to include items. (Rob)
 - [X] Add git ignore file and remove compiled .class files. (Rob)
-- [ ] Fix "save" message (anyone)
-- [ ] Fix Glitches (Rob)
-- [ ] Custom Dungeons (0/3)
+- [X] Fix "save" message (anyone)
+- [X] Fix Glitches (Rob)
+- [ ] Custom Dungeons (1/3)
 - [X] Add weight limit (John)
+- [ ] Fix Null coming from loaded sav file when traversing dungeon.
