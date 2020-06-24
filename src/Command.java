@@ -156,7 +156,7 @@ class UnknownCommand extends Command {
     }
 
     String execute() {
-        return null;    //TODO implement
+        return String.format("Sorry, I don't understand '%s'", bogusCommand);
     }
 }
 
@@ -191,12 +191,17 @@ class ItemSpecificCommand extends Command {
     String execute() {
         for (Item i : GameState.instance().getInventory()) {
             if (i.getPrimaryName().equals(this.noun)) {
-                return i.getMessageForVerb(this.verb);
+                if (i.getMessageForVerb(this.verb) != null) {
+                    return i.getMessageForVerb(this.verb);
+                } else {
+                    return String.format("You cannot '%s' a %s", verb, noun);
+                }
+
             } else {
-                return "???";
+                return String.format("You don't have '%s'", noun);
             }
         }
-        return "???";
+        return "What?";
     }
 }
 
