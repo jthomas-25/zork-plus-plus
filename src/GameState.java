@@ -212,8 +212,8 @@ class GameState {
     String getFilePath() {
         String currentDir = System.getProperty("user.dir");
         String projectDir = currentDir.split("src")[0];
-        String saveFilePath = projectDir + fileDir;
-        return saveFilePath;
+        String filePath = projectDir + fileDir;
+        return filePath;
     }
 }
 

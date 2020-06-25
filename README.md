@@ -2,7 +2,8 @@
 Team Programming Assignment #1 — "Zork III"
 
 ### To do:
-
+- [ ] Turn in project. (Richard)
+- [ ] Custom Dungeons (1/3)
 - [X] Add look command. (Richard)
 - [X] Add take command. (Rob)
 - [X] Add drop command. (John)
@@ -15,7 +16,6 @@ Team Programming Assignment #1 — "Zork III"
 - [X] Add git ignore file and remove compiled .class files. (Rob)
 - [X] Fix "save" message (anyone)
 - [X] Fix Glitches (Rob)
-- [ ] Custom Dungeons (1/3)
 - [X] Add weight limit (John)
 - [X] Fix Null coming from loaded sav file when traversing dungeon.
 - [X] Fix duplicate GameState class in GitHub (anyone)
