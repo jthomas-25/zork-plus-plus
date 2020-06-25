@@ -98,4 +98,3 @@ class NoExitException extends Exception {
     NoExitException() {
     }
 }
-

@@ -17,6 +17,6 @@ Team Programming Assignment #1 — "Zork III"
 - [X] Fix Glitches (Rob)
 - [ ] Custom Dungeons (1/3)
 - [X] Add weight limit (John)
-- [ ] Fix Null coming from loaded sav file when traversing dungeon.
-- [ ] Fix duplicate GameState class in GitHub (anyone)
-- [ ] Fix save command *again* (anyone)
+- [X] Fix Null coming from loaded sav file when traversing dungeon.
+- [X] Fix duplicate GameState class in GitHub (anyone)
+- [X] Fix save command *again* (anyone)

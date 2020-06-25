@@ -9,7 +9,6 @@
 
 class CommandFactory {
     private static CommandFactory single_instance = null;
-    private String itemName;
 
     /**
      * instance() - this method is represented by the Singleton CommandFactory Class
@@ -66,11 +65,10 @@ class CommandFactory {
                     case "drop":
                         return new DropCommand(words[1]);
                     case "save":
-                        return new SaveCommand("ZorkIII_OOO_state.sav");
+                        return new SaveCommand(words[1]);
                     default:
                         return new ItemSpecificCommand(words[0], words[1]);
                 }
         }
     }
 }
-
