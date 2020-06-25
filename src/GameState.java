@@ -1,24 +1,26 @@
 /**
  * GameState Class - represents the current state of the game: which dungeon is being played
  * and what room the adventurer is currently in.
- * @author Richard Volynski
- * @version 2.5
- * 23 June 2020
+ * @author Object Oriented Optimists
+ * @version 2.7
+ * 25 June 2020
  */
+
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Scanner;
 import java.util.Iterator;
+import java.util.Scanner;
 
 class GameState {
+
     private Dungeon dungeon = null;
     private Room currentRoom = null;
     private String dungeonDesc = "Welcome to the Dungeon. Enjoy but you won't come out how you came in!";
+    private String gameFile = null;
     private ArrayList<Item> inventory = new ArrayList<Item>();
     private final int MAX_INVENTORY_WEIGHT = 40;
     private int inventoryWeight = 0;
-    private String fileDir = "files/";
 
 
     //Singleton instance of GameState class
@@ -27,14 +29,16 @@ class GameState {
 
     /**
      * instance - this method returns single instance of GameState class
+     *
      * @return single instance of GameState class
      */
-    public static synchronized GameState instance() {
+    public static GameState instance() {
         if (single_instance == null)
             single_instance = new GameState();
 
         return single_instance;
     }
+
 
     /**
      * Default Constructor GameState
@@ -44,6 +48,7 @@ class GameState {
 
     /**
      * initialize - This method initializes the dungeon and name of the starting room.
+     *
      * @param dungeon - controls entire game function
      */
     void initialize(Dungeon dungeon) {
@@ -55,6 +60,7 @@ class GameState {
     /**
      * getAdventurersCurrentRoom - this method returns the current room the user is in. The room updates as the
      * user moves.
+     *
      * @return currentRoom
      */
     Room getAdventurersCurrentRoom() {
@@ -64,6 +70,7 @@ class GameState {
     /**
      * setAdventurersCurrentRoom - this method sets the current room the user is in. The room updates as the
      * user moves.
+     *
      * @param room - new current room
      */
     void setAdventurersCurrentRoom(Room room) {
@@ -80,47 +87,36 @@ class GameState {
     /**
      * store - this method stores the input from the file so that when the user saves the game, the user wll be
      * able to resume playing where they left off.
+     *
      * @param saveName
-     * @exception IOException
+     * @throws IOException
      */
     void store(String saveName) throws IllegalSaveFormatException {
         try {
-            String saveFilePath = getFilePath();
-            File saveFile = new File(saveFilePath + saveName + ".sav");
-            PrintWriter printWriter = new PrintWriter(saveFile);
+            this.gameFile = saveName;
+            PrintWriter printWriter = new PrintWriter(saveName);
             printWriter.write("Zork III save data\n");
             dungeon.storeState(printWriter);
-            printWriter.write("Adventurer:\n");
-            printWriter.write("Current room: " + currentRoom.getName() + "\n");
-            if (!inventory.isEmpty()) {
-                printWriter.write("Inventory: ");
-                for (int i = 0; i < inventory.size(); i++) {
-                    Item item = inventory.get(i);
-                    printWriter.write(item.getPrimaryName());
-                    if (i < inventory.size() - 1) {
-                        printWriter.write(",");
-                    }
-                }
-                printWriter.write("\n");
-            }
+            printWriter.write("Current room: " + currentRoom.getName());
             printWriter.flush();
             printWriter.close();
-        }
-        catch (Exception ex) {
-            throw new IllegalSaveFormatException("Failed to save game state.");
+        } catch (Exception ex) {
+            throw new IllegalSaveFormatException("Failed to save game state");
         }
     }
 
     /**
      * restore - this method restores the game at the state which it was saved.
+     *
      * @param fileName
-     * @exception IllegalSaveFormatException
-     * @exception NoExitException
-     * @exception FileNotFoundException
+     * @throws IllegalSaveFormatException
+     * @throws NoExitException
+     * @throws FileNotFoundException
      */
-    void restore(String fileName) throws FileNotFoundException, NoRoomException, IllegalDungeonFormatException, IllegalSaveFormatException {
-        String saveFilePath = getFilePath();
-        File file = new File(saveFilePath + fileName);
+    void restore(String fileName) throws FileNotFoundException, NoRoomException, IllegalDungeonFormatException, IllegalSaveFormatException, NoItemException {
+//        String saveFilePath = getFilePath();
+//        File file = new File(saveFilePath + fileName);
+        File file = new File(fileName);
         Scanner gameScanner = new Scanner(file);
         String version = gameScanner.nextLine().split(" save data")[0];
         if (!version.equals("Zork III")) {
@@ -133,28 +129,24 @@ class GameState {
         initialize(dungeon);
 
         dungeon.restoreState(gameScanner);
-
-        gameScanner.nextLine(); //Skip "Adventurer:" line
         String currentRoomLine = gameScanner.nextLine();
         String[] currentRoomSplit = currentRoomLine.split(": ");
         String currentRoomName = currentRoomSplit[1];
         currentRoom = dungeon.getRoom(currentRoomName);
         dungeon.setEntry(currentRoom);
-        restoreInventory(gameScanner, dungeon);
+
+        //Temporarily comment out as needed to implement storeInventory
+
+//        String[] splitLine = gameScanner.nextLine().split(": ");
+//        if (splitLine[0].equals("Inventory")) {
+//            String[] itemNames = splitLine[1].split(",");
+//            for (String itemName : itemNames) {
+//                Item item = dungeon.getItem(itemName);
+//                this.addToInventory(item);
+//            }
+//        }
         gameScanner.close();
     }
-
-    void restoreInventory(Scanner s, Dungeon d) {
-        String[] splitLine = s.nextLine().split(": ");
-        if (splitLine[0].equals("Inventory")) {
-            String[] itemNames = splitLine[1].split(",");
-            for (String itemName : itemNames) {
-                Item item = d.getItem(itemName);
-                this.addToInventory(item);
-            }
-        }
-    }
-
     ArrayList<Item> getInventory() {
         return this.inventory;
     }
@@ -165,14 +157,10 @@ class GameState {
     }
 
     void removeFromInventory(Item item) {
-        this.inventory.remove(item);
-        inventoryWeight -= item.getWeight();
+        Iterator<Item> itr = inventory.iterator();
+        removeFromInventory(itr, item);
     }
-    /**
-     * This method will actually let you remove multiple items while iterating
-     * over them, thereby avoiding a ConcurrentModificationException.
-     * @param itr the iterator which will do the removing.
-     */
+
     void removeFromInventory(Iterator<Item> itr, Item item) {
         itr.remove();
         inventoryWeight -= item.getWeight();
@@ -185,7 +173,7 @@ class GameState {
                 item = getItemFromInventoryNamed(name);
                 return item;
             } catch (NoItemException e) {
-                throw new NoItemException(String.format("%s not found in %s.", name, currentRoom.getName()));
+                throw e;
             }
         } else {
             return item;
@@ -209,13 +197,14 @@ class GameState {
         return inventoryWeight;
     }
 
-    String getFilePath() {
-        String currentDir = System.getProperty("user.dir");
-        String projectDir = currentDir.split("src")[0];
-        String filePath = projectDir + fileDir;
-        return filePath;
-    }
+//    String getFilePath() {
+//        String currentDir = System.getProperty("user.dir");
+//        String projectDir = currentDir.split("src")[0];
+//        String filePath = projectDir + fileDir;
+//        return filePath;
+//    }
 }
+
 
 /**
  * class IllegalDungeonFormatException is a custom exception
@@ -228,3 +217,4 @@ class IllegalSaveFormatException extends Exception {
     public IllegalSaveFormatException(String errorMsg) {
     }
 }
+
