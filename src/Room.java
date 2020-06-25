@@ -2,7 +2,7 @@
  * Room Class - represents every room in the dungeon (name, description), knows whether or not
  * the adventurer has already visited it. Also, the Room Class contains lists of Exits.
  * @author Object Oriented Optimists
- * @version 2.6
+ * @version 2.7
  * 25 June 2020
  */
 
@@ -161,6 +161,12 @@ public class Room{
         return beenHere;
     }
 
+    /**
+     * Room - constructor to initialize room content
+     * @param s - Scanner
+     * @param d - Dungeon
+     * @param initState - initialized from .sav file or not
+     */
     public Room(Scanner s, Dungeon d, boolean initState) throws NoRoomException, NoItemException {
         String line = s.nextLine();
         if (line.equals("===")) {
@@ -182,6 +188,13 @@ public class Room{
 //        line = s.nextLine();
     }
 
+
+    /**
+     * restoreState - restores game as it was saved
+     * @param s - Scanner
+     * @param d - Dungeon
+     * @throws NoItemException
+     */
     void restoreState(Scanner s, Dungeon d) throws NoItemException {
         restoreState(s);
         String line = s.nextLine();
@@ -196,6 +209,11 @@ public class Room{
         }
     }
 
+
+    /**
+     * add - this method adds item to ArrayList contents
+     * @param item
+     */
     void add(Item item) {
         this.contents.add(item);
     }
@@ -209,11 +227,20 @@ public class Room{
         itr.remove();
     }
 
+    /**
+     * remove - this method removes items from ArrayList contents
+     * @param item
+     */
     void remove(Item item) {
         this.contents.remove(item);
     }
 
 
+    /**
+     * getItemNamed - this method checks if item matches item name
+     * @param name - name of the item
+     * @return item found
+     */
     Item getItemNamed(String name) {
         for (Item content : contents) {
             if (content.goesBy(name)) {
@@ -223,10 +250,17 @@ public class Room{
         return null;
     }
 
+    /**
+     * getContents - this method allows user to get contents in the Room
+     * @return contents
+     */
     ArrayList<Item> getContents() {
         return this.contents;
     }
 
+    /**
+     * setRoomDescriptionNeeded - this method sets a flag if room description is needed
+     */
     public void setRoomDescriptionNeeded() {
         this.roomDescriptionNeeded = true;
     }

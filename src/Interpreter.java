@@ -6,7 +6,7 @@
  * inputs a command, it should use the CommandFactory to instantiate a new Command object and execute it.
  * If the user enters "q", it terminates the program.
  * @author Object Oriented Optimists
- * @version 2.6
+ * @version 2.7
  * 25 June 2020
  */
 

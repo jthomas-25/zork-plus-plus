@@ -1,7 +1,7 @@
 /**
  * Item Class - An Item has a name, weight, and a Hashtable of verb/message pairs (called "messages").
  * @author Object Oriented Optimists
- * @version 2.6
+ * @version 2.7
  * 25 June 2020
  */
 
@@ -19,6 +19,11 @@ public class Item {
     private ArrayList<String> aliases = new ArrayList<>();
 
 
+    /**
+     * Item - Constructor to read from file, parse it, and restore items
+     * @param s - file to read from
+     * @throws NoItemException
+     */
     public Item (Scanner s) throws NoItemException {
         String line = s.nextLine(); //name, aliases
         if (line.equals("===") || line.equals("---")) {
@@ -74,6 +79,11 @@ public class Item {
     }
 
 
+    /**
+     * goesBy - Returns true if the Item is known by a certain name
+     * @param name - item name
+     * @return boolean
+     */
     public boolean goesBy(String name) {
         if (name.equals(primaryName)) {
             return true;
@@ -88,10 +98,19 @@ public class Item {
         }
     }
 
+    /**
+     * getPrimaryName -this method returns name of an item
+     * @return primaryName
+     */
     public String getPrimaryName() {
         return primaryName;
     }
 
+    /**
+     * getMessageForVerb - this method returns a certain message for user command
+     * @param verb
+     * @return verb
+     */
     public String getMessageForVerb(String verb) {
         Iterator keys = messages.keySet().iterator();
         while (keys.hasNext()) {
@@ -103,10 +122,18 @@ public class Item {
         return null;
     }
 
+    /**
+     * toString
+     * @return primaryName - item name
+     */
     public String toString() {
         return primaryName;
     }
 
+    /**
+     * getWeight - this message returns weight of user's inventory
+     * @return weight
+     */
     public int getWeight() {
         return weight;
     }

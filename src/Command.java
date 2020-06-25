@@ -2,7 +2,7 @@
  * Command Class - Objects of type Command represent (parsed) commands that the user has typed
  * and wants to invoke
  * @author Object Oriented Optimists
- * @version 2.6
+ * @version 2.7
  * 25 June 2020
  */
 
@@ -32,7 +32,7 @@ class Command {
     }
 
     /**
-     * execute() - this method executes Command and returns the text that should be printed to the user
+     * execute - this method executes Command and returns the text that should be printed to the user
      * in response to that command being executed
      * @return text description where the user is going
      */
@@ -54,6 +54,11 @@ class Command {
 class TakeCommand extends Command {
     private String itemName;
 
+
+    /**
+     * TakeCommand - this method is used when the user tries to take items from the Room
+     * @param itemName
+     */
     TakeCommand(String itemName) {
         if (itemName.isEmpty()) {
             Scanner stdin = new Scanner(System.in);
@@ -65,6 +70,11 @@ class TakeCommand extends Command {
         this.itemName = itemName;
     }
 
+    /**
+     * execute - this method is a continuation of TakeCommand method except that it warns user
+     * if inventory is too heavy
+     * @return itemName
+     */
     String execute() {
         GameState state = GameState.instance();
         Room currentRoom = state.getAdventurersCurrentRoom();
@@ -111,11 +121,20 @@ class TakeCommand extends Command {
 
 class DropCommand extends Command {
     private String itemName;
-    
+
+    /**
+     * DropCommand - this method allows user to drop item
+     * @param itemName
+     */
     DropCommand(String itemName) {
         this.itemName = itemName;
     }
 
+
+    /**
+     * execute - this method is a continuation of DropCommand except that it warns user if they have no items to drop
+     * @return
+     */
     String execute() {
         GameState state = GameState.instance();
         switch(this.itemName) {
@@ -158,7 +177,6 @@ class MovementCommand extends Command {
     /**
      * MovementCommand - For now, this constructor takes a valid move command entered by the user and stores it
      * as an instance variable
-     *
      * @param dir - user inputted direction, including save
      */
     MovementCommand(String dir) {
@@ -168,7 +186,6 @@ class MovementCommand extends Command {
     /**
      * execute() - this method executes command and returns the text that should be printed to the user
      * in response to that command being executed
-     *
      * @return text description where the user is going
      */
     String execute() {
@@ -181,6 +198,11 @@ class MovementCommand extends Command {
     class SaveCommand extends Command {
         private String saveFileName;
 
+
+        /**
+         * SaveCommand - this command allows the user to save the game at its current state.
+         * @param saveFileName
+         */
         SaveCommand(String saveFileName) {
             this.saveFileName = saveFileName;
         }
@@ -200,6 +222,11 @@ class UnknownCommand extends Command {
 
     private String bogusCommand;
 
+
+    /**
+     * Unknown Command - this Command is invoked when a user enters an unknown command to the program
+     * @param bogusCommand
+     */
     UnknownCommand(String bogusCommand) {
         this.bogusCommand = bogusCommand;
     }
@@ -211,6 +238,9 @@ class UnknownCommand extends Command {
 
 class InventoryCommand extends Command {
 
+    /**
+     * InventoryCommand - Constructor
+     */
     InventoryCommand() {
     }
 
@@ -232,11 +262,24 @@ class ItemSpecificCommand extends Command {
     private String verb;
     private String noun;
 
+
+    /**
+     * ItemSpecificCommand -  If the noun matches the name of an item that is either
+     * in their inventory or in the current room, and if the verb corresponds to an
+     * item-specific verb for that noun, the corresponding message (specified in the dungeon file)
+     * will be output
+     * @param verb
+     * @param noun
+     */
     ItemSpecificCommand(String verb, String noun) {
         this.noun = noun;
         this.verb = verb;
     }
 
+    /**
+     * execute - this method executes the ItemSpecificCommand method
+     * @return null
+     */
     String execute() {
         for (Item i : GameState.instance().getInventory()) {
             if (i.getPrimaryName().equals(this.noun)) {
@@ -251,9 +294,16 @@ class ItemSpecificCommand extends Command {
 
 class LookCommand extends Command {
 
+    /**
+     * LookCommand - Constructor
+     */
     LookCommand() {
     }
 
+    /**
+     * execute - this method executes the LookCommand method
+     * @return execute
+     */
     String execute() {
         GameState.instance().getAdventurersCurrentRoom().setRoomDescriptionNeeded();
         String execute = GameState.instance().getAdventurersCurrentRoom().describe();

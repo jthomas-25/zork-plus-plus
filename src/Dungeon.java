@@ -3,7 +3,7 @@
  * A Hashtable is a class that makes it easy to look up entries by a "key" rather than by a numbered index,
  * as an ArrayList does.
  * @author Object Oriented Optimists
- * @version 2.6
+ * @version 2.7
  * 25 June 2020
  */
 
@@ -18,7 +18,6 @@ public class Dungeon {
 
     /**
      * getTitle - this method returns title
-     *
      * @return title;
      */
     public String getTitle() {
@@ -163,12 +162,12 @@ public class Dungeon {
         this.setEntry(entry);
     }
 
-    private void init() {
-    }
+
+//    private void init() {
+//    }
 
     /**
      * add - this method adds a room to Dungeon class
-     *
      * @param room
      */
     public void add(Room room) {
@@ -177,7 +176,6 @@ public class Dungeon {
 
     /**
      * getRoom - this method returns a Room by roomName
-     *
      * @param roomName
      * @return room found
      */
@@ -192,7 +190,6 @@ public class Dungeon {
 
     /**
      * getFileName - this method returns the filename
-     *
      * @return fileName
      */
     public String getFileName() {
@@ -201,7 +198,6 @@ public class Dungeon {
 
     /**
      * storeState - this method checks if next line is equal to "===". If yes, then write current room
-     *
      * @param w - PrintWriter
      */
     void storeState(PrintWriter w) {
@@ -226,7 +222,6 @@ public class Dungeon {
 
     /**
      * restoreState - this method allow the user to resume the game from the state it was saved
-     *
      * @param r - Scanner
      */
     void restoreState(Scanner r) throws NoItemException {
@@ -263,7 +258,6 @@ public class Dungeon {
 
     /**
      * getEntry - this method returns the room the user is entering
-     *
      * @return entry
      */
     public Room getEntry() {
@@ -278,6 +272,12 @@ public class Dungeon {
         this.entry = entry;
     }
 
+    /**
+     * getItem - this method returns item by name
+     * @param primaryName item name
+     * @return Item item found
+     * @throws NoItemException
+     */
     public Item getItem(String primaryName) throws NoItemException {
         for (int i = 0; i < items.size(); i++) {
             if (items.get(i).getPrimaryName().equals(primaryName)) {
@@ -287,6 +287,11 @@ public class Dungeon {
         throw new NoItemException(String.format("You're not carrying a(n) %s.", primaryName));
     }
 
+
+    /**
+     * add - this method adds item to a collection of items
+     * @param item
+     */
     public void add (Item item) {
         items.add(item);
     }

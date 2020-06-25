@@ -2,7 +2,7 @@
  * CommandFactory Class - A factory class whose purpose is to parse text strings
  * and produce the appropriate Command objects. Also, the CommandFactory is a Singleton class.
  * @author Object Oriented Optimists
- * @version 2.6
+ * @version 2.7
  * 25 June 2020
  */
 
@@ -13,7 +13,6 @@ class CommandFactory {
 
     /**
      * instance() - this method is represented by the Singleton CommandFactory Class
-     *
      * @return single_instance
      */
     public static CommandFactory instance() {
@@ -31,7 +30,6 @@ class CommandFactory {
 
     /**
      * parse - this method parses entered commands and produces Command objects
-     *
      * @param commandString - user input
      * @return - Command objects
      */

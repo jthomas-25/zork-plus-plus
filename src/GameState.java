@@ -29,7 +29,6 @@ class GameState {
 
     /**
      * instance - this method returns single instance of GameState class
-     *
      * @return single instance of GameState class
      */
     public static GameState instance() {
@@ -60,7 +59,6 @@ class GameState {
     /**
      * getAdventurersCurrentRoom - this method returns the current room the user is in. The room updates as the
      * user moves.
-     *
      * @return currentRoom
      */
     Room getAdventurersCurrentRoom() {
@@ -70,7 +68,6 @@ class GameState {
     /**
      * setAdventurersCurrentRoom - this method sets the current room the user is in. The room updates as the
      * user moves.
-     *
      * @param room - new current room
      */
     void setAdventurersCurrentRoom(Room room) {
@@ -87,7 +84,6 @@ class GameState {
     /**
      * store - this method stores the input from the file so that when the user saves the game, the user wll be
      * able to resume playing where they left off.
-     *
      * @param saveName
      * @throws IOException
      */
@@ -107,7 +103,6 @@ class GameState {
 
     /**
      * restore - this method restores the game at the state which it was saved.
-     *
      * @param fileName
      * @throws IllegalSaveFormatException
      * @throws NoExitException
@@ -147,25 +142,50 @@ class GameState {
 //        }
         gameScanner.close();
     }
+
+    /**
+     * inventory - this method stores the items that the user takes from the Rooms as an ArrayList
+     * @return inventory
+     */
     ArrayList<Item> getInventory() {
         return this.inventory;
     }
 
+    /**
+     * addToInventory - this method adds items to ArrayList inventory that the user takes from the Rooms
+     * @param item
+     */
     void addToInventory(Item item) {
         this.inventory.add(item);
         inventoryWeight += item.getWeight();
     }
 
+    /**
+     * removeFromInventory - this method removes items from ArrayList inventory
+     * @param item
+     */
     void removeFromInventory(Item item) {
         Iterator<Item> itr = inventory.iterator();
         removeFromInventory(itr, item);
     }
 
+    /**
+     * removeFromInventory - this method allows the user to remove items from ArrayList inventory one at a time
+     * @param itr
+     * @param item
+     */
     void removeFromInventory(Iterator<Item> itr, Item item) {
         itr.remove();
         inventoryWeight -= item.getWeight();
     }
 
+
+    /**
+     * getItemFromVicinityNamed - this method is never used
+     * @param name
+     * @return item
+     * @throws NoItemException
+     */
     Item getItemInVicinityNamed(String name) throws NoItemException {
         Item item = currentRoom.getItemNamed(name);
         if (item == null) {
@@ -180,6 +200,12 @@ class GameState {
         }
     }
 
+    /**
+     * getItemFromInventoryNamed - this method allows the user to see what items they have in their inventory
+     * @param name
+     * @return item
+     * @throws NoItemException
+     */
     Item getItemFromInventoryNamed(String name) throws NoItemException {
         for (Item item : inventory) {
             if (item.goesBy(name)) {
@@ -189,10 +215,19 @@ class GameState {
         throw new NoItemException(String.format("You're not carrying a(n) %s.", name));
     }
 
+    /**
+     * inventoryWeightLimitReached - this method notifies the user that their inventory weight limit was reached
+     * @param item
+     * @return inventoryWeight
+     */
     boolean inventoryWeightLimitReached(Item item) {
         return inventoryWeight + item.getWeight() > MAX_INVENTORY_WEIGHT;
     }
 
+    /**
+     * getInventoryWeight - this method is never used
+     * @return inventory weight
+     */
     int getInventoryWeight() {
         return inventoryWeight;
     }
