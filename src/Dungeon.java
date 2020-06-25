@@ -2,31 +2,38 @@
  * Dungeon Class - It holds on to a Hashtable collection of Room objects, and knows which one is the entry point.
  * A Hashtable is a class that makes it easy to look up entries by a "key" rather than by a numbered index,
  * as an ArrayList does.
- * @author Richard Volynski
- * @version 2.5
- * 23 June 2020
+ * @author Object Oriented Optimists
+ * @version 2.6
+ * 25 June 2020
  */
 
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.Scanner;
 
 public class Dungeon {
+
+    /**
+     * getTitle - this method returns title
+     *
+     * @return title;
+     */
+    public String getTitle() {
+        return title;
+    }
+
     private String title = "Simple Dungeon";    //default
     private Room entry;
     private ArrayList<Room> rooms = new ArrayList<Room>();
+    private ArrayList<String> lines = new ArrayList<>();
+
     private String fileName;
-    private Hashtable<String, Item> items = new Hashtable<String, Item>();
 
+    private ArrayList<Item> items = new ArrayList<>();
 
-    public Dungeon(String fileName) throws IllegalDungeonFormatException, FileNotFoundException, NoRoomException {
-        this(fileName, true);
-    }
     /**
      * Dungeon constructor
      *
@@ -35,17 +42,24 @@ public class Dungeon {
      * @throws FileNotFoundException
      */
     public Dungeon(String fileName, boolean initState) throws IllegalDungeonFormatException, FileNotFoundException, NoRoomException {
+        //TODO implement initState
 
         this.fileName = fileName;
-        String filePath = GameState.instance().getFilePath();
-        File file = new File(filePath + fileName);
+        File file = new File(fileName);
 
 
 //        System.out.println("Dungeon file is " + fileName + " File path: " + file.getAbsolutePath() +
 //                " File size " + file.length());
 
         Scanner stdin = new Scanner(file);
+
+//        boolean firstLine = true;
+//        boolean secondLine = false;
+//        boolean thirdLine = false;
+//        boolean fourthLine = false;
+
         int lineNumber = 0;
+
         while (stdin.hasNextLine()) {
             String line = stdin.nextLine();
             lineNumber++;
@@ -74,6 +88,7 @@ public class Dungeon {
             boolean firstRoom = true;
 
             if (lineNumber == 4) {
+
                 if (line.equals("Items:")) {
                     while (!line.equals("===")) {
                         Item item;
@@ -83,6 +98,7 @@ public class Dungeon {
                             break;
                         }
 
+                        lineNumber += 3;
                         this.add(item);
                     }
                 }
@@ -93,11 +109,13 @@ public class Dungeon {
 
                         Room room;
                         try {
-                            room = new Room(stdin, this, initState);
-                        } catch (NoRoomException ex) {
+                            room = new Room(stdin, this,true);  //TODO check initState
+                        } catch (NoRoomException | NoItemException ex) {
                             break;
                         }
 
+                        line = stdin.nextLine();
+                        lineNumber += 3;
                         rooms.add(room);
                         if (firstRoom) {
                             this.entry = room;
@@ -105,8 +123,8 @@ public class Dungeon {
                         }
                     }
                 }
-
                 line = stdin.nextLine();
+                lineNumber++;
                 if (line.equals("Exits:")) {
                     while (!line.equals("===")) {
 
@@ -117,7 +135,7 @@ public class Dungeon {
                             break;
                         }
                         line = stdin.nextLine();
-                        Room exitSrc = exit.getSrc();
+                        Room exitSrc = exit.getSrc();   //exit src = null
                         String exitSrcRoomName = exitSrc.getName();
 
                         for (int i = 0; i < rooms.size(); i++) {
@@ -127,9 +145,11 @@ public class Dungeon {
                                 break;
                             }
                         }
+                        lineNumber += 4;
                     }
                 }
             }
+            lines.add(line);
         }
     }
 
@@ -145,15 +165,6 @@ public class Dungeon {
     }
 
     private void init() {
-    }
-
-    /**
-     * getTitle - this method returns title
-     *
-     * @return title;
-     */
-    public String getTitle() {
-        return title;
     }
 
     /**
@@ -196,9 +207,20 @@ public class Dungeon {
      */
     void storeState(PrintWriter w) {
         w.write("Dungeon file: " + getFileName() + "\n");
+
+        w.write("Item states:" + "\n");
+        ArrayList<Item> inventory = GameState.instance().getInventory();
+
+        for (int i = 0; i < inventory.size(); i++) {
+            inventory.get(i).storeState(w);
+        }
+        w.write("===" + "\n");
+
         w.write("Room states:" + "\n");
         for (int i = 0; i < rooms.size(); i++) {
-            rooms.get(i).storeState(w);
+            if (rooms.get(i).isBeenHere()) {
+                rooms.get(i).storeState(w);
+            }
         }
         w.write("===" + "\n");
     }
@@ -208,14 +230,35 @@ public class Dungeon {
      *
      * @param r - Scanner
      */
-    void restoreState(Scanner r) {
-        r.nextLine(); //Skip "Room states:" line
-        String line = r.nextLine(); //room name
-        while (!line.equals("===")) {   //loop through all rooms
-            String[] currentRoomSplit = line.split(":");    //parse room name by colon
-            String currentRoomName = currentRoomSplit[0];
-            this.getRoom(currentRoomName).restoreState(r, this);
-            line = r.nextLine(); //room name
+    void restoreState(Scanner r) throws NoItemException {  //TODO implement
+        String line = r.nextLine();
+
+        if (line.equals("Item states:")) {  //Item states
+            while (!line.equals("===")) {   //loop through all item
+
+                try {
+                    Item item = new Item(r);
+                    GameState.instance().addToInventory(item);
+                }
+                catch (NoItemException e) {
+                    break;
+                }
+//                line = r.nextLine();   //skip ---
+            }
+        }
+
+        line = r.nextLine();
+        if (line.equals("Room states:")) {  //Room states
+            while (!line.equals("===")) {   //loop through all rooms
+                line = r.nextLine(); //room name
+                if (line.equals("===")) {
+                    break;
+                }
+                String[] currentRoomSplit = line.split(":");    //parse room name by colon
+                String currentRoomName = currentRoomSplit[0];   //Room name
+                this.getRoom(currentRoomName).restoreState(r);  //Get room and restore it
+                line = r.nextLine();   //skip ---
+            }
         }
     }
 
@@ -236,12 +279,17 @@ public class Dungeon {
         this.entry = entry;
     }
 
-    public Item getItem(String primaryName) {
-        return items.get(primaryName);
+    public Item getItem(String primaryName) throws NoItemException {
+        for (int i = 0; i < items.size(); i++) {
+            if (items.get(i).getPrimaryName().equals(primaryName)) {
+                return items.get(i);
+            }
+        }
+        throw new NoItemException(String.format("You're not carrying a(n) %s.", primaryName));
     }
 
-    public void add(Item item) {
-        items.put(item.getPrimaryName(), item);
+    public void add (Item item) {
+        items.add(item);
     }
 }
 
@@ -256,3 +304,4 @@ class IllegalDungeonFormatException extends Exception {
     public IllegalDungeonFormatException(String errorMsg) {
     }
 }
+

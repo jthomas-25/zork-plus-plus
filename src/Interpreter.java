@@ -5,9 +5,9 @@
  * initializes the GameState with it, and repeatedly prompts the user for input. Each time the user
  * inputs a command, it should use the CommandFactory to instantiate a new Command object and execute it.
  * If the user enters "q", it terminates the program.
- * @author Richard Volynski
- * @version 2.5
- * 23 June 2020
+ * @author Object Oriented Optimists
+ * @version 2.6
+ * 25 June 2020
  */
 
 
@@ -26,7 +26,7 @@ public class Interpreter {
         Scanner stdin = new Scanner(System.in);
 
 
-        String defaultZorkFile = "trinklev3.zork";
+        String defaultZorkFile = "ZorkIII_Test_File.zork";
         if (args.length > 0) {
             defaultZorkFile = args[0];
         }
@@ -41,43 +41,61 @@ public class Interpreter {
                 dungeon = GameState.instance().getDungeon();
             }
             else {
-                dungeon = new Dungeon(defaultZorkFile, true);
+                dungeon = new Dungeon(defaultZorkFile,true);    //TODO check if file hydrates or not
                 GameState.instance().initialize(dungeon);
             }
         }
         catch (Exception e) {
-            System.out.println("Exception happened: " + e);
-            //e.printStackTrace();
-            System.exit(1);
+            System.out.println("Exception happened: " + e.toString());
+            e.printStackTrace();
+            return;
         }
 
         System.out.println(dungeon.getTitle());
         System.out.println();
         System.out.println(dungeon.getEntry().describe());
 
-        System.out.print("Enter command: ");
-        String commandEntered = stdin.nextLine();
-        while (!commandEntered.equalsIgnoreCase("q")) {
-            Command command;
-            if (commandEntered.toLowerCase().equals("save")) {
-                System.out.print("Enter the name of your save file: ");
-                String saveFilename = stdin.nextLine();
-                command = CommandFactory.instance().parse(commandEntered + " " + saveFilename);
-            } else {
-                command = CommandFactory.instance().parse(commandEntered);
-            }
-            if (command != null) {
-                String output = command.execute();
-                if (output == null) {
-                    System.out.println("See you next time!");
-                }
-                else {
-                    System.out.println(output);
-                }
-            }
+        String commandEntered = "";
+        while (!commandEntered.equalsIgnoreCase("save")) {
             System.out.print("Enter command: ");
             commandEntered = stdin.nextLine();
+
+            if (commandEntered.toLowerCase().equals("q")) {
+                break;
+            }
+//            else if (!(commandEntered.equalsIgnoreCase("N")
+//                    || commandEntered.equalsIgnoreCase("W")
+//                    || commandEntered.equalsIgnoreCase("E")
+//                    || commandEntered.equalsIgnoreCase("S")
+//                    || commandEntered.equalsIgnoreCase("U")
+//                    || commandEntered.equalsIgnoreCase("D")
+//                    || commandEntered.equalsIgnoreCase("look")
+//                    || commandEntered.equalsIgnoreCase("take")
+//                    || commandEntered.equalsIgnoreCase("drop")
+//                    || commandEntered.equalsIgnoreCase("i")
+//                    || commandEntered.equalsIgnoreCase("save"))) {
+//                System.out.println("I'm sorry I don't understand the command " + "\"" + commandEntered + "\"" + " yet."
+//                        + " " + "\"" + commandEntered.toLowerCase() + "\"" + " will be implemented soon.");
+//            }
+            else {
+//                System.out.println(dungeon.getEntry().getName());
+//                Command command = new Command (commandEntered);
+                if (commandEntered.isEmpty()) {
+                    continue;
+                }
+                Command command = CommandFactory.instance().parse(commandEntered);
+                if (command != null) {
+                    String output = command.execute();
+                    if (output == null) {
+                        System.out.println("See you next time!");
+                    }
+                    else {
+                        System.out.println(output);
+                    }
+                }
+            }
         }
+        stdin.close();
     }
 
     /**
@@ -156,3 +174,4 @@ public class Interpreter {
         return dungeon;
     }
 }
+

@@ -1,30 +1,74 @@
 /**
  * Command Class - Objects of type Command represent (parsed) commands that the user has typed
  * and wants to invoke
- * @author Richard Volynski
- * @version 2.5
- * 23 June 2020
+ * @author Object Oriented Optimists
+ * @version 2.6
+ * 25 June 2020
  */
+
 
 import com.sun.source.tree.BreakTree;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Scanner;
 
 
-abstract class Command {
-    abstract String execute();
+class Command {
+
+    private String dir;
+
+    Command () {
+    }
+
+    /**
+     * Command - For now, this constructor takes a valid move command entered by the user and stores it
+     * as an instance variable
+     * @param dir - user inputted direction, including save
+     */
+    Command (String dir) {
+        this.dir = dir;
+    }
+
+    /**
+     * execute() - this method executes Command and returns the text that should be printed to the user
+     * in response to that command being executed
+     * @return text description where the user is going
+     */
+    String execute() throws IllegalSaveFormatException {
+
+        if (dir.toLowerCase().equals("save")) {
+            GameState.instance().store("ZorkIII_OOO_state.sav");
+            return null;
+        }
+        else {
+            Room room = GameState.instance().getAdventurersCurrentRoom().leaveBy(dir);
+            GameState.instance().setAdventurersCurrentRoom(room);
+            String execute = GameState.instance().getAdventurersCurrentRoom().describe();
+            return execute;
+        }
+    }
 }
 
 class TakeCommand extends Command {
     private String itemName;
 
-    TakeCommand(String itemName) { this.itemName = itemName; }
+    TakeCommand(String itemName) {
+        if (itemName.isEmpty()) {
+            Scanner stdin = new Scanner(System.in);
+            System.out.print("Take what item? ");
+            itemName = stdin.nextLine();
+//            stdin.close();
+        }
+
+        this.itemName = itemName;
+    }
 
     String execute() {
         GameState state = GameState.instance();
         Room currentRoom = state.getAdventurersCurrentRoom();
+
         switch (this.itemName) {
             case "":
                 return "Take what?";
@@ -58,8 +102,9 @@ class TakeCommand extends Command {
                         return String.format("Took %s from %s.", item, currentRoom.getName());
                     }
                 } else {
-                    return String.format("%s not found in %s.", itemName, currentRoom.getName());
+                    return String.format("%s not found in %s", itemName, currentRoom.getName());
                 }
+
         }
     }
 }
@@ -83,7 +128,7 @@ class DropCommand extends Command {
                     Iterator<Item> itr = inventory.iterator();
                     while (itr.hasNext()) {
                         Item item = itr.next();
-                        state.removeFromInventory(itr, item);
+                        state.removeFromInventory(itr,item);
                         Room currentRoom = state.getAdventurersCurrentRoom();
                         currentRoom.add(item);
                         result += (item + " dropped.\n");
@@ -99,7 +144,8 @@ class DropCommand extends Command {
                     Room currentRoom = state.getAdventurersCurrentRoom();
                     currentRoom.add(item);
                     return item + " dropped.";
-                } catch (NoItemException e) {
+                }
+                catch (NoItemException e) {
                     return e.getMessage();
                 }
         }
@@ -112,6 +158,7 @@ class MovementCommand extends Command {
     /**
      * MovementCommand - For now, this constructor takes a valid move command entered by the user and stores it
      * as an instance variable
+     *
      * @param dir - user inputted direction, including save
      */
     MovementCommand(String dir) {
@@ -121,6 +168,7 @@ class MovementCommand extends Command {
     /**
      * execute() - this method executes command and returns the text that should be printed to the user
      * in response to that command being executed
+     *
      * @return text description where the user is going
      */
     String execute() {
@@ -130,25 +178,26 @@ class MovementCommand extends Command {
         return execute;
     }
 }
+    class SaveCommand extends Command {
+        private String saveFileName;
 
-class SaveCommand extends Command {
-    private String saveFilename;
+        SaveCommand(String saveFileName) {
+            this.saveFileName = saveFileName;
+        }
 
-    SaveCommand(String saveFilename) {
-        this.saveFilename = saveFilename;
-    }
-
-    String execute() {
-        try {
-            GameState.instance().store(this.saveFilename);
-            return "Game saved successfully.";
-        } catch (IllegalSaveFormatException e) {
-            return e.getMessage(); 
+        String execute() {
+            try {
+                GameState.instance().store(this.saveFileName);
+                return "Game saved successfully.";
+            }
+            catch (IllegalSaveFormatException e) {
+                return e.getMessage();
+            }
         }
     }
-}
 
 class UnknownCommand extends Command {
+
     private String bogusCommand;
 
     UnknownCommand(String bogusCommand) {
@@ -156,7 +205,7 @@ class UnknownCommand extends Command {
     }
 
     String execute() {
-        return String.format("Sorry, I don't understand '%s'.", bogusCommand);
+        return null;    //TODO implement
     }
 }
 
@@ -189,16 +238,14 @@ class ItemSpecificCommand extends Command {
     }
 
     String execute() {
-        try {
-            Item i = GameState.instance().getItemInVicinityNamed(this.noun);
-            if (i.getMessageForVerb(this.verb) != null) {
+        for (Item i : GameState.instance().getInventory()) {
+            if (i.getPrimaryName().equals(this.noun)) {
                 return i.getMessageForVerb(this.verb);
             } else {
-                return String.format("You cannot '%s' the %s.", verb, i);
+                return null;
             }
-        } catch (NoItemException e) {
-            return e.getMessage();
         }
+        return null;
     }
 }
 
@@ -213,3 +260,5 @@ class LookCommand extends Command {
         return execute;
     }
 }
+
+
