@@ -41,115 +41,114 @@ public class Dungeon {
      * @throws IllegalDungeonFormatException
      * @throws FileNotFoundException
      */
-    public Dungeon(String fileName, boolean initState) throws IllegalDungeonFormatException, FileNotFoundException, NoRoomException {
-        //TODO implement initState
+    public Dungeon(String fileName, boolean initState) throws IllegalDungeonFormatException, FileNotFoundException, NoRoomException, NoItemException, IllegalSaveFormatException {
 
         this.fileName = fileName;
-        File file = new File(fileName);
+        if (initState) {
+            GameState.instance().restore(fileName); //restore from .sav file
+        }
+        else {
+            File file = new File(fileName);
 
 
 //        System.out.println("Dungeon file is " + fileName + " File path: " + file.getAbsolutePath() +
 //                " File size " + file.length());
 
-        Scanner stdin = new Scanner(file);
+            Scanner stdin = new Scanner(file);
 
-//        boolean firstLine = true;
-//        boolean secondLine = false;
-//        boolean thirdLine = false;
-//        boolean fourthLine = false;
+            int lineNumber = 0;
 
-        int lineNumber = 0;
-
-        while (stdin.hasNextLine()) {
-            String line = stdin.nextLine();
-            lineNumber++;
-            if (lineNumber == 1) {
-                this.title = line;
-                continue;
-            }
-            if (lineNumber == 2) {
-                if (line.equals("Zork III")) {
-                    continue;
-                } else {
-                    throw new IllegalDungeonFormatException("Dungeon file is incompatible with the current version of Zork");
-//                    System.out.println("Dungeon file is incompatible with the current version of Zork");
-                }
-            }
-
-            if (lineNumber == 3) {
-                if (line.equals("===")) {
-                    continue;
-                } else {
-//                    System.out.println("Third line is wrong in the Dungeon file");
-                    break;
-                }
-            }
-
-            boolean firstRoom = true;
-
-            if (lineNumber == 4) {
-
-                if (line.equals("Items:")) {
-                    while (!line.equals("===")) {
-                        Item item;
-                        try {
-                            item = new Item(stdin);
-                        } catch (NoItemException ex) {
-                            break;
-                        }
-
-                        lineNumber += 3;
-                        this.add(item);
-                    }
-                }
-
-                line = stdin.nextLine();
-                if (line.equals("Rooms:")) {
-                    while (!line.equals("===")) {
-
-                        Room room;
-                        try {
-                            room = new Room(stdin, this,true);  //TODO check initState
-                        } catch (NoRoomException | NoItemException ex) {
-                            break;
-                        }
-
-                        line = stdin.nextLine();
-                        lineNumber += 3;
-                        rooms.add(room);
-                        if (firstRoom) {
-                            this.entry = room;
-                            firstRoom = false;
-                        }
-                    }
-                }
-                line = stdin.nextLine();
+            while (stdin.hasNextLine()) {
+                String line = stdin.nextLine();
                 lineNumber++;
-                if (line.equals("Exits:")) {
-                    while (!line.equals("===")) {
+                if (lineNumber == 1) {
+                    this.title = line;
+                    continue;
+                }
+                if (lineNumber == 2) {
+                    if (line.equals("Zork III")) {
+                        continue;
+                    } else {
+                        throw new IllegalDungeonFormatException("Dungeon file is incompatible with the current version of Zork");
+//                    System.out.println("Dungeon file is incompatible with the current version of Zork");
+                    }
+                }
 
-                        Exit exit;
-                        try {
-                            exit = new Exit(stdin, this);
-                        } catch (NoExitException ex) {
-                            break;
-                        }
-                        line = stdin.nextLine();
-                        Room exitSrc = exit.getSrc();   //exit src = null
-                        String exitSrcRoomName = exitSrc.getName();
+                if (lineNumber == 3) {
+                    if (line.equals("===")) {
+                        continue;
+                    } else {
+//                    System.out.println("Third line is wrong in the Dungeon file");
+                        break;
+                    }
+                }
 
-                        for (int i = 0; i < rooms.size(); i++) {
-                            Room currentRoom = rooms.get(i);
-                            if (currentRoom.getName().equals(exitSrcRoomName)) {
-                                currentRoom.addExit(exit);
+                boolean firstRoom = true;
+
+                if (lineNumber == 4) {
+
+                    if (line.equals("Items:")) {
+                        while (!line.equals("===")) {
+                            Item item;
+                            try {
+                                item = new Item(stdin);
+                            } catch (NoItemException ex) {
                                 break;
                             }
+
+                            lineNumber += 3;
+                            this.add(item);
                         }
-                        lineNumber += 4;
+                    }
+
+                    line = stdin.nextLine();
+                    if (line.equals("Rooms:")) {
+                        while (!line.equals("===")) {
+
+                            Room room;
+                            try {
+                                room = new Room(stdin, this, initState);
+                            } catch (NoRoomException | NoItemException ex) {
+                                break;
+                            }
+
+                            line = stdin.nextLine();
+                            lineNumber += 3;
+                            rooms.add(room);
+                            if (firstRoom) {
+                                this.entry = room;
+                                firstRoom = false;
+                            }
+                        }
+                    }
+                    line = stdin.nextLine();
+                    lineNumber++;
+                    if (line.equals("Exits:")) {
+                        while (!line.equals("===")) {
+
+                            Exit exit;
+                            try {
+                                exit = new Exit(stdin, this);
+                            } catch (NoExitException ex) {
+                                break;
+                            }
+                            line = stdin.nextLine();
+                            Room exitSrc = exit.getSrc();   //exit src = null
+                            String exitSrcRoomName = exitSrc.getName();
+
+                            for (int i = 0; i < rooms.size(); i++) {
+                                Room currentRoom = rooms.get(i);
+                                if (currentRoom.getName().equals(exitSrcRoomName)) {
+                                    currentRoom.addExit(exit);
+                                    break;
+                                }
+                            }
+                            lineNumber += 4;
+                        }
                     }
                 }
+                lines.add(line);
             }
-            lines.add(line);
         }
     }
 
@@ -230,7 +229,7 @@ public class Dungeon {
      *
      * @param r - Scanner
      */
-    void restoreState(Scanner r) throws NoItemException {  //TODO implement
+    void restoreState(Scanner r) throws NoItemException {
         String line = r.nextLine();
 
         if (line.equals("Item states:")) {  //Item states

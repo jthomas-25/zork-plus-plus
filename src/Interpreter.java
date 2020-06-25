@@ -37,11 +37,12 @@ public class Interpreter {
         try {
 //            dungeon = buildSampleDungeon();
             if (defaultZorkFile.endsWith(".sav")) {
-                GameState.instance().restore(defaultZorkFile);
+                dungeon = new Dungeon(defaultZorkFile, true);
+//                GameState.instance().restore(defaultZorkFile);
                 dungeon = GameState.instance().getDungeon();
             }
             else {
-                dungeon = new Dungeon(defaultZorkFile,true);    //TODO check if file hydrates or not
+                dungeon = new Dungeon(defaultZorkFile,false);
                 GameState.instance().initialize(dungeon);
             }
         }
