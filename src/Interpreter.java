@@ -47,15 +47,15 @@ public class Interpreter {
             }
         }
         catch (Exception e) {
-<<<<<<< HEAD
+
             System.out.println("Exception happened: " + e);
             e.printStackTrace();
             System.exit(1);
-=======
+
             System.out.println("Exception happened: " + e.toString());
             e.printStackTrace();
             return;
->>>>>>> b8a429491614a1e9cdef1c7bf93a55d14f8c40e3
+
         }
 
         System.out.println(dungeon.getTitle());
