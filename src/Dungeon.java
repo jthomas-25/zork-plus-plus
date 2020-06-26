@@ -34,8 +34,7 @@ public class Dungeon {
      * @throws IllegalDungeonFormatException
      * @throws FileNotFoundException
      */
-    public Dungeon(String fileName, boolean initState) throws IllegalDungeonFormatException, FileNotFoundException, NoRoomException {
-
+    Dungeon(String fileName, boolean initState) throws IllegalDungeonFormatException, FileNotFoundException, NoRoomException {
         this.fileName = fileName;
         String filePath = GameState.instance().getFilePath();
         File file = new File(filePath + fileName);
@@ -117,7 +116,7 @@ public class Dungeon {
                             break;
                         }
                         line = stdin.nextLine();
-                        Room exitSrc = exit.getSrc();
+                        Room exitSrc = exit.getSrc();   //exit src = null
                         String exitSrcRoomName = exitSrc.getName();
 
                         for (int i = 0; i < rooms.size(); i++) {
@@ -152,7 +151,7 @@ public class Dungeon {
      *
      * @return title;
      */
-    public String getTitle() {
+    String getTitle() {
         return title;
     }
 
@@ -161,7 +160,7 @@ public class Dungeon {
      *
      * @param room
      */
-    public void add(Room room) {
+    void add(Room room) {
         rooms.add(room);
     }
 
@@ -171,7 +170,7 @@ public class Dungeon {
      * @param roomName
      * @return room found
      */
-    public Room getRoom(String roomName) {
+    Room getRoom(String roomName) {
         for (int i = 0; i < rooms.size(); i++) {
             if (rooms.get(i).getName().equals(roomName)) {
                 return rooms.get(i);
@@ -185,7 +184,7 @@ public class Dungeon {
      *
      * @return fileName
      */
-    public String getFileName() {
+    private String getFileName() {
         return fileName;
     }
 
@@ -198,7 +197,9 @@ public class Dungeon {
         w.write("Dungeon file: " + getFileName() + "\n");
         w.write("Room states:" + "\n");
         for (int i = 0; i < rooms.size(); i++) {
-            rooms.get(i).storeState(w);
+            if (rooms.get(i).isBeenHere()) {
+                rooms.get(i).storeState(w);
+            }
         }
         w.write("===" + "\n");
     }
@@ -224,7 +225,7 @@ public class Dungeon {
      *
      * @return entry
      */
-    public Room getEntry() {
+    Room getEntry() {
         return entry;
     }
 
@@ -232,15 +233,15 @@ public class Dungeon {
      * setEntry - this method sets the room the user is entering
      * @param entry - room
      */
-    public void setEntry(Room entry) {
+    void setEntry(Room entry) {
         this.entry = entry;
     }
 
-    public Item getItem(String primaryName) {
+    Item getItem(String primaryName) {
         return items.get(primaryName);
     }
 
-    public void add(Item item) {
+    void add(Item item) {
         items.put(item.getPrimaryName(), item);
     }
 }
@@ -253,6 +254,6 @@ class IllegalDungeonFormatException extends Exception {
     /**
      * IllegalDungeonFormatException - default constructor
      */
-    public IllegalDungeonFormatException(String errorMsg) {
+    IllegalDungeonFormatException(String errorMsg) {
     }
 }

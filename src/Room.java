@@ -25,8 +25,8 @@ public class Room {
 
 
     Room(Scanner s, Dungeon d) throws NoRoomException {
-       this(s, d, true);
-    } 
+        this(s, d, true);
+    }
     public Room(Scanner s, Dungeon d, boolean initState) throws NoRoomException {
         init();
         String line = s.nextLine();
@@ -68,9 +68,9 @@ public class Room {
         if (line.equals("===")) {
             throw new NoRoomException();
         }
-        this.name = line;
+        this.name = "\t" + line;
         line = s.nextLine();
-        this.desc = line;
+        this.desc = "\t" + line;
     }
 
     /**
@@ -81,7 +81,7 @@ public class Room {
         init();
         this.name = name;
     }
-    
+
     private void init() {
         exits = new Hashtable<>();
         roomDescriptionNeeded = false;
@@ -113,11 +113,11 @@ public class Room {
         String output = "";
         if (!beenHere) {
             beenHere = true;
-            output = name + "\n" + this.desc + "\n";
+            output = name + "\n" + "\t" + this.desc + "\n" + "\n";
         }
         else if (this.roomDescriptionNeeded) {
             this.roomDescriptionNeeded = false;
-            output = name + "\n" + this.desc + "\n";
+            output = name + "\n" + "\t" + this.desc + "\n" + "\n";
         }
         else {
             output = name + "\n";
@@ -195,7 +195,7 @@ public class Room {
     void restoreState(Scanner s, Dungeon d) {
         restoreState(s);
         String line = s.nextLine();
-        String[] splitLine = line.split(": "); 
+        String[] splitLine = line.split(": ");
         if (splitLine[0].equals("Contents")) {
             String[] itemNames = splitLine[1].split(",");
             for (String itemName : itemNames) {

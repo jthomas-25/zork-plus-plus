@@ -26,7 +26,7 @@ public class Interpreter {
         Scanner stdin = new Scanner(System.in);
 
 
-        String defaultZorkFile = "trinklev3.zork";
+        String defaultZorkFile = "ZorkIII_Test_File.zork";
         if (args.length > 0) {
             defaultZorkFile = args[0];
         }
@@ -47,7 +47,7 @@ public class Interpreter {
         }
         catch (Exception e) {
             System.out.println("Exception happened: " + e);
-            //e.printStackTrace();
+            e.printStackTrace();
             System.exit(1);
         }
 

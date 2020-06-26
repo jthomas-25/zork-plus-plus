@@ -6,8 +6,6 @@
  * 23 June 2020
  */
 
-import com.sun.source.tree.BreakTree;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -27,7 +25,7 @@ class TakeCommand extends Command {
         Room currentRoom = state.getAdventurersCurrentRoom();
         switch (this.itemName) {
             case "":
-                return "Take what?";
+                return "Take what? (usage: take <item in room>)";
             case "all":
                 String result = "";
                 ArrayList<Item> currentRoomContents = currentRoom.getContents();
@@ -66,7 +64,7 @@ class TakeCommand extends Command {
 
 class DropCommand extends Command {
     private String itemName;
-    
+
     DropCommand(String itemName) {
         this.itemName = itemName;
     }
@@ -143,7 +141,7 @@ class SaveCommand extends Command {
             GameState.instance().store(this.saveFilename);
             return "Game saved successfully.";
         } catch (IllegalSaveFormatException e) {
-            return e.getMessage(); 
+            return e.getMessage();
         }
     }
 }
@@ -157,6 +155,13 @@ class UnknownCommand extends Command {
 
     String execute() {
         return String.format("Sorry, I don't understand '%s'.", bogusCommand);
+    }
+}
+
+class QuitCommand extends Command {
+
+    String execute() {
+        return null;
     }
 }
 

@@ -28,13 +28,14 @@ class GameState {
     /**
      * instance - this method returns single instance of GameState class
      * @return single instance of GameState class
-     */
+     * */
     public static synchronized GameState instance() {
         if (single_instance == null)
             single_instance = new GameState();
 
         return single_instance;
     }
+
 
     /**
      * Default Constructor GameState
@@ -92,8 +93,8 @@ class GameState {
             dungeon.storeState(printWriter);
             printWriter.write("Adventurer:\n");
             printWriter.write("Current room: " + currentRoom.getName() + "\n");
+            printWriter.write("Inventory: ");
             if (!inventory.isEmpty()) {
-                printWriter.write("Inventory: ");
                 for (int i = 0; i < inventory.size(); i++) {
                     Item item = inventory.get(i);
                     printWriter.write(item.getPrimaryName());
@@ -117,7 +118,7 @@ class GameState {
      * @exception IllegalSaveFormatException
      * @exception NoExitException
      * @exception FileNotFoundException
-     */
+     * */
     void restore(String fileName) throws FileNotFoundException, NoRoomException, IllegalDungeonFormatException, IllegalSaveFormatException {
         String saveFilePath = getFilePath();
         File file = new File(saveFilePath + fileName);
@@ -129,7 +130,7 @@ class GameState {
         String secLine = gameScanner.nextLine();  //reads Dungeon file name
         String[] secLineSplit = secLine.split(": ");    //parse by colon and space
         String zorkFileName = secLineSplit[1];
-        dungeon = new Dungeon(zorkFileName, false);
+        dungeon = new Dungeon(zorkFileName, false); //Todo: Figure this out
         initialize(dungeon);
 
         dungeon.restoreState(gameScanner);
@@ -140,19 +141,19 @@ class GameState {
         String currentRoomName = currentRoomSplit[1];
         currentRoom = dungeon.getRoom(currentRoomName);
         dungeon.setEntry(currentRoom);
-        restoreInventory(gameScanner, dungeon);
-        gameScanner.close();
-    }
-
-    void restoreInventory(Scanner s, Dungeon d) {
-        String[] splitLine = s.nextLine().split(": ");
+        String[] splitLine = gameScanner.nextLine().split(": ");
         if (splitLine[0].equals("Inventory")) {
-            String[] itemNames = splitLine[1].split(",");
-            for (String itemName : itemNames) {
-                Item item = d.getItem(itemName);
-                this.addToInventory(item);
+            try {
+                String[] itemNames = splitLine[1].split(",");
+                for (String itemName : itemNames) {
+                    Item item = dungeon.getItem(itemName);
+                    this.addToInventory(item);
+                }
+            } catch (Exception e) {
+                assert true;
             }
         }
+        gameScanner.close();
     }
 
     ArrayList<Item> getInventory() {
@@ -185,7 +186,7 @@ class GameState {
                 item = getItemFromInventoryNamed(name);
                 return item;
             } catch (NoItemException e) {
-                throw new NoItemException(String.format("%s not found in %s.", name, currentRoom.getName()));
+                throw e;
             }
         } else {
             return item;
@@ -215,6 +216,7 @@ class GameState {
         String filePath = projectDir + fileDir;
         return filePath;
     }
+
 }
 
 /**

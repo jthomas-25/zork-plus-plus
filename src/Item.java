@@ -19,7 +19,7 @@ public class Item {
     private ArrayList<String> aliases = new ArrayList<String>();
 
 
-    public Item (Scanner s) throws NoItemException {
+    Item (Scanner s) throws NoItemException {
         String line = s.nextLine(); //name, aliases
         if (line.equals("===") || line.equals("---")) {
             throw new NoItemException();
@@ -32,11 +32,7 @@ public class Item {
         }
 
         line = s.nextLine();
-        try {
-            this.weight = Integer.parseInt(line);
-        }
-        catch (Exception e) {
-        }
+        this.weight = Integer.parseInt(line);
 
         line = s.nextLine();
         while (!line.equals("---")) {
@@ -48,15 +44,37 @@ public class Item {
         }
     }
 
-    public boolean goesBy(String name) {
+    /**
+     * storeState - this method stores the state of the room in the file, whether it was visited or not
+     * @param w - PrintWriter to write to file
+     */
+    void storeState(PrintWriter w) {
+        String primaryNameAndAliases = getPrimaryName();
+
+        for (int i = 0; i < aliases.size(); i++) {
+            primaryNameAndAliases+= "," + aliases.get(i);
+        }
+        w.write(primaryNameAndAliases + "\n");
+        w.write(Integer.toString(weight) + "\n");
+        Iterator keys = messages.keySet().iterator();
+        while (keys.hasNext()) {
+            String key = (String) keys.next();
+            String value = (String) messages.get(key);
+            w.write(key + ":" + value + "\n");
+        }
+        w.write("---" + "\n");
+    }
+
+
+    boolean goesBy(String name) {
         return primaryName.equals(name) || aliases.contains(name);
     }
 
-    public String getPrimaryName() {
+    String getPrimaryName() {
         return primaryName;
     }
 
-    public String getMessageForVerb(String verb) {
+    String getMessageForVerb(String verb) {
         return messages.get(verb);
     }
 
@@ -64,7 +82,7 @@ public class Item {
         return primaryName;
     }
 
-    public int getWeight() {
+    int getWeight() {
         return weight;
     }
 }

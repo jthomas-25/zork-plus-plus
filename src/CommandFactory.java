@@ -9,17 +9,18 @@
 
 class CommandFactory {
     private static CommandFactory single_instance = null;
+    private String itemName;
 
     /**
      * instance() - this method is represented by the Singleton CommandFactory Class
-     *
      * @return single_instance
      */
-    public static CommandFactory instance() {
+    static synchronized CommandFactory instance() {
         if (single_instance == null)
             single_instance = new CommandFactory();
         return single_instance;
     }
+
 
 
     /**
@@ -30,11 +31,10 @@ class CommandFactory {
 
     /**
      * parse - this method parses entered commands and produces Command objects
-     *
      * @param commandString - user input
      * @return - Command objects
      */
-    Command parse(String commandString) {
+    Command parse (String commandString) {
         String[] words = commandString.split(" ");
         switch (words.length) {
             case 1:
@@ -52,9 +52,10 @@ class CommandFactory {
                         return new TakeCommand("");
                     case "drop":
                         return new DropCommand("");
-                    case "i":
-                    case "inventory":
+                    case "i": case "inventory":
                         return new InventoryCommand();
+                    case "q": case "quit":
+                        return new QuitCommand();
                     default:
                         return new UnknownCommand(words[0]);
                 }
