@@ -73,7 +73,7 @@ class DropCommand extends Command {
         GameState state = GameState.instance();
         switch(this.itemName) {
             case "":
-                return "Drop what?";
+                return "Drop what? (usage: drop <item in inventory>)";
             case "all":
                 String result = "";
                 ArrayList<Item> inventory = state.getInventory();
