@@ -6,7 +6,7 @@
  * inputs a command, it should use the CommandFactory to instantiate a new Command object and execute it.
  * If the user enters "q", it terminates the program.
  * @author Object Oriented Optimists
- * @version 2.8
+ * @version 2.9
  * 26 June 2020
  */
 
@@ -87,11 +87,14 @@ public class Interpreter {
                 Command command = CommandFactory.instance().parse(commandEntered);
                 if (command != null) {
                     String output = command.execute();
-                    if (output == ("save")) {
+                    if (output == null) {
+                        System.out.println("I'm sorry I don't understand the command " + "\"" + commandEntered + "\"");
+                    }
+                    else if (output.equals("save")) {
                         System.out.println("See you next time!");
                     }
                     else {
-                        System.out.println("I'm sorry I don't understand the command " + "\"" + commandEntered + "\"");
+                        System.out.println(output);
                     }
                 }
             }
