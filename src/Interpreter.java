@@ -10,7 +10,6 @@
  * 26 June 2020
  */
 
-
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
@@ -47,15 +46,9 @@ public class Interpreter {
             }
         }
         catch (Exception e) {
-
-            System.out.println("Exception happened: " + e);
-            e.printStackTrace();
-            System.exit(1);
-
             System.out.println("Exception happened: " + e.toString());
             e.printStackTrace();
             return;
-
         }
 
         System.out.println(dungeon.getTitle());
@@ -184,4 +177,3 @@ public class Interpreter {
         return dungeon;
     }
 }
-
