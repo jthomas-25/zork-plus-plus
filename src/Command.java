@@ -1,28 +1,87 @@
 /**
  * Command Class - Objects of type Command represent (parsed) commands that the user has typed
  * and wants to invoke
- * @author Richard Volynski
- * @version 2.5
- * 23 June 2020
+ * @author Object Oriented Optimists
+ * @version 2.7
+ * 25 June 2020
  */
 
+<<<<<<< HEAD
+=======
+
+import com.sun.source.tree.BreakTree;
+
+>>>>>>> b8a429491614a1e9cdef1c7bf93a55d14f8c40e3
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Scanner;
 
 
-abstract class Command {
-    abstract String execute();
+class Command {
+
+    private String dir;
+
+    Command () {
+    }
+
+    /**
+     * Command - For now, this constructor takes a valid move command entered by the user and stores it
+     * as an instance variable
+     * @param dir - user inputted direction, including save
+     */
+    Command (String dir) {
+        this.dir = dir;
+    }
+
+    /**
+     * execute - this method executes Command and returns the text that should be printed to the user
+     * in response to that command being executed
+     * @return text description where the user is going
+     */
+    String execute() throws IllegalSaveFormatException {
+
+        if (dir.toLowerCase().equals("save")) {
+            GameState.instance().store("ZorkIII_OOO_state.sav");
+            return null;
+        }
+        else {
+            Room room = GameState.instance().getAdventurersCurrentRoom().leaveBy(dir);
+            GameState.instance().setAdventurersCurrentRoom(room);
+            String execute = GameState.instance().getAdventurersCurrentRoom().describe();
+            return execute;
+        }
+    }
 }
 
 class TakeCommand extends Command {
     private String itemName;
 
-    TakeCommand(String itemName) { this.itemName = itemName; }
 
+    /**
+     * TakeCommand - this method is used when the user tries to take items from the Room
+     * @param itemName
+     */
+    TakeCommand(String itemName) {
+        if (itemName.isEmpty()) {
+            Scanner stdin = new Scanner(System.in);
+            System.out.print("Take what item? ");
+            itemName = stdin.nextLine();
+//            stdin.close();
+        }
+
+        this.itemName = itemName;
+    }
+
+    /**
+     * execute - this method is a continuation of TakeCommand method except that it warns user
+     * if inventory is too heavy
+     * @return itemName
+     */
     String execute() {
         GameState state = GameState.instance();
         Room currentRoom = state.getAdventurersCurrentRoom();
+
         switch (this.itemName) {
             case "":
                 return "Take what? (usage: take <item in room>)";
@@ -56,8 +115,9 @@ class TakeCommand extends Command {
                         return String.format("Took %s from %s.", item, currentRoom.getName());
                     }
                 } else {
-                    return String.format("%s not found in %s.", itemName, currentRoom.getName());
+                    return String.format("%s not found in %s", itemName, currentRoom.getName());
                 }
+
         }
     }
 }
@@ -65,10 +125,22 @@ class TakeCommand extends Command {
 class DropCommand extends Command {
     private String itemName;
 
+<<<<<<< HEAD
+=======
+    /**
+     * DropCommand - this method allows user to drop item
+     * @param itemName
+     */
+>>>>>>> b8a429491614a1e9cdef1c7bf93a55d14f8c40e3
     DropCommand(String itemName) {
         this.itemName = itemName;
     }
 
+
+    /**
+     * execute - this method is a continuation of DropCommand except that it warns user if they have no items to drop
+     * @return
+     */
     String execute() {
         GameState state = GameState.instance();
         switch(this.itemName) {
@@ -81,7 +153,7 @@ class DropCommand extends Command {
                     Iterator<Item> itr = inventory.iterator();
                     while (itr.hasNext()) {
                         Item item = itr.next();
-                        state.removeFromInventory(itr, item);
+                        state.removeFromInventory(itr,item);
                         Room currentRoom = state.getAdventurersCurrentRoom();
                         currentRoom.add(item);
                         result += (item + " dropped.\n");
@@ -97,7 +169,8 @@ class DropCommand extends Command {
                     Room currentRoom = state.getAdventurersCurrentRoom();
                     currentRoom.add(item);
                     return item + " dropped.";
-                } catch (NoItemException e) {
+                }
+                catch (NoItemException e) {
                     return e.getMessage();
                 }
         }
@@ -128,33 +201,53 @@ class MovementCommand extends Command {
         return execute;
     }
 }
+    class SaveCommand extends Command {
+        private String saveFileName;
 
-class SaveCommand extends Command {
-    private String saveFilename;
 
-    SaveCommand(String saveFilename) {
-        this.saveFilename = saveFilename;
-    }
+        /**
+         * SaveCommand - this command allows the user to save the game at its current state.
+         * @param saveFileName
+         */
+        SaveCommand(String saveFileName) {
+            this.saveFileName = saveFileName;
+        }
 
+<<<<<<< HEAD
     String execute() {
         try {
             GameState.instance().store(this.saveFilename);
             return "Game saved successfully.";
         } catch (IllegalSaveFormatException e) {
             return e.getMessage();
+=======
+        String execute() {
+            try {
+                GameState.instance().store(this.saveFileName);
+                return "Game saved successfully.";
+            }
+            catch (IllegalSaveFormatException e) {
+                return e.getMessage();
+            }
+>>>>>>> b8a429491614a1e9cdef1c7bf93a55d14f8c40e3
         }
     }
-}
 
 class UnknownCommand extends Command {
+
     private String bogusCommand;
 
+
+    /**
+     * Unknown Command - this Command is invoked when a user enters an unknown command to the program
+     * @param bogusCommand
+     */
     UnknownCommand(String bogusCommand) {
         this.bogusCommand = bogusCommand;
     }
 
     String execute() {
-        return String.format("Sorry, I don't understand '%s'.", bogusCommand);
+        return null;
     }
 }
 
@@ -167,6 +260,9 @@ class QuitCommand extends Command {
 
 class InventoryCommand extends Command {
 
+    /**
+     * InventoryCommand - Constructor
+     */
     InventoryCommand() {
     }
 
@@ -188,33 +284,53 @@ class ItemSpecificCommand extends Command {
     private String verb;
     private String noun;
 
+
+    /**
+     * ItemSpecificCommand -  If the noun matches the name of an item that is either
+     * in their inventory or in the current room, and if the verb corresponds to an
+     * item-specific verb for that noun, the corresponding message (specified in the dungeon file)
+     * will be output
+     * @param verb
+     * @param noun
+     */
     ItemSpecificCommand(String verb, String noun) {
         this.noun = noun;
         this.verb = verb;
     }
 
+    /**
+     * execute - this method executes the ItemSpecificCommand method
+     * @return null
+     */
     String execute() {
-        try {
-            Item i = GameState.instance().getItemInVicinityNamed(this.noun);
-            if (i.getMessageForVerb(this.verb) != null) {
+        for (Item i : GameState.instance().getInventory()) {
+            if (i.getPrimaryName().equals(this.noun)) {
                 return i.getMessageForVerb(this.verb);
             } else {
-                return String.format("You cannot '%s' the %s.", verb, i);
+                return null;
             }
-        } catch (NoItemException e) {
-            return e.getMessage();
         }
+        return null;
     }
 }
 
 class LookCommand extends Command {
 
+    /**
+     * LookCommand - Constructor
+     */
     LookCommand() {
     }
 
+    /**
+     * execute - this method executes the LookCommand method
+     * @return execute
+     */
     String execute() {
         GameState.instance().getAdventurersCurrentRoom().setRoomDescriptionNeeded();
         String execute = GameState.instance().getAdventurersCurrentRoom().describe();
         return execute;
     }
 }
+
+

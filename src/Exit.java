@@ -1,9 +1,9 @@
 /**
  * Exit Class - Each Room object holds on to an ArrayList of the Exits from it, and each Exit holds on to the
  * Room that it leads to. An Exit can also describe itself, which generates and returns a String message.
- * @author Richard Volynski
- * @version 2.5
- * 23 June 2020
+ * @author Object Oriented Optimists
+ * @version 2.7
+ * 25 June 2020
  */
 
 
@@ -95,3 +95,4 @@ class NoExitException extends Exception {
     NoExitException() {
     }
 }
+
