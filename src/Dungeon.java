@@ -2,37 +2,31 @@
  * Dungeon Class - It holds on to a Hashtable collection of Room objects, and knows which one is the entry point.
  * A Hashtable is a class that makes it easy to look up entries by a "key" rather than by a numbered index,
  * as an ArrayList does.
- * @author Object Oriented Optimists
- * @version 2.7
- * 25 June 2020
+ * @author Richard Volynski
+ * @version 2.5
+ * 23 June 2020
  */
 
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.Scanner;
 
 public class Dungeon {
-
-    /**
-     * getTitle - this method returns title
-     * @return title;
-     */
-    public String getTitle() {
-        return title;
-    }
-
     private String title = "Simple Dungeon";    //default
     private Room entry;
     private ArrayList<Room> rooms = new ArrayList<Room>();
-    private ArrayList<String> lines = new ArrayList<>();
-
     private String fileName;
+    private Hashtable<String, Item> items = new Hashtable<String, Item>();
 
-    private ArrayList<Item> items = new ArrayList<>();
 
+    public Dungeon(String fileName) throws IllegalDungeonFormatException, FileNotFoundException, NoRoomException {
+        this(fileName, true);
+    }
     /**
      * Dungeon constructor
      *
@@ -40,90 +34,87 @@ public class Dungeon {
      * @throws IllegalDungeonFormatException
      * @throws FileNotFoundException
      */
-<<<<<<< HEAD
     Dungeon(String fileName, boolean initState) throws IllegalDungeonFormatException, FileNotFoundException, NoRoomException {
-=======
-    public Dungeon(String fileName, boolean initState) throws IllegalDungeonFormatException, FileNotFoundException, NoRoomException, NoItemException, IllegalSaveFormatException {
-
->>>>>>> b8a429491614a1e9cdef1c7bf93a55d14f8c40e3
         this.fileName = fileName;
-        if (initState) {
-            GameState.instance().restore(fileName); //restore from .sav file
-        }
-        else {
-            File file = new File(fileName);
+        String filePath = GameState.instance().getFilePath();
+        File file = new File(filePath + fileName);
 
 
 //        System.out.println("Dungeon file is " + fileName + " File path: " + file.getAbsolutePath() +
 //                " File size " + file.length());
 
-            Scanner stdin = new Scanner(file);
-
-            int lineNumber = 0;
-
-            while (stdin.hasNextLine()) {
-                String line = stdin.nextLine();
-                lineNumber++;
-                if (lineNumber == 1) {
-                    this.title = line;
+        Scanner stdin = new Scanner(file);
+        int lineNumber = 0;
+        while (stdin.hasNextLine()) {
+            String line = stdin.nextLine();
+            lineNumber++;
+            if (lineNumber == 1) {
+                this.title = line;
+                continue;
+            }
+            if (lineNumber == 2) {
+                if (line.equals("Zork III")) {
                     continue;
-                }
-                if (lineNumber == 2) {
-                    if (line.equals("Zork III")) {
-                        continue;
-                    } else {
-                        throw new IllegalDungeonFormatException("Dungeon file is incompatible with the current version of Zork");
+                } else {
+                    throw new IllegalDungeonFormatException("Dungeon file is incompatible with the current version of Zork");
 //                    System.out.println("Dungeon file is incompatible with the current version of Zork");
-                    }
                 }
+            }
 
-                if (lineNumber == 3) {
-                    if (line.equals("===")) {
-                        continue;
-                    } else {
+            if (lineNumber == 3) {
+                if (line.equals("===")) {
+                    continue;
+                } else {
 //                    System.out.println("Third line is wrong in the Dungeon file");
-                        break;
+                    break;
+                }
+            }
+
+            boolean firstRoom = true;
+
+            if (lineNumber == 4) {
+                if (line.equals("Items:")) {
+                    while (!line.equals("===")) {
+                        Item item;
+                        try {
+                            item = new Item(stdin);
+                        } catch (NoItemException ex) {
+                            break;
+                        }
+
+                        this.add(item);
                     }
                 }
 
-                boolean firstRoom = true;
+                line = stdin.nextLine();
+                if (line.equals("Rooms:")) {
+                    while (!line.equals("===")) {
 
-                if (lineNumber == 4) {
+                        Room room;
+                        try {
+                            room = new Room(stdin, this, initState);
+                        } catch (NoRoomException ex) {
+                            break;
+                        }
 
-                    if (line.equals("Items:")) {
-                        while (!line.equals("===")) {
-                            Item item;
-                            try {
-                                item = new Item(stdin);
-                            } catch (NoItemException ex) {
-                                break;
-                            }
-
-                            lineNumber += 3;
-                            this.add(item);
+                        rooms.add(room);
+                        if (firstRoom) {
+                            this.entry = room;
+                            firstRoom = false;
                         }
                     }
+                }
 
-                    line = stdin.nextLine();
-                    if (line.equals("Rooms:")) {
-                        while (!line.equals("===")) {
+                line = stdin.nextLine();
+                if (line.equals("Exits:")) {
+                    while (!line.equals("===")) {
 
-                            Room room;
-                            try {
-                                room = new Room(stdin, this, initState);
-                            } catch (NoRoomException | NoItemException ex) {
-                                break;
-                            }
-
-                            line = stdin.nextLine();
-                            lineNumber += 3;
-                            rooms.add(room);
-                            if (firstRoom) {
-                                this.entry = room;
-                                firstRoom = false;
-                            }
+                        Exit exit;
+                        try {
+                            exit = new Exit(stdin, this);
+                        } catch (NoExitException ex) {
+                            break;
                         }
-<<<<<<< HEAD
                         line = stdin.nextLine();
                         Room exitSrc = exit.getSrc();   //exit src = null
                         String exitSrcRoomName = exitSrc.getName();
@@ -132,36 +123,11 @@ public class Dungeon {
                             Room currentRoom = rooms.get(i);
                             if (currentRoom.getName().equals(exitSrcRoomName)) {
                                 currentRoom.addExit(exit);
-=======
-                    }
-                    line = stdin.nextLine();
-                    lineNumber++;
-                    if (line.equals("Exits:")) {
-                        while (!line.equals("===")) {
-
-                            Exit exit;
-                            try {
-                                exit = new Exit(stdin, this);
-                            } catch (NoExitException ex) {
->>>>>>> b8a429491614a1e9cdef1c7bf93a55d14f8c40e3
                                 break;
                             }
-                            line = stdin.nextLine();
-                            Room exitSrc = exit.getSrc();   //exit src = null
-                            String exitSrcRoomName = exitSrc.getName();
-
-                            for (int i = 0; i < rooms.size(); i++) {
-                                Room currentRoom = rooms.get(i);
-                                if (currentRoom.getName().equals(exitSrcRoomName)) {
-                                    currentRoom.addExit(exit);
-                                    break;
-                                }
-                            }
-                            lineNumber += 4;
                         }
                     }
                 }
-                lines.add(line);
             }
         }
     }
@@ -177,8 +143,9 @@ public class Dungeon {
         this.setEntry(entry);
     }
 
+    private void init() {
+    }
 
-<<<<<<< HEAD
     /**
      * getTitle - this method returns title
      *
@@ -187,13 +154,10 @@ public class Dungeon {
     String getTitle() {
         return title;
     }
-=======
-//    private void init() {
-//    }
->>>>>>> b8a429491614a1e9cdef1c7bf93a55d14f8c40e3
 
     /**
      * add - this method adds a room to Dungeon class
+     *
      * @param room
      */
     void add(Room room) {
@@ -202,6 +166,7 @@ public class Dungeon {
 
     /**
      * getRoom - this method returns a Room by roomName
+     *
      * @param roomName
      * @return room found
      */
@@ -216,6 +181,7 @@ public class Dungeon {
 
     /**
      * getFileName - this method returns the filename
+     *
      * @return fileName
      */
     private String getFileName() {
@@ -224,19 +190,11 @@ public class Dungeon {
 
     /**
      * storeState - this method checks if next line is equal to "===". If yes, then write current room
+     *
      * @param w - PrintWriter
      */
     void storeState(PrintWriter w) {
         w.write("Dungeon file: " + getFileName() + "\n");
-
-        w.write("Item states:" + "\n");
-        ArrayList<Item> inventory = GameState.instance().getInventory();
-
-        for (int i = 0; i < inventory.size(); i++) {
-            inventory.get(i).storeState(w);
-        }
-        w.write("===" + "\n");
-
         w.write("Room states:" + "\n");
         for (int i = 0; i < rooms.size(); i++) {
             if (rooms.get(i).isBeenHere()) {
@@ -248,42 +206,23 @@ public class Dungeon {
 
     /**
      * restoreState - this method allow the user to resume the game from the state it was saved
+     *
      * @param r - Scanner
      */
-    void restoreState(Scanner r) throws NoItemException {
-        String line = r.nextLine();
-
-        if (line.equals("Item states:")) {  //Item states
-            while (!line.equals("===")) {   //loop through all item
-
-                try {
-                    Item item = new Item(r);
-                    GameState.instance().addToInventory(item);
-                }
-                catch (NoItemException e) {
-                    break;
-                }
-//                line = r.nextLine();   //skip ---
-            }
-        }
-
-        line = r.nextLine();
-        if (line.equals("Room states:")) {  //Room states
-            while (!line.equals("===")) {   //loop through all rooms
-                line = r.nextLine(); //room name
-                if (line.equals("===")) {
-                    break;
-                }
-                String[] currentRoomSplit = line.split(":");    //parse room name by colon
-                String currentRoomName = currentRoomSplit[0];   //Room name
-                this.getRoom(currentRoomName).restoreState(r);  //Get room and restore it
-                line = r.nextLine();   //skip ---
-            }
+    void restoreState(Scanner r) {
+        r.nextLine(); //Skip "Room states:" line
+        String line = r.nextLine(); //room name
+        while (!line.equals("===")) {   //loop through all rooms
+            String[] currentRoomSplit = line.split(":");    //parse room name by colon
+            String currentRoomName = currentRoomSplit[0];
+            this.getRoom(currentRoomName).restoreState(r, this);
+            line = r.nextLine(); //room name
         }
     }
 
     /**
      * getEntry - this method returns the room the user is entering
+     *
      * @return entry
      */
     Room getEntry() {
@@ -298,37 +237,12 @@ public class Dungeon {
         this.entry = entry;
     }
 
-<<<<<<< HEAD
     Item getItem(String primaryName) {
         return items.get(primaryName);
     }
 
     void add(Item item) {
         items.put(item.getPrimaryName(), item);
-=======
-    /**
-     * getItem - this method returns item by name
-     * @param primaryName item name
-     * @return Item item found
-     * @throws NoItemException
-     */
-    public Item getItem(String primaryName) throws NoItemException {
-        for (int i = 0; i < items.size(); i++) {
-            if (items.get(i).getPrimaryName().equals(primaryName)) {
-                return items.get(i);
-            }
-        }
-        throw new NoItemException(String.format("You're not carrying a(n) %s.", primaryName));
-    }
-
-
-    /**
-     * add - this method adds item to a collection of items
-     * @param item
-     */
-    public void add (Item item) {
-        items.add(item);
->>>>>>> b8a429491614a1e9cdef1c7bf93a55d14f8c40e3
     }
 }
 
@@ -343,4 +257,3 @@ class IllegalDungeonFormatException extends Exception {
     IllegalDungeonFormatException(String errorMsg) {
     }
 }
-

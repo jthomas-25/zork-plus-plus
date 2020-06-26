@@ -1,9 +1,9 @@
 /**
  * CommandFactory Class - A factory class whose purpose is to parse text strings
  * and produce the appropriate Command objects. Also, the CommandFactory is a Singleton class.
- * @author Object Oriented Optimists
- * @version 2.7
- * 25 June 2020
+ * @author Richard Volynski
+ * @version 2.5
+ * 23 June 2020
  */
 
 
@@ -54,13 +54,8 @@ class CommandFactory {
                         return new DropCommand("");
                     case "i": case "inventory":
                         return new InventoryCommand();
-<<<<<<< HEAD
                     case "q": case "quit":
                         return new QuitCommand();
-=======
-                    case "save":
-                        return new SaveCommand("ZorkIII_OOO_state.sav");
->>>>>>> b8a429491614a1e9cdef1c7bf93a55d14f8c40e3
                     default:
                         return new UnknownCommand(words[0]);
                 }
@@ -71,11 +66,10 @@ class CommandFactory {
                     case "drop":
                         return new DropCommand(words[1]);
                     case "save":
-                        return new SaveCommand("ZorkIII_OOO_state.sav");
+                        return new SaveCommand(words[1]);
                     default:
                         return new ItemSpecificCommand(words[0], words[1]);
                 }
         }
     }
 }
-

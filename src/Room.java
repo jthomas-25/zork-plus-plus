@@ -1,19 +1,29 @@
 /**
  * Room Class - represents every room in the dungeon (name, description), knows whether or not
  * the adventurer has already visited it. Also, the Room Class contains lists of Exits.
- * @author Object Oriented Optimists
- * @version 2.7
- * 25 June 2020
+ * @author Richard Volynski
+ * @version 2.5
+ * 23 June 2020
  */
 
-
-
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.Iterator;
 
-public class Room{
 
-<<<<<<< HEAD
+public class Room {
+    private Hashtable <String, Exit> exits;
+    private String name;
+    private boolean roomDescriptionNeeded;
+    private String desc;
+    private boolean beenHere;
+    private ArrayList<Item> contents;
+
+
     Room(Scanner s, Dungeon d) throws NoRoomException {
         this(s, d, true);
     }
@@ -24,39 +34,34 @@ public class Room{
             throw new NoRoomException();
         }
         this.name = line;
-=======
-    /**
-     * getName - this method returns name of the room
-     * @return room name
-     */
-    public String getName() {
-        return name;
+
+        line = s.nextLine();
+        String[] splitLine = line.split(": ");
+        if (splitLine[0].equals("Contents")) {
+            //Decide whether to reset room state (i.e. contents)
+            if (initState) {
+                String[] itemNames = splitLine[1].split(",");
+                for (String itemName : itemNames) {
+                    Item item = d.getItem(itemName);
+                    this.add(item);
+                }
+            }
+            this.desc = s.nextLine();
+        } else {
+            this.desc = line;
+        }
+
+        line = s.nextLine();
+        while (!line.equals("---")) {
+            this.desc += ("\n" + line);
+            line = s.nextLine();
+        }
     }
->>>>>>> b8a429491614a1e9cdef1c7bf93a55d14f8c40e3
-
-    private Hashtable <String, Exit> exits = new Hashtable<>();
-
-    private String name;
-    private boolean firstTimeWhenEnter = true;
-    private boolean roomDescriptionNeeded = false;
-    private ArrayList<Item> contents = new ArrayList<>();
-
-    /**
-     * setDesc - this method sets room description
-     * @param desc
-     */
-    public void setDesc(String desc) {
-        this.desc = desc;
-    }
-
-    private String desc;
-    private boolean beenHere = false;
 
     /**
      * Room - constructor
      * @param s - Scanner
      */
-<<<<<<< HEAD
     public Room (Scanner s) throws NoRoomException {
         init();
         String line = s.nextLine();
@@ -67,33 +72,15 @@ public class Room{
         line = s.nextLine();
         this.desc = "\t" + line;
     }
-=======
-//    public Room (Scanner s) throws NoRoomException {
-//        String line = s.nextLine();
-//        if (line.equals("===")) {
-//            throw new NoRoomException();
-//        }
-//        this.name = line;
-//        line = s.nextLine();
-//        if (line.contains("Contents: ")) {
-//            String[] contents = line.split(" ");
-//            String itemName = contents[1];
-//
-//        }
-//        this.desc = line;
-////        line = s.nextLine();
-//    }
-
->>>>>>> b8a429491614a1e9cdef1c7bf93a55d14f8c40e3
 
     /**
      * Constructor Room - which stores room name in instance variable name
      * @param name
      */
     Room (String name) throws NoExitException {
+        init();
         this.name = name;
     }
-<<<<<<< HEAD
 
     private void init() {
         exits = new Hashtable<>();
@@ -117,8 +104,6 @@ public class Room{
     void setDesc(String desc) {
         this.desc = desc;
     }
-=======
->>>>>>> b8a429491614a1e9cdef1c7bf93a55d14f8c40e3
 
     /**
      * describe - this method generates room description
@@ -126,7 +111,6 @@ public class Room{
      */
     String describe() {
         String output = "";
-<<<<<<< HEAD
         if (!beenHere) {
             beenHere = true;
             output = name + "\n" + "\t" + this.desc + "\n" + "\n";
@@ -134,15 +118,6 @@ public class Room{
         else if (this.roomDescriptionNeeded) {
             this.roomDescriptionNeeded = false;
             output = name + "\n" + "\t" + this.desc + "\n" + "\n";
-=======
-        if (this.firstTimeWhenEnter) {
-            this.firstTimeWhenEnter = false;
-            output = name + "\n" + desc + "\n";
-        }
-        else if (this.roomDescriptionNeeded) {
-            this.roomDescriptionNeeded = false;
-            output = name + "\n" + desc + "\n";
->>>>>>> b8a429491614a1e9cdef1c7bf93a55d14f8c40e3
         }
         else {
             output = name + "\n";
@@ -158,7 +133,7 @@ public class Room{
         }
 
         for (Item i : contents) {
-            output = output + "\n" + String.format("There is a(n) %s here.", i.getPrimaryName());
+            output = output + "\n" + String.format("There is a(n) %s here.", i);
         }
 
         return output;
@@ -175,7 +150,6 @@ public class Room{
         }
         else {
             Room newRoom = exits.get(dir.toLowerCase()).getDest();
-            newRoom.beenHere = true;
             return newRoom;
         }
     }
@@ -184,7 +158,6 @@ public class Room{
      * addExit - this method stores exit in class Room
      * @param exit - exit
      */
-
     public void addExit (Exit exit) {
         exits.put(exit.getDir(), exit);
     }
@@ -195,7 +168,18 @@ public class Room{
      */
     void storeState(PrintWriter w) {
         w.write(getName() + ":\n");
-        w.write("beenHere=true" + "\n");
+        w.write("beenHere=" + beenHere + "\n");
+        if (!contents.isEmpty()) {
+            w.write("Contents: ");
+            for (int i = 0; i < contents.size(); i++) {
+                Item item = contents.get(i);
+                w.write(item.getPrimaryName());
+                if (i < contents.size() - 1) {
+                    w.write(",");
+                }
+            }
+            w.write("\n");
+        }
         w.write("---" + "\n");
     }
 
@@ -204,60 +188,11 @@ public class Room{
      * @param r - PrintWriter to write to file
      */
     void restoreState(Scanner r) {
-        String beenHereLine = r.nextLine(); //beenHere = true
-        String[] beenHereSplit = beenHereLine.split("=");   //parse by =
-        String newBeenHere = beenHereSplit[1];  //beenHere flag
-        if (newBeenHere.equals("true")) {
-            beenHere = true;
-        }
-        else {
-            beenHere = false;
-        }
+        String beenHereLine = r.nextLine();
+        beenHere = Boolean.parseBoolean(beenHereLine.split("=")[1]);
     }
 
-    /**
-     * isBeenHere - this method determines whether or not the user visited the room
-     * @return beenHere
-     */
-    public boolean isBeenHere() {
-        return beenHere;
-    }
-
-    /**
-     * Room - constructor to initialize room content
-     * @param s - Scanner
-     * @param d - Dungeon
-     * @param initState - initialized from .sav file or not
-     */
-    public Room(Scanner s, Dungeon d, boolean initState) throws NoRoomException, NoItemException {
-        String line = s.nextLine();
-        if (line.equals("===")) {
-            throw new NoRoomException();
-        }
-        this.name = line;
-        line = s.nextLine();
-        if (line.contains("Contents: ")) {
-            String[] contents = line.split(" ");
-            String itemName = contents[1];
-            String[] afterSplitItemName = itemName.split(",");
-            for (int i = 0; i < afterSplitItemName.length; i++) {
-                Item item = d.getItem(afterSplitItemName[i]);
-                add(item);
-            }
-            line = s.nextLine();
-        }
-        this.desc = line;
-//        line = s.nextLine();
-    }
-
-
-    /**
-     * restoreState - restores game as it was saved
-     * @param s - Scanner
-     * @param d - Dungeon
-     * @throws NoItemException
-     */
-    void restoreState(Scanner s, Dungeon d) throws NoItemException {
+    void restoreState(Scanner s, Dungeon d) {
         restoreState(s);
         String line = s.nextLine();
         String[] splitLine = line.split(": ");
@@ -271,15 +206,13 @@ public class Room{
         }
     }
 
-
-    /**
-     * add - this method adds item to ArrayList contents
-     * @param item
-     */
     void add(Item item) {
         this.contents.add(item);
     }
 
+    void remove(Item item) {
+        this.contents.remove(item);
+    }
     /**
      * This method will actually let you remove multiple items while iterating
      * over them, thereby avoiding a ConcurrentModificationException.
@@ -289,40 +222,27 @@ public class Room{
         itr.remove();
     }
 
-    /**
-     * remove - this method removes items from ArrayList contents
-     * @param item
-     */
-    void remove(Item item) {
-        this.contents.remove(item);
-    }
-
-
-    /**
-     * getItemNamed - this method checks if item matches item name
-     * @param name - name of the item
-     * @return item found
-     */
     Item getItemNamed(String name) {
-        for (Item content : contents) {
-            if (content.goesBy(name)) {
-                return content;
+        for (Item item : contents) {
+            if (item.goesBy(name)) {
+                return item;
             }
         }
         return null;
     }
 
-    /**
-     * getContents - this method allows user to get contents in the Room
-     * @return contents
-     */
     ArrayList<Item> getContents() {
         return this.contents;
     }
 
     /**
-     * setRoomDescriptionNeeded - this method sets a flag if room description is needed
+     * isBeenHere - this method determines whether or not the user visited the room
+     * @return beenHere
      */
+    public boolean isBeenHere() {
+        return beenHere;
+    }
+
     public void setRoomDescriptionNeeded() {
         this.roomDescriptionNeeded = true;
     }
@@ -338,9 +258,4 @@ class NoRoomException extends Exception {
      */
     NoRoomException() {
     }
-<<<<<<< HEAD
 }
-=======
-}
-
->>>>>>> b8a429491614a1e9cdef1c7bf93a55d14f8c40e3

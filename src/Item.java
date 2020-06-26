@@ -1,8 +1,8 @@
 /**
  * Item Class - An Item has a name, weight, and a Hashtable of verb/message pairs (called "messages").
- * @author Object Oriented Optimists
- * @version 2.7
- * 25 June 2020
+ * @author Richard Volynski
+ * @version 2.5
+ * 23 June 2020
  */
 
 
@@ -15,23 +15,14 @@ import java.util.Scanner;
 public class Item {
     private String primaryName;
     private int weight;
-    private Hashtable messages = new Hashtable();
-    private ArrayList<String> aliases = new ArrayList<>();
+    private Hashtable<String, String> messages = new Hashtable<String, String>();
+    private ArrayList<String> aliases = new ArrayList<String>();
 
 
-<<<<<<< HEAD
     Item (Scanner s) throws NoItemException {
-=======
-    /**
-     * Item - Constructor to read from file, parse it, and restore items
-     * @param s - file to read from
-     * @throws NoItemException
-     */
-    public Item (Scanner s) throws NoItemException {
->>>>>>> b8a429491614a1e9cdef1c7bf93a55d14f8c40e3
         String line = s.nextLine(); //name, aliases
         if (line.equals("===") || line.equals("---")) {
-            throw new NoItemException("");
+            throw new NoItemException();
         }
         String[] itemNameSplit = line.split(",");
         primaryName = itemNameSplit[0];
@@ -41,27 +32,15 @@ public class Item {
         }
 
         line = s.nextLine();
-<<<<<<< HEAD
         this.weight = Integer.parseInt(line);
-=======
 
-        try {
-            this.weight = Integer.parseInt(line);
-        }
-        catch (Exception e) {
-            e = e;
-        }
->>>>>>> b8a429491614a1e9cdef1c7bf93a55d14f8c40e3
-
-
+        line = s.nextLine();
         while (!line.equals("---")) {
+            String[] commandParts = line.split(":");
+            String verb = commandParts[0];
+            String message = commandParts[1];
+            messages.put(verb, message);
             line = s.nextLine();
-
-            if (line.equals("---")) {
-                break;
-            }
-            String[] keyToSplit = line.split(":");
-            messages.put(keyToSplit[0],keyToSplit[1]);
         }
     }
 
@@ -87,7 +66,6 @@ public class Item {
     }
 
 
-<<<<<<< HEAD
     boolean goesBy(String name) {
         return primaryName.equals(name) || aliases.contains(name);
     }
@@ -98,68 +76,13 @@ public class Item {
 
     String getMessageForVerb(String verb) {
         return messages.get(verb);
-=======
-    /**
-     * goesBy - Returns true if the Item is known by a certain name
-     * @param name - item name
-     * @return boolean
-     */
-    public boolean goesBy(String name) {
-        if (name.equals(primaryName)) {
-            return true;
-        }
-        else {
-            for (int i = 0; i < aliases.size(); i++) {
-                if (aliases.get(i).equals(name)) {
-                    return true;
-                }
-            }
-            return false;
-        }
     }
 
-    /**
-     * getPrimaryName -this method returns name of an item
-     * @return primaryName
-     */
-    public String getPrimaryName() {
-        return primaryName;
-    }
-
-    /**
-     * getMessageForVerb - this method returns a certain message for user command
-     * @param verb
-     * @return verb
-     */
-    public String getMessageForVerb(String verb) {
-        Iterator keys = messages.keySet().iterator();
-        while (keys.hasNext()) {
-            String key = (String) keys.next();
-            if (key.equals(verb)) {
-                return (String) messages.get(key);
-            }
-        }
-        return null;
->>>>>>> b8a429491614a1e9cdef1c7bf93a55d14f8c40e3
-    }
-
-    /**
-     * toString
-     * @return primaryName - item name
-     */
     public String toString() {
         return primaryName;
     }
 
-<<<<<<< HEAD
     int getWeight() {
-=======
-    /**
-     * getWeight - this message returns weight of user's inventory
-     * @return weight
-     */
-    public int getWeight() {
->>>>>>> b8a429491614a1e9cdef1c7bf93a55d14f8c40e3
         return weight;
     }
 }
@@ -167,8 +90,11 @@ public class Item {
 class NoItemException extends Exception {
     /**
      * NoItemException - default constructor
-     * @param format
      */
-    NoItemException(String format) {
+    NoItemException() {
+    }
+
+    NoItemException(String message) {
+        super(message);
     }
 }
