@@ -1,0 +1,149 @@
+Aperture Labs
+Zork III
+===
+Items:
+companionCube
+20
+examine:This cube is strange.  All metal, with small pink hearts on each surface.  I wonder whats inside.
+---
+portalGun
+10
+examine:This isn’t just any regular gun, it shoots portals that will link, allowing one to pass through and instantly be teleported.
+shoot:*click*
+---
+sentryTurret
+10
+examine:This sentry turret is shaped a bit like an egg with spider legs.  It looks amazing, too bad its trying to kill you.
+deploy:It won’t listen...
+---
+cake
+5
+examine:This chocolate cake looks amazing.  What is it doing here though?
+eat:Its probably best to not do that.
+---
+radio
+5
+examine:This radio looks so old, wonder if it still even works.
+toggle:The radio comes to life.  It seems to only pickup static though.
+---
+potato
+1
+examine:This potato is… just a potato.
+eat:On second thought, maybe not...
+---
+repulsionGel
+5
+examine:This gel is blue… seems to allow one to bounce higher.
+spray:The gel sticks to the surface, allowing you to jump higher!
+---
+lemon
+5
+examine:With this lemon, you could make lemonade… or burn a house down.
+makeLemonade:nice.
+---
+===
+Rooms:
+Lobby
+This lobby is like something from the 1950s.  Seemingly untouched for decades.  Certainly doesn’t match the rest of the facility.  There’s all sorts of interesting paintings and areas to explore though.
+---
+Test Chamber
+Contents: PortalGun,CompanionCube
+This doesnt look too friendly.  Its made up of countless tiles that seem to move into shapes depending on ones actions.  Its as if the room is alive.
+---
+Cave
+Contents: Lemon,RepulsionGel
+This cave is huge! Seems to go on forever, surrounded by countless slabs of concrete the house the inner workings of the facility.
+---
+Den
+This looks like it was once the home of a mad man.  Drawings and scribbles everywhere.  Not sure what it means.
+---
+Relaxation Center
+Contents: Radio
+This bedroom is pretty nice.  It has a bed and it is a room.  Theres a few things to make it look better though, some nice wallpaper and paintings.
+---
+Main Chamber
+This chamber looks like it could house a giant super computer.  Looks like a lot of damage was done here.
+---
+Server Room
+The quiet hum of servers is all around you.  This room is actually pretty relaxing.
+---
+The Vault
+Contents: SentryTurret
+This vault contains thousands, if not hundreds of thousands of test subjects frozen in time.  In some sort of stasis.  Very eerie.  For their sake, they might as well stay asleep forever.
+---
+Science Fair
+Contents:Potato
+This looks like it was once a science fair, with lots of interesting projects.  There’s a giant, overgrown tree in the middle though.  Looks like one of the science experiments has been going on for a long time.
+---
+Air Ducts
+Contents: Cake
+These air ducts are cramped.  They would serve as a great hiding spot though.  Very useful to get around too.
+---
+===
+Exits:
+Lobby
+d
+Cave
+---
+Cave
+u
+Lobby
+---
+Cave
+s
+The Vault
+---
+The Vault
+n
+Cave
+---
+Lobby
+u
+Air Ducts
+---
+Air Ducts
+d
+Lobby
+---
+Air Ducts
+n
+Server Room
+---
+Server Room
+s
+Air Ducts
+---
+Air Ducts
+s
+Relaxation Center
+---
+Relaxation Center
+n
+Air Ducts
+---
+Air Ducts
+e
+Den
+---
+Den
+w
+Air Ducts
+---
+Air Ducts
+w
+Test Chamber
+---
+Test Chamber
+e
+Air Ducts
+---
+Test Chamber
+w
+Main Chamber
+---
+Main Chamber
+e
+Test Chamber
+---
+===
+
