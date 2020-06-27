@@ -113,11 +113,11 @@ public class Room {
         String output = "";
         if (!beenHere) {
             beenHere = true;
-            output = name + "\n" + "\t" + this.desc + "\n" + "\n";
+            output = name + "\n" + this.desc + "\n" + "\n";
         }
         else if (this.roomDescriptionNeeded) {
             this.roomDescriptionNeeded = false;
-            output = name + "\n" + "\t" + this.desc + "\n" + "\n";
+            output = name + "\n" + this.desc + "\n" + "\n";
         }
         else {
             output = name + "\n";

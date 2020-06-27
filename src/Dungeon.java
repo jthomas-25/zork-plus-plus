@@ -197,9 +197,7 @@ public class Dungeon {
         w.write("Dungeon file: " + getFileName() + "\n");
         w.write("Room states:" + "\n");
         for (int i = 0; i < rooms.size(); i++) {
-            if (rooms.get(i).isBeenHere()) {
-                rooms.get(i).storeState(w);
-            }
+            rooms.get(i).storeState(w);
         }
         w.write("===" + "\n");
     }

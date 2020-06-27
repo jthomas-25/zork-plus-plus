@@ -18,7 +18,7 @@ class GameState {
     private ArrayList<Item> inventory = new ArrayList<Item>();
     private final int MAX_INVENTORY_WEIGHT = 40;
     private int inventoryWeight = 0;
-    private String fileDir = "files/";
+    private String fileDir = "files";
 
 
     //Singleton instance of GameState class
@@ -212,8 +212,9 @@ class GameState {
 
     String getFilePath() {
         String currentDir = System.getProperty("user.dir");
-        String projectDir = currentDir.split("src")[0];
-        String filePath = projectDir + fileDir;
+        File f = new File(currentDir);
+        String projectDir = f.getParent();
+        String filePath = String.format("%s/%s/", projectDir, fileDir);
         return filePath;
     }
 

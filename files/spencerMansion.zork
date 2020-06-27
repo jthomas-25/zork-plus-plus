@@ -1,0 +1,154 @@
+Spencer Mansion
+Zork III
+===
+Items:
+Beretta,M9,pistol,handgun
+15
+examine:This is a standard-issue Beretta M92FS semi-automatic handgun.
+draw:Your fingers twitch briefly as you flex them before whipping out your gun.
+aim:You've got to ask yourself one question--'Do I feel lucky?' Well, do ya, punk?
+fire:*BANG!*
+spin:Performing several tricky maneuvers, you twirl the gun around in a dizzying display of skill.
+holster:You gently place the gun back in its holster.
+---
+combatKnife,knife
+5
+swing:The knife cuts through the air like--well, you know...
+throw:The knife sails across the room in a graceful arc.
+---
+typewriter
+25
+examine:Many of the keys are scratched due to frequent typing.
+use:It's missing some ink, so you can't use it right now.
+---
+inkRibbon
+1
+examine:A typical ribbon of ink for a typewriter.
+---
+woodenEmblem
+20
+examine:It's in the shape of a shield. An intricate, golden coat of arms is emblazoned on the front. The edges are all worn, as if it's been fitted multiple times.
+set:You try to place the emblem, but there isn't a shield-shaped indentation anywhere nearby.
+---
+firstFloorMap
+4
+examine:The map reveals a bizarre, confusing layout.
+---
+musicalScore,sheetMusic,musicNotes
+3
+examine:The title reads "Moonlight Sonata".
+read:It's written in the key of C# minor and consists of three movements.
+play:This piece requires a certain instrument to play it...
+---
+grandPiano,piano
+100
+play:Your hands drift across the keys as the piano emits a beautiful melody.
+lift:You must be joking.
+---
+bookshelf,bookcase
+60
+push:With a low rumble and some effort, the bookshelf moves.
+---
+lockpick
+2
+examine:Perfect for you, the Master of Unlocking.
+use:Not a lock in sight.
+---
+===
+Rooms:
+Foyer
+Contents: Beretta,combatKnife,typewriter,inkRibbon
+You find yourself in a large entrance hall, which is quite drafty. A red carpet
+in the middle leads to a split staircase. White columns and arches line the
+walls, supporting the upper level. To the left side of the staircase, on a
+small round table, sits an old typewriter.
+---
+Dining Room
+Contents: woodenEmblem
+A long, rectangular table with rounded corners spans almost the entire length
+of the room. A grandfather clock, leaning against the north wall, ticks loudly.
+At the far west end, a wooden emblem with a gold crest hangs above the
+fireplace.
+---
+Art Showroom
+Contents: firstFloorMap
+It's dark in here, except for several spotlights which illuminate the various
+paintings covering the walls. A statue, depicting a woman carrying an urn on
+her shoulder, stands in the center. There's also a red curtain in the corner.
+---
+2F
+Contents: lockpick
+On the way up, you pass an ornate work of stained glass on the wall above the
+landing. Reaching the top of the stairs, you notice the nearby walkway over-
+looking the massive foyer below. There's nothing else up here (besides more red
+carpet), but at least you can enjoy the view, right?
+---
+Hallway
+Although nothing catches your eye, you hear distant sounds of flesh being torn
+from bone...
+---
+Sitting Area
+A corner sectional is the only piece of furniture in sight in this little nook,
+but more importantly —
+A shadowy figure is crouched over something, and it appears not to notice you.
+You should probably get out of there...!
+---
+Bar
+Contents: musicalScore,grandPiano,bookshelf
+Wow, this place is fancy! Everything, from the stools to the hardwood flooring,
+boasts of an owner who has money to burn. Bottles of all shapes and sizes fill
+the shelves behind the counter. A beautiful grand piano occupies one corner of
+the room. It looks like it hasn't been played in a while, yet has remained in
+surprisingly pristine condition.
+---
+===
+Exits:
+Foyer
+w
+Dining Room
+---
+Foyer
+e
+Art Showroom
+---
+Foyer
+u
+2F
+---
+Dining Room
+e
+Foyer
+---
+Dining Room
+n
+Hallway
+---
+Art Showroom
+w
+Foyer
+---
+2F
+d
+Foyer
+---
+Hallway
+s
+Dining Room
+---
+Hallway
+w
+Sitting Area
+---
+Hallway
+n
+Bar
+---
+Sitting Area
+e
+Hallway
+---
+Bar
+s
+Hallway
+---
+===

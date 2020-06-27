@@ -1,0 +1,247 @@
+Ritz-Carlton Hotel
+Zork III
+===
+Items:
+goldspoon,spoon
+3
+take:Taken
+break:Ouch! The glass cuts your hand.
+wield:There's no one here to wield it against.
+examine:It's a rough-hewn obsidian sliver, sharp as a needle.
+---
+CopperSword,sword
+10
+take:Taken
+drop:This sword is definitely worth more than a penny (drops sword).
+---
+SableDagger,dagger
+12
+loop:This sharp assassin's weapon has a dragonbone hilt.
+take:You soak yourself in the waterfall but manage to take the dagger.
+throw:The dagger hits someone in the neck, severely wounding them. Hotel management calls police.
+drop:Dagger dropped.
+---
+LaserNecklace,necklace
+4
+examine:This is a dainty jeweled necklace sparkling blue.
+take:Necklace taken.
+drop:Necklace dropped.
+---
+GreenKnife,knife
+4
+examine:This sharp knife is a green toxic knife if used on animals.
+take:Knife taken.
+drop:Knife dropped.
+---
+YellowPowder,powder
+2
+examine:Yellow box with yellow powder and strong smell.
+take:Powder taken.
+drop:Powder dropped.
+---
+BlackGodzillaEgg,BlackEgg
+8
+examine:This egg is as black as midnight sea, yet alive with scarlet ripples and swirls. 
+---
+GasMask,ProtectiveMask
+5
+examine:This mask protect you against dangerous chemicals.
+take:Gas mask taken.
+drop:Gas mask dropped.
+---
+Antidote,antiPoisonMed
+1
+examine:This medicine is taken to counteract poison.
+take:Antidote taken.
+drop:Antidote dropped.
+---
+RolexWatch,watch
+2
+examine:This watch is worth a lot of money!!
+take:Watch taken. Be careful, it could be stolen.
+drop:Watch dropped.
+---
+===
+Rooms:
+Waterfall
+Contents: SableDagger
+You are facing a waterfall in the middle of the lobby.
+---
+The Royal Suite
+Contents: CopperSword
+You are facing a suite where everything from the blanket to the TV is made from gold. It is huge and overlooks the ocean. But be careful there...
+---
+Hotel Kitchen
+You are in the hotel kitchen. Here food from Michellin star restaurants is being served. 
+---
+The Blue Bar
+This bar contains 10,000 bottles of different kinds of blue beverages. Don't drink more than three blue beverages, otherwise, your blood will turn blue. 
+---
+Hotel Safe
+Contents: RolexWatch
+This is a special room protected by hotel security to store your valuables. 
+---
+Secret Passage
+The Secret Passage leads out of the hotel via the tunnel to the secluded beach.
+---
+North Wing
+You are in the North Wing of the hotel. This wing contains security offices and personnel to keep guests safe. 
+---
+Seven Corner Restaurant
+This is a huge room with seven corners - Each of them has a booth for two to protect guests from paparazzi. 
+---
+South Wing
+The South Wing of the hotel contains privileged guests with yearly memberships.
+---
+In-House Ski Slope
+This is a ski resort under the hotel roof, having ski-out abilities right from guests' balconies.
+---
+Maid Chapters
+This is the place where hotel personnel live.
+---
+The Grand Ballroom
+Every year, on the full moon, at 1 AM, all guests get together here for the annual Mystic ball.
+---
+Diamond Pool
+This is a diamond pool with a lazy river that goes around the entire hotel, so you even eat and whirl. 
+---
+The Royal Jacuzzi
+This is a 100 foot jacuzzi with musical fountain and light performances.
+---
+Dark Sauna
+This sauna is 200F sauna to relax and rejuvenate.
+---
+Climbing Wall
+Hotel guests enjoy and improve their climbing skills using the climbing wall.
+---
+Manager's Office
+Contents: YellowPowder,Antidote
+This is office the Mr. Jabel Gibbon controls the hotel from.
+---
+Gift Shop
+Contents: BlackGodzillaEgg,GreenKnife,goldspoon
+This is the hotel gift shop. 
+---
+===
+Exits:
+Waterfall
+s
+North Wing
+---
+North Wing
+n
+Waterfall
+---
+North Wing
+s
+Seven Corner Restaurant
+---
+Seven Corner Restaurant
+n
+North Wing
+---
+South Wing
+n
+Seven Corner Restaurant
+---
+Seven Corner Restaurant
+s
+South Wing
+---
+In-House Ski Slope
+w
+Seven Corner Restaurant
+---
+Seven Corner Restaurant
+e
+In-House Ski Slope
+---
+In-House Ski Slope
+e
+Maid Chapters
+---
+Maid Chapters
+w
+In-House Ski Slope
+---
+The Grand Ballroom
+s
+Maid Chapters
+---
+Maid Chapters
+n
+The Grand Ballroom
+---
+Seven Corner Restaurant
+w
+Diamond Pool
+---
+Diamond Pool
+e
+Seven Corner Restaurant
+---
+Diamond Pool
+w
+Dark Sauna
+---
+Dark Sauna
+e
+Diamond Pool
+---
+The Royal Jacuzzi
+e
+Dark Sauna
+---
+Dark Sauna
+w
+The Royal Jacuzzi
+---
+The Royal Jacuzzi
+w
+Climbing Wall
+---
+Climbing Wall
+e
+The Royal Jacuzzi
+---
+Gift Shop
+n
+South Wing
+---
+South Wing
+s
+Gift Shop
+---
+Manager's Office
+n
+Gift Shop
+---
+Gift Shop
+s
+Manager's Office
+---
+Waterfall
+n
+The Royal Suite
+---
+The Royal Suite
+s
+Waterfall
+---
+Manager's Office
+e
+The Blue Bar
+---
+The Blue Bar
+w
+Manager's Office
+---
+The Blue Bar
+e
+Hotel Safe
+---
+Hotel Safe
+w
+The Blue Bar
+---
+===
