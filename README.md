@@ -2,8 +2,8 @@
 Team Programming Assignment #1 — "Zork III"
 
 ### To do:
-- [ ] Turn in project. (TBD)
-- [ ] Custom Dungeons (2/3)
+- [X] Turn in project. (TBD)
+- [X] Custom Dungeons (2/3)
 - [X] Add look command. (Richard)
 - [X] Add take command. (Rob)
 - [X] Add drop command. (John)
