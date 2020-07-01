@@ -1,11 +1,10 @@
 /**
  * Command Class - Objects of type Command represent (parsed) commands that the user has typed
  * and wants to invoke
- * @author Richard Volynski
- * @version 2.6
+ * @author Object Oriented Optimists (OOO)
+ * @version 2.7
  * 1 July 2020
  */
-
 
 
 import java.util.ArrayList;
@@ -229,7 +228,7 @@ class ScoreCommand extends Command {
     String execute() {
         String scoreMsg  = "";
         if (GameState.instance().getScoreMsg().containsKey(GameState.instance().getScore())) {
-             scoreMsg = "You have accumulated " + GameState.instance().getScore() + " points. This gives you a rank of "
+            scoreMsg = "You have accumulated " + GameState.instance().getScore() + " points. This gives you a rank of "
                     + GameState.instance().getScoreMsg().get(GameState.instance().getScore()) + ".";
         }
         else {
@@ -256,4 +255,3 @@ class HealthCommand extends Command {
         return healthMsg;
     }
 }
-

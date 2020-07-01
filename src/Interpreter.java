@@ -5,8 +5,8 @@
  * initializes the GameState with it, and repeatedly prompts the user for input. Each time the user
  * inputs a command, it should use the CommandFactory to instantiate a new Command object and execute it.
  * If the user enters "q", it terminates the program.
- * @author Richard Volynski
- * @version 2.6
+ * @author Object Oriented Optimists (OOO)
+ * @version 2.7
  * 1 July 2020
  */
 

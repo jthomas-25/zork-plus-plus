@@ -1,7 +1,7 @@
 /**
  * GameState Class - represents the current state of the game: which dungeon is being played
  * and what room the adventurer is currently in.
- * @author Richard Volynski
+ * @author Object Oriented Optimists (OOO)
  * @version 2.6
  * 1 July 2020
  */
@@ -280,4 +280,5 @@ class IllegalSaveFormatException extends Exception {
     public IllegalSaveFormatException(String errorMsg) {
     }
 }
+
 

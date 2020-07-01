@@ -2,7 +2,7 @@
  * Dungeon Class - It holds on to a Hashtable collection of Room objects, and knows which one is the entry point.
  * A Hashtable is a class that makes it easy to look up entries by a "key" rather than by a numbered index,
  * as an ArrayList does.
- * @author Richard Volynski
+ * @author Object Oriented Optimists (OOO)
  * @version 2.5
  * 23 June 2020
  */
@@ -255,3 +255,4 @@ class IllegalDungeonFormatException extends Exception {
     IllegalDungeonFormatException(String errorMsg) {
     }
 }
+

@@ -1,10 +1,9 @@
 /**
  * Item Class - An Item has a name, weight, and a Hashtable of verb/message pairs (called "messages").
- * @author Richard Volynski
+ * @author Object Oriented Optimists (OOO)
  * @version 2.5
  * 23 June 2020
  */
-
 
 
 
@@ -100,4 +99,5 @@ class NoItemException extends Exception {
         super(message);
     }
 }
+
 

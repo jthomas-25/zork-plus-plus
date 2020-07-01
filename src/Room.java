@@ -1,11 +1,10 @@
 /**
  * Room Class - represents every room in the dungeon (name, description), knows whether or not
  * the adventurer has already visited it. Also, the Room Class contains lists of Exits.
- * @author Richard Volynski
+ * @author Object Oriented Optimists (OOO)
  * @version 2.5
  * 23 June 2020
  */
-
 
 
 import java.io.PrintWriter;
@@ -261,4 +260,5 @@ class NoRoomException extends Exception {
     NoRoomException() {
     }
 }
+
 
