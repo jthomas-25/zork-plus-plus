@@ -2,11 +2,12 @@
  * Command Class - Objects of type Command represent (parsed) commands that the user has typed
  * and wants to invoke
  * @author Richard Volynski
- * @version 2.5
- * 23 June 2020
+ * @version 2.6
+ * 1 July 2020
  */
 
-import java.io.IOException;
+
+
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -97,7 +98,8 @@ class DropCommand extends Command {
                     Room currentRoom = state.getAdventurersCurrentRoom();
                     currentRoom.add(item);
                     return item + " dropped.";
-                } catch (NoItemException e) {
+                }
+                catch (NoItemException e) {
                     return e.getMessage();
                 }
         }
@@ -218,3 +220,40 @@ class LookCommand extends Command {
         return execute;
     }
 }
+
+class ScoreCommand extends Command {
+
+    ScoreCommand() {
+    }
+
+    String execute() {
+        String scoreMsg  = "";
+        if (GameState.instance().getScoreMsg().containsKey(GameState.instance().getScore())) {
+             scoreMsg = "You have accumulated " + GameState.instance().getScore() + " points. This gives you a rank of "
+                    + GameState.instance().getScoreMsg().get(GameState.instance().getScore()) + ".";
+        }
+        else {
+            scoreMsg = "You have accumulated " + GameState.instance().getScore() + " You don't have a rank assigned.";
+        }
+
+        return scoreMsg;
+    }
+}
+
+class HealthCommand extends Command {
+
+    HealthCommand() {
+    }
+    String execute() {
+        String healthMsg  = "";
+
+        if (GameState.instance().getHealthMsg().containsKey(GameState.instance().getHealth())) {
+            healthMsg = GameState.instance().getHealthMsg().get(GameState.instance().getHealth());
+        }
+        else {
+            healthMsg = "No health info available";
+        }
+        return healthMsg;
+    }
+}
+

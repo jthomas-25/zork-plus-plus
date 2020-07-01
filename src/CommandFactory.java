@@ -2,9 +2,10 @@
  * CommandFactory Class - A factory class whose purpose is to parse text strings
  * and produce the appropriate Command objects. Also, the CommandFactory is a Singleton class.
  * @author Richard Volynski
- * @version 2.5
- * 23 June 2020
+ * @version 2.6
+ * 1 July 2020
  */
+
 
 
 class CommandFactory {
@@ -56,6 +57,10 @@ class CommandFactory {
                         return new InventoryCommand();
                     case "q": case "quit":
                         return new QuitCommand();
+                    case "score":
+                        return new ScoreCommand();
+                    case "health":
+                        return new HealthCommand();
                     default:
                         return new UnknownCommand(words[0]);
                 }
@@ -73,3 +78,4 @@ class CommandFactory {
         }
     }
 }
+

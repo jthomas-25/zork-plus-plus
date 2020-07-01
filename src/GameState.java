@@ -2,12 +2,15 @@
  * GameState Class - represents the current state of the game: which dungeon is being played
  * and what room the adventurer is currently in.
  * @author Richard Volynski
- * @version 2.5
- * 23 June 2020
+ * @version 2.6
+ * 1 July 2020
  */
+
+
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.Scanner;
 import java.util.Iterator;
 
@@ -19,6 +22,10 @@ class GameState {
     private final int MAX_INVENTORY_WEIGHT = 40;
     private int inventoryWeight = 0;
     private String fileDir = "files";
+    private int score = 0;
+    private int health = 0;
+    private Hashtable <Integer, String> healthMsg = new Hashtable<>();
+    private Hashtable <Integer, String> scoreMsg = new Hashtable<>();
 
 
     //Singleton instance of GameState class
@@ -41,6 +48,17 @@ class GameState {
      * Default Constructor GameState
      */
     private GameState() {
+        getHealthMsg().put(0, "Will be implemented 0");
+        getHealthMsg().put(1, "Will be implemented 1");
+        getHealthMsg().put(2, "Will be implemented 2");
+        getHealthMsg().put(3, "Will be implemented 3");
+        getHealthMsg().put(4, "Will be implemented 4");
+
+        getScoreMsg().put(0, "none");
+        getScoreMsg().put(25, "score message 2");
+        getScoreMsg().put(50, "Score message 3");
+        getScoreMsg().put(75, "Score message 4");
+        getScoreMsg().put(100, "Score message 5");
     }
 
     /**
@@ -218,6 +236,37 @@ class GameState {
         return filePath;
     }
 
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public Hashtable<Integer, String> getHealthMsg() {
+        return healthMsg;
+    }
+
+    public void setHealthMsg(Hashtable<Integer, String> healthMsg) {
+        this.healthMsg = healthMsg;
+    }
+
+    public Hashtable<Integer, String> getScoreMsg() {
+        return scoreMsg;
+    }
+
+    public void setScoreMsg(Hashtable<Integer, String> scoreMsg) {
+        this.scoreMsg = scoreMsg;
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
+    }
 }
 
 /**
@@ -231,3 +280,4 @@ class IllegalSaveFormatException extends Exception {
     public IllegalSaveFormatException(String errorMsg) {
     }
 }
+

@@ -6,8 +6,8 @@
  * inputs a command, it should use the CommandFactory to instantiate a new Command object and execute it.
  * If the user enters "q", it terminates the program.
  * @author Richard Volynski
- * @version 2.5
- * 23 June 2020
+ * @version 2.6
+ * 1 July 2020
  */
 
 
@@ -80,4 +80,5 @@ public class Interpreter {
         }
     }
 }
+
 
