@@ -1,0 +1,25 @@
+title Preassure Plate
+
+Interpreter->CommandFactory: instance()
+CommandFactory->":CommandFactory": new()
+":CommandFactory"->CommandFactory:
+CommandFactory->Interpreter:
+Interpreter->":CommandFactory": parse("d")
+":CommandFactory"->":Command": new("d")
+":Command"->":CommandFactory":
+":CommandFactory"->Interpreter:
+Interpreter->":Command": execute()
+":Command"->"GameState": getAdventurersCurrentRoom()
+"GameState"->"A:Room": leaveBy(dir)
+"A:Room"->"GameState":
+"GameState"->":Command":
+":Command"->"GameState": setAdventuerersCurrentRoom(room)
+"GameState"->"B:Room": describe()
+"B:Room"->"GameState":
+":Command"->"GameState": getAdventurersCurrentRoom()
+"GameState"->"B:Room": getPlate()
+"B:Room"->":Event": new Event("broadcast", "You stepped on a plate!")
+":Event"->"B:Room":
+"B:Room"->"GameState":
+"GameState"->":Command":
+":Command"->"Interpreter": ""You are in room A now!""
