@@ -1,23 +1,15 @@
 # CPSC-240
-Team Programming Assignment #1 — "Zork III"
+Team Programming Assignment #2 — "Zork++"
 
 ### To do:
-- [X] Turn in project. (TBD)
-- [X] Custom Dungeons (2/3)
-- [X] Add look command. (Richard)
-- [X] Add take command. (Rob)
-- [X] Add drop command. (John)
-- [X] Add inventory command. (anyone)
-- [X] Make all the changes to the Dungeon class, including hydrating items. (Same note as in Room above about keeping both hydration constructors.) Make sure you can hydrate trinklev3.zork. (Richard)
-- [X] Step 5 (John)
-- [X] Step 6 (Done)
-- [X] Step 7 (Rob)
-- [X] Update room describe method to include items. (Rob)
-- [X] Add git ignore file and remove compiled .class files. (Rob)
-- [X] Fix "save" message (anyone)
-- [X] Fix Glitches (Rob)
-- [X] Add weight limit (John)
-- [X] Fix Null coming from loaded sav file when traversing dungeon.
-- [X] Fix duplicate GameState class in GitHub (anyone)
-- [X] Fix save command *again* (anyone)
-- [X] Engine Complete
+- [] One Use Case description for each of your supplemental features. (2/x)
+- [X] One or more UML class diagrams, created with a drawing tool (ArgoUML is one such choice, but anything that can draw UML diagrams will do).
+
+Several UML sequence diagrams:
+- [] One showing the result of the player typing "score" and "health" back to back.
+- [] One showing an item-specific command triggering a transform event into some other item.
+- [] One showing an item-specific command triggering a teleport event.
+- [] One for for each of your supplemental features.
+- [X] Canonical examples of your .zork and .sav file formats.
+
+To be crystal clear: your team will be turning in one submission for this group activity (see Zork-Plus-Plus Phase 1 OOO submission file). 
