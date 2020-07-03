@@ -1,0 +1,18 @@
+title Transform Event
+
+Interpreter->EventFactory: instance()
+EventFactory->":EventFactory": new()
+":EventFactory"->EventFactory:
+EventFactory->Interpreter:
+Interpreter->":EventFactory": parse("transform, dagger, sword, inventory")
+":EventFactory"->":Event": new("transform, dagger, sword, inventory")
+":Event"->":EventFactory":
+":EventFactory"->Interpreter:
+Interpreter->":Event": execute()
+":Event"->":GameState": getInventory()
+":GameState"->":Event": inventory
+":Event"->":GameState": removeFromInventory("dagger")
+":GameState"->":Event":
+":Event"->":GameState": addToInventory("sword")
+":GameState"->":Event": 
+":Event"->Interpreter:""Your dagger is now a sword!""

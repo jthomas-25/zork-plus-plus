@@ -1,0 +1,18 @@
+title Teleport
+
+Interpreter->EventFactory: instance()
+EventFactory->":EventFactory": new()
+":EventFactory"->EventFactory:
+EventFactory->Interpreter:
+Interpreter->":EventFactory": parse("teleport, Treasure Room")
+":EventFactory"->":Event": new("teleport, Treasure Room")
+":Event"->":EventFactory":
+":EventFactory"->Interpreter:
+Interpreter->":Event": execute()
+":Event"->":GameState": setAdventurersCurrentRoom(tpRoom)
+":GameState"->":Event":
+":Event"->":GameState": getAdventurersCurrentRoom()
+":GameState"->":Room": describe()
+":Room"->":GameState":
+":GameState"->":Event": 
+":Event"->Interpreter:""You have been teleported to Treasure Room!"\n<room description too>"
