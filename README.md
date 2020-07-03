@@ -1,4 +1,4 @@
-# CPSC-240
+# Object Oriented Optimists (OOO)
 Team Programming Assignment #2 — "Zork++"
 
 ### To do:
