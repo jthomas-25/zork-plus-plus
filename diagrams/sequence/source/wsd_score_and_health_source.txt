@@ -1,0 +1,22 @@
+title Score and Health
+
+Interpreter->CommandFactory: instance()
+CommandFactory->":CommandFactory": new()
+":CommandFactory"->CommandFactory:
+CommandFactory->Interpreter:
+Interpreter->":CommandFactory": parse("score")
+":CommandFactory"->":Command": new("score")
+":Command"->":CommandFactory":
+":CommandFactory"->Interpreter:
+Interpreter->":Command": execute()
+":Command"->":GameState": getScore()
+":GameState"->":Command": 25
+":Command"->Interpreter:""You have accumulated 25 points. You don't have a rank assigned.""
+Interpreter->":CommandFactory": parse("health")
+":CommandFactory"->":Command": new("health")
+":Command"->":CommandFactory":
+":CommandFactory"->Interpreter:
+Interpreter->":Command": execute()
+":Command"->":GameState": getHealth()
+":GameState"->":Command": 10
+":Command"->Interpreter: ""You're at full health""
