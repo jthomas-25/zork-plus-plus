@@ -1,12 +1,3 @@
-/**
- * Room Class - represents every room in the dungeon (name, description), knows whether or not
- * the adventurer has already visited it. Also, the Room Class contains lists of Exits.
- * @author Object Oriented Optimists (OOO)
- * @version 2.5
- * 23 June 2020
- */
-
-
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -16,6 +7,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 
+/**
+ * Room Class - represents every room in the dungeon (name, description), knows whether or not
+ * the adventurer has already visited it. Also, the Room Class contains lists of Exits.
+ * @author Object Oriented Optimists (OOO)
+ * @version 2.5
+ * 23 June 2020
+ */
 public class Room {
     private Hashtable <String, Exit> exits;
     private String name;

@@ -1,3 +1,7 @@
+
+import java.util.ArrayList;
+import java.util.Iterator;
+
 /**
  * Command Class - Objects of type Command represent (parsed) commands that the user has typed
  * and wants to invoke
@@ -5,12 +9,6 @@
  * @version 2.7
  * 1 July 2020
  */
-
-
-import java.util.ArrayList;
-import java.util.Iterator;
-
-
 abstract class Command {
     abstract String execute();
 }

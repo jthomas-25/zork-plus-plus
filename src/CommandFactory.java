@@ -1,3 +1,4 @@
+
 /**
  * CommandFactory Class - A factory class whose purpose is to parse text strings
  * and produce the appropriate Command objects. Also, the CommandFactory is a Singleton class.
@@ -5,9 +6,6 @@
  * @version 2.7
  * 1 July 2020
  */
-
-
-
 class CommandFactory {
     private static CommandFactory single_instance = null;
     private String itemName;

@@ -4,8 +4,6 @@
  * @version 1.0
  * 1 July 2020
  */
-
-
 abstract class ZorkEvent {
 
     ZorkEvent() {

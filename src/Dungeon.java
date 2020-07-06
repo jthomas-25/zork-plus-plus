@@ -1,12 +1,3 @@
-/**
- * Dungeon Class - It holds on to a Hashtable collection of Room objects, and knows which one is the entry point.
- * A Hashtable is a class that makes it easy to look up entries by a "key" rather than by a numbered index,
- * as an ArrayList does.
- * @author Object Oriented Optimists (OOO)
- * @version 2.5
- * 23 June 2020
- */
-
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -16,6 +7,15 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Scanner;
 
+
+/**
+ * Dungeon Class - It holds on to a Hashtable collection of Room objects, and knows which one is the entry point.
+ * A Hashtable is a class that makes it easy to look up entries by a "key" rather than by a numbered index,
+ * as an ArrayList does.
+ * @author Object Oriented Optimists (OOO)
+ * @version 2.5
+ * 23 June 2020
+ */
 public class Dungeon {
     private String title = "Simple Dungeon";    //default
     private Room entry;

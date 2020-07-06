@@ -1,3 +1,9 @@
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Scanner;
+import java.util.*;
+
 /**
  * CPSC 240
  * Team Programming Assignment #1 — "Zork III"
@@ -9,13 +15,6 @@
  * @version 2.7
  * 1 July 2020
  */
-
-
-import java.io.File;
-import java.io.IOException;
-import java.util.Scanner;
-import java.util.*;
-
 public class Interpreter {
     private String commandEntered;
 

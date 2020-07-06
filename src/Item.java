@@ -1,18 +1,15 @@
-/**
- * Item Class - An Item has a name, weight, and a Hashtable of verb/message pairs (called "messages").
- * @author Object Oriented Optimists (OOO)
- * @version 2.5
- * 23 June 2020
- */
-
-
-
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Scanner;
 
+/**
+ * Item Class - An Item has a name, weight, and a Hashtable of verb/message pairs (called "messages").
+ * @author Object Oriented Optimists (OOO)
+ * @version 2.5
+ * 23 June 2020
+ */
 public class Item {
     private String primaryName;
     private int weight;

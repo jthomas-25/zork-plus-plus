@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 /**
  * Exit Class - Each Room object holds on to an ArrayList of the Exits from it, and each Exit holds on to the
  * Room that it leads to. An Exit can also describe itself, which generates and returns a String message.
@@ -5,12 +7,6 @@
  * @version 2.5
  * 23 June 2020
  */
-
-
-
-
-import java.util.Scanner;
-
 class Exit {
     private String dir;
     private Room src;

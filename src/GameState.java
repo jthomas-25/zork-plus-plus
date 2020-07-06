@@ -1,3 +1,9 @@
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.Scanner;
+import java.util.Iterator;
+
 /**
  * GameState Class - represents the current state of the game: which dungeon is being played
  * and what room the adventurer is currently in.
@@ -5,15 +11,6 @@
  * @version 2.6
  * 1 July 2020
  */
-
-
-
-import java.io.*;
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.Scanner;
-import java.util.Iterator;
-
 class GameState {
     private Dungeon dungeon = null;
     private Room currentRoom = null;
