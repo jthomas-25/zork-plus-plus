@@ -4,6 +4,7 @@ import java.util.Hashtable;
 import java.util.Scanner;
 import java.util.Iterator;
 
+
 /**
  * GameState Class - represents the current state of the game: which dungeon is being played
  * and what room the adventurer is currently in.
@@ -15,19 +16,17 @@ class GameState {
     private Dungeon dungeon = null;
     private Room currentRoom = null;
     private String dungeonDesc = "Welcome to the Dungeon. Enjoy but you won't come out how you came in!";
-    private ArrayList<Item> inventory = new ArrayList<Item>();
+    private ArrayList<Item> inventory;
     private final int MAX_INVENTORY_WEIGHT = 40;
-    private int inventoryWeight = 0;
-    private String fileDir = "files";
-    private int score = 0;
-    private int health = 0;
-    private Hashtable <Integer, String> healthMsg = new Hashtable<>();
-    private Hashtable <Integer, String> scoreMsg = new Hashtable<>();
+    private int inventoryWeight;
+    private int score;
+    private int health;
+    private Hashtable<Integer, String> ranks;
+    private Hashtable<Integer, String> healthMsgs;
 
 
     //Singleton instance of GameState class
     private static GameState single_instance = null;
-
 
     /**
      * instance - this method returns single instance of GameState class
@@ -40,22 +39,28 @@ class GameState {
         return single_instance;
     }
 
-
     /**
      * Default Constructor GameState
      */
     private GameState() {
-        getHealthMsg().put(0, "Will be implemented 0");
-        getHealthMsg().put(1, "Will be implemented 1");
-        getHealthMsg().put(2, "Will be implemented 2");
-        getHealthMsg().put(3, "Will be implemented 3");
-        getHealthMsg().put(4, "Will be implemented 4");
+        inventory = new ArrayList<>();
+        inventoryWeight = 0;
+        score = 0;
+        health = 0;
+        ranks = new Hashtable<>();
+        healthMsgs = new Hashtable<>();
 
-        getScoreMsg().put(0, "none");
-        getScoreMsg().put(25, "score message 2");
-        getScoreMsg().put(50, "Score message 3");
-        getScoreMsg().put(75, "Score message 4");
-        getScoreMsg().put(100, "Score message 5");
+        setRank(0, "Rank 1");
+        setRank(25, "Rank 2");
+        setRank(50, "Rank 3");
+        setRank(75, "Rank 4");
+        setRank(100, "Rank 5");
+
+        setHealthMsg(0, "Message 1");
+        setHealthMsg(1, "Message 2");
+        setHealthMsg(2, "Message 3");
+        setHealthMsg(3, "Message 4");
+        setHealthMsg(4, "Message 5");
     }
 
     /**
@@ -101,8 +106,7 @@ class GameState {
      */
     void store(String saveName) throws IllegalSaveFormatException {
         try {
-            String saveFilePath = getFilePath();
-            File saveFile = new File(saveFilePath + saveName + ".sav");
+            File saveFile = new File(saveName + ".sav");
             PrintWriter printWriter = new PrintWriter(saveFile);
             printWriter.write("Zork III save data\n");
             dungeon.storeState(printWriter);
@@ -135,17 +139,16 @@ class GameState {
      * @exception FileNotFoundException
      * */
     void restore(String fileName) throws FileNotFoundException, NoRoomException, IllegalDungeonFormatException, IllegalSaveFormatException {
-        String saveFilePath = getFilePath();
-        File file = new File(saveFilePath + fileName);
+        File file = new File(fileName);
         Scanner gameScanner = new Scanner(file);
         String version = gameScanner.nextLine().split(" save data")[0];
         if (!version.equals("Zork III")) {
             throw new IllegalSaveFormatException("Save file incompatible with current version of Zork (Zork III).");
         }
         String secLine = gameScanner.nextLine();  //reads Dungeon file name
-        String[] secLineSplit = secLine.split(": ");    //parse by colon and space
+        String[] secLineSplit = secLine.split(": ");
         String zorkFileName = secLineSplit[1];
-        dungeon = new Dungeon(zorkFileName, false); //Todo: Figure this out
+        dungeon = new Dungeon(zorkFileName, false);
         initialize(dungeon);
 
         dungeon.restoreState(gameScanner);
@@ -165,7 +168,6 @@ class GameState {
                     this.addToInventory(item);
                 }
             } catch (Exception e) {
-                assert true;
             }
         }
         gameScanner.close();
@@ -225,45 +227,46 @@ class GameState {
         return inventoryWeight;
     }
 
-    String getFilePath() {
-        String currentDir = System.getProperty("user.dir");
-        File f = new File(currentDir);
-        String projectDir = f.getParent();
-        String filePath = String.format("%s/%s/", projectDir, fileDir);
-        return filePath;
-    }
-
-    public int getScore() {
+    int getScore() {
         return score;
     }
 
-    public void setScore(int score) {
+    void setScore(int score) {
         this.score = score;
     }
 
-    public Hashtable<Integer, String> getHealthMsg() {
-        return healthMsg;
-    }
-
-    public void setHealthMsg(Hashtable<Integer, String> healthMsg) {
-        this.healthMsg = healthMsg;
-    }
-
-    public Hashtable<Integer, String> getScoreMsg() {
-        return scoreMsg;
-    }
-
-    public void setScoreMsg(Hashtable<Integer, String> scoreMsg) {
-        this.scoreMsg = scoreMsg;
-    }
-
-    public int getHealth() {
+    int getHealth() {
         return health;
     }
 
-    public void setHealth(int health) {
+    void setHealth(int health) {
         this.health = health;
     }
+
+    String getRank() {
+        return ranks.get(this.score);
+    }
+
+    boolean rankAssigned() {
+        return getRank() != null;
+    }
+
+    void setRank(int score, String scoreMsg) {
+        ranks.put(score, scoreMsg);
+    }
+
+    String getHealthMsg() {
+        return healthMsgs.get(this.health);
+    }
+
+    boolean healthInfoAvailable() {
+        return getHealthMsg() != null;
+    }
+
+    void setHealthMsg(int health, String healthMsg) {
+        healthMsgs.put(health, healthMsg);
+    }
+
 }
 
 /**
@@ -277,5 +280,4 @@ class IllegalSaveFormatException extends Exception {
     public IllegalSaveFormatException(String errorMsg) {
     }
 }
-
 

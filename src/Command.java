@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.Iterator;
 
+
 /**
  * Command Class - Objects of type Command represent (parsed) commands that the user has typed
  * and wants to invoke
@@ -94,8 +95,7 @@ class DropCommand extends Command {
                     Room currentRoom = state.getAdventurersCurrentRoom();
                     currentRoom.add(item);
                     return item + " dropped.";
-                }
-                catch (NoItemException e) {
+                } catch (NoItemException e) {
                     return e.getMessage();
                 }
         }
@@ -223,15 +223,13 @@ class ScoreCommand extends Command {
     }
 
     String execute() {
-        String scoreMsg  = "";
-        if (GameState.instance().getScoreMsg().containsKey(GameState.instance().getScore())) {
-            scoreMsg = "You have accumulated " + GameState.instance().getScore() + " points. This gives you a rank of "
-                    + GameState.instance().getScoreMsg().get(GameState.instance().getScore()) + ".";
+        GameState state = GameState.instance();
+        String scoreMsg = "You have accumulated " + state.getScore() + " points. ";
+        if (state.rankAssigned()) {
+            scoreMsg += "This gives you a rank of " + state.getRank() + ".";
+        } else {
+            scoreMsg += "You don't have a rank assigned.";
         }
-        else {
-            scoreMsg = "You have accumulated " + GameState.instance().getScore() + " You don't have a rank assigned.";
-        }
-
         return scoreMsg;
     }
 }
@@ -240,15 +238,16 @@ class HealthCommand extends Command {
 
     HealthCommand() {
     }
-    String execute() {
-        String healthMsg  = "";
 
-        if (GameState.instance().getHealthMsg().containsKey(GameState.instance().getHealth())) {
-            healthMsg = GameState.instance().getHealthMsg().get(GameState.instance().getHealth());
-        }
-        else {
+    String execute() {
+        GameState state = GameState.instance();
+        String healthMsg;
+        if (state.healthInfoAvailable()) {
+            healthMsg = state.getHealthMsg();
+        } else {
             healthMsg = "No health info available";
         }
         return healthMsg;
     }
 }
+

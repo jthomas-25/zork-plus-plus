@@ -4,20 +4,27 @@ Zork III
 Items:
 Beretta,M9,pistol,handgun
 15
-examine:This is a standard-issue Beretta M92FS semi-automatic handgun.
+examine:This is a standard-issue Beretta M9 semi-automatic handgun.
 draw:Your fingers twitch briefly as you flex them before whipping out your gun.
 aim:You've got to ask yourself one question--'Do I feel lucky?' Well, do ya, punk?
 fire:*BANG!*
 spin:Performing several tricky maneuvers, you twirl the gun around in a dizzying display of skill.
 holster:You gently place the gun back in its holster.
 ---
+shotgun,boomstick
+25
+examine:S-Mart's top of the line--a Remington M870 12-gauge pump-action shotgun.
+aim:This is my BOOMSTICK!
+fire:You stumble backwards as the shotgun discharges a powerful blast!
+---
 combatKnife,knife
 5
+examine:Dangerous in the wrong hands, lethal in the right ones.
 swing:The knife cuts through the air like--well, you know...
 throw:The knife sails across the room in a graceful arc.
 ---
 typewriter
-25
+20
 examine:Many of the keys are scratched due to frequent typing.
 use:It's missing some ink, so you can't use it right now.
 ---
@@ -80,8 +87,7 @@ her shoulder, stands in the center. There's also a red curtain in the corner.
 Contents: lockpick
 On the way up, you pass an ornate work of stained glass on the wall above the
 landing. Reaching the top of the stairs, you notice the nearby walkway over-
-looking the massive foyer below. There's nothing else up here (besides more red
-carpet), but at least you can enjoy the view, right?
+looking the massive foyer below —— an impressive view, to be sure.
 ---
 Hallway
 Although nothing catches your eye, you hear distant sounds of flesh being torn
@@ -89,7 +95,7 @@ from bone...
 ---
 Sitting Area
 A corner sectional is the only piece of furniture in sight in this little nook,
-but more importantly —
+but more importantly ——
 A shadowy figure is crouched over something, and it appears not to notice you.
 You should probably get out of there...!
 ---
@@ -100,6 +106,25 @@ boasts of an owner who has money to burn. Bottles of all shapes and sizes fill
 the shelves behind the counter. A beautiful grand piano occupies one corner of
 the room. It looks like it hasn't been played in a while, yet has remained in
 surprisingly pristine condition.
+---
+Winding Corridor
+Weaving its way westward, a serpentine hallway passes by many other rooms.
+---
+Marble Room
+A feeling of claustrophobia washes over you while you contemplate the purpose
+of this boxlike space made of polished stone.
+---
+Living Room
+Contents: shotgun
+The furniture here includes a fireplace, coffee table, and leather sofa (how
+cozy!). The floor is covered with a decorative rug. A well-crafted shotgun
+hangs on two metal hooks attached to the back wall.
+---
+Back Passage
+no desc
+---
+Gallery
+no desc
 ---
 ===
 Exits:
@@ -127,6 +152,34 @@ Art Showroom
 w
 Foyer
 ---
+Art Showroom
+n
+Winding Corridor
+---
+Winding Corridor
+s
+Art Showroom
+---
+Winding Corridor
+w
+Back Passage
+---
+Winding Corridor
+e
+Marble Room
+---
+Marble Room
+w
+Winding Corridor
+---
+Marble Room
+s
+Living Room
+---
+Living Room
+n
+Marble Room
+---
 2F
 d
 Foyer
@@ -150,5 +203,17 @@ Hallway
 Bar
 s
 Hallway
+---
+Back Passage
+e
+Winding Corridor
+---
+Back Passage
+s
+Gallery
+---
+Gallery
+n
+Back Passage
 ---
 ===

@@ -18,17 +18,15 @@ public class Interpreter {
     private String commandEntered;
 
     /**
-     * Main class - Argument can be either a .sav file or .ZORK file
+     * Main method - Argument can be either a .sav file or .zork file
      */
     public static void main(String[] args) throws IllegalSaveFormatException {
         Scanner stdin = new Scanner(System.in);
 
-
         String defaultZorkFile = "ZorkIII_Test_File.zork";
         if (args.length > 0) {
             defaultZorkFile = args[0];
-        }
-        else {
+        } else {
             assert true; // essentially do nothing
         }
 
@@ -37,13 +35,11 @@ public class Interpreter {
             if (defaultZorkFile.endsWith(".sav")) {
                 GameState.instance().restore(defaultZorkFile);
                 dungeon = GameState.instance().getDungeon();
-            }
-            else {
+            } else {
                 dungeon = new Dungeon(defaultZorkFile, true);
                 GameState.instance().initialize(dungeon);
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("Exception happened: " + e);
             e.printStackTrace();
             System.exit(1);
@@ -70,8 +66,7 @@ public class Interpreter {
                 String output = command.execute();
                 if (output == null) {
                     System.out.println("See you next time!");
-                }
-                else {
+                } else {
                     System.out.println(output);
                 }
             }
