@@ -1,13 +1,3 @@
-/**
- * Dungeon Class - It holds on to a Hashtable collection of Room objects, and knows which one is the entry point.
- * A Hashtable is a class that makes it easy to look up entries by a "key" rather than by a numbered index,
- * as an ArrayList does.
- * @author Object Oriented Optimists (OOO)
- * @version 2.5
- * 23 June 2020
- */
-
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -16,12 +6,20 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Scanner;
 
+/**
+ * Dungeon Class - It holds on to a Hashtable collection of Room objects, and knows which one is the entry point.
+ * A Hashtable is a class that makes it easy to look up entries by a "key" rather than by a numbered index,
+ * as an ArrayList does.
+ * @author Object Oriented Optimists (OOO)
+ * @version 2.5
+ * 1 July 2020
+ */
 public class Dungeon {
     private String title = "Simple Dungeon";    //default
     private Room entry;
-    private ArrayList<Room> rooms = new ArrayList<Room>();
+    private ArrayList<Room> rooms;
     private String fileName;
-    private Hashtable<String, Item> items = new Hashtable<String, Item>();
+    private Hashtable<String, Item> items;
 
 
     public Dungeon(String fileName) throws IllegalDungeonFormatException, FileNotFoundException, NoRoomException {
@@ -35,13 +33,10 @@ public class Dungeon {
      * @throws FileNotFoundException
      */
     Dungeon(String fileName, boolean initState) throws IllegalDungeonFormatException, FileNotFoundException, NoRoomException {
+        init();
         this.fileName = fileName;
-        String filePath = GameState.instance().getFilePath();
-        File file = new File(filePath + fileName);
-
-
-//        System.out.println("Dungeon file is " + fileName + " File path: " + file.getAbsolutePath() +
-//                " File size " + file.length());
+        File file = new File(this.fileName);
+        //System.out.println("Dungeon file is " + file.getName() + " File path: " + file.getPath());
 
         Scanner stdin = new Scanner(file);
         int lineNumber = 0;
@@ -57,7 +52,6 @@ public class Dungeon {
                     continue;
                 } else {
                     throw new IllegalDungeonFormatException("Dungeon file is incompatible with the current version of Zork");
-//                    System.out.println("Dungeon file is incompatible with the current version of Zork");
                 }
             }
 
@@ -116,7 +110,7 @@ public class Dungeon {
                             break;
                         }
                         line = stdin.nextLine();
-                        Room exitSrc = exit.getSrc();   //exit src = null
+                        Room exitSrc = exit.getSrc();
                         String exitSrcRoomName = exitSrc.getName();
 
                         for (int i = 0; i < rooms.size(); i++) {
@@ -139,11 +133,14 @@ public class Dungeon {
      * @param title - Dungeon description
      */
     Dungeon(Room entry, String title) {
+        init();
         this.title = title;
         this.setEntry(entry);
     }
 
     private void init() {
+        rooms = new ArrayList<>();
+        items = new Hashtable<>();
     }
 
     /**
