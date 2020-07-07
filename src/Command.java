@@ -5,8 +5,9 @@ import java.util.Iterator;
  * Command Class - Abstract class of Objects of type Command represent commands (parsed) that the user has typed
  * and wants to invoke: for instance, "take", "drop", "i/inventory". Each command has a subclass, which extends
  * this abstract Command class.
- * @author OOO
- * @version 2.8
+ * @author Object Oriented Optimists (OOO)
+ * @author Richard Volynski
+ * @version 2.9
  * 7 July 2020
  */
 abstract class Command {
@@ -21,7 +22,8 @@ abstract class Command {
 /**
  * TakeCommand - this class extends Command class, implements "take" command, which takes an item(s)
  * from the user's current room and puts it into the user's current inventory
- * @author OOO
+ * @author Object Oriented Optimists (OOO)
+ * @author Richard Volynski
  * @version 1.0
  * 6 July 2020
  */
@@ -86,7 +88,8 @@ class TakeCommand extends Command {
 /**
  * DropCommand - this class extends Command class and implements "drop" command, which removes
  * an item(s) from the user's current inventory
- * @author OOO
+ * @author Object Oriented Optimists (OOO)
+ * @author Richard Volynski
  * @version 1.0
  * 6 July 2020
  */
@@ -145,7 +148,8 @@ class DropCommand extends Command {
 /**
  * MovementCommand - this class extends Command class and implements movement command(s), which moves the user
  * into/towards the direction they entered, if a valid command was entered
- * @author OOO
+ * @author Object Oriented Optimists (OOO)
+ * @author Richard Volynski
  * @version 1.0
  * 6 July 2020
  */
@@ -179,7 +183,8 @@ class MovementCommand extends Command {
 /**
  * SaveCommand - this class extends Command class and implements a "save" command, which saves the
  * game vitals at its current state and prompts the user to enter a file name where the game data will be saved
- * @author OOO
+ * @author Object Oriented Optimists (OOO)
+ * @author Richard Volynski
  * @version 1.1
  * 7 July 2020
  */
@@ -214,7 +219,8 @@ class SaveCommand extends Command {
 /**
  * UnknownCommand - this class extends Command class, implements an unknown command, and returns an
  * error message to the user in response to that command being entered
- * @author OOO
+ * @author Object Oriented Optimists (OOO)
+ * @author Richard Volynski
  * @version 1.1
  * 7 July 2020
  */
@@ -242,7 +248,8 @@ class UnknownCommand extends Command {
 /**
  * QuitCommand - this class extends Command class, implements the quit/q command and ends the
  * game without saving user data
- * @author OOO
+ * @author Object Oriented Optimists (OOO)
+ * @author Richard Volynski
  * @version 1.0
  * 6 July 2020
  */
@@ -260,7 +267,8 @@ class QuitCommand extends Command {
 /**
  * InventoryCommand - this class extends Command class, implements the inventory/i command, and
  * prints the user's current items or prints a message that user has no items
- * @author OOO
+ * @author Object Oriented Optimists (OOO)
+ * @author Richard Volynski
  * @version 1.1
  * 7 July 2020
  */
@@ -294,7 +302,8 @@ class InventoryCommand extends Command {
 /**
  * ItemSpecificCommand - this class extends Command class, implements a(n) item-specific command,
  * and prints a message for certain items or an error message
- * @author OOO
+ * @author Object Oriented Optimists (OOO)
+ * @author Richard Volynski
  * @version 1.0
  * 6 July 2020
  */
@@ -334,6 +343,7 @@ class ItemSpecificCommand extends Command {
 /**
  * LookCommand - this class extends Command class, implements the "look" command, returns a message
  * containing a description of the user's current room, surrounding rooms, and surrounding exits
+ * @author Object Oriented Optimists (OOO)
  * @author Richard Volynski
  * @version 1.1
  * 7 July 2020
@@ -360,6 +370,7 @@ class LookCommand extends Command {
 
 /**
  * ScoreCommand - this class extends Command class, returns current score, and user's rank
+ * @author Object Oriented Optimists (OOO)
  * @author Richard Volynski
  * @version 1.0
  * 6 July 2020
@@ -392,6 +403,7 @@ class ScoreCommand extends Command {
 /**
  * HealthCommand - this class extends Command class and implements "health" command, which returns user's
  * current health as a String message
+ * @author Object Oriented Optimists (OOO)
  * @author Richard Volynski
  * @version 1.0
  * 6 July 2020
@@ -425,6 +437,7 @@ class HealthCommand extends Command {
  * SwapCommand - this class extends Command class, implements swap command, which exchanges all items in the user's
  * current room with the user's current inventory (in both directions, e.g. items from Room B6 become items in the
  * user's current inventory, and items in the user's current inventory become items in Room B6)
+ * @author Object Oriented Optimists (OOO)
  * @author Richard Volynski
  * @version 1.0
  * 6 July 2020
@@ -453,6 +466,7 @@ class SwapCommand extends Command {
  * would kill a snake if it appeared in the room the user is currently in. If the user possesses a dagger
  * or sword, they will type “kill snake with sword” or “kill snake with dagger.” Once the user kills the snake,
  * the snake will be removed from the room.
+ * @author Object Oriented Optimists (OOO)
  * @author Richard Volynski
  * @version 1.0
  * 6 July 2020
@@ -475,7 +489,4 @@ class KillCommand extends Command {
         return null;    //TODO implement
     }
 }
-
-
-
 
