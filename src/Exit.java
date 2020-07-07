@@ -8,7 +8,7 @@ import java.util.Scanner;
  * from Zork file.
  * @author Richard Volynski (OOO)
  * @version 2.6
- * 8 July 2020
+ * 6 July 2020
  */
 class Exit {
     private String dir;
