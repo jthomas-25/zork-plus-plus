@@ -2,20 +2,26 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
- * Command Class - Abstract class of Objects of type Command represent (parsed) commands that the user has typed
- * and wants to invoke
- * @author Object Oriented Optimists (OOO)
- * @version 2.7
- * 1 July 2020
+ * Command Class - Abstract class of Objects of type Command represent commands (parsed) that the user has typed
+ * and wants to invoke: for instance, "take", "drop", "i/inventory". Each command has a subclass, which extends
+ * this abstract Command class.
+ * @author OOO
+ * @version 2.8
+ * 7 July 2020
  */
 abstract class Command {
+
+    /**
+     * execute - this is an abstract command, which will be implemented at the subclass level.
+     * @return String command message
+     */
     abstract String execute();
 }
 
 /**
  * TakeCommand - this class extends Command class, implements "take" command, which takes an item(s)
  * from the user's current room and puts it into the user's current inventory
- * @author Richard Volynski
+ * @author OOO
  * @version 1.0
  * 6 July 2020
  */
@@ -24,16 +30,16 @@ class TakeCommand extends Command {
 
     /**
      * TakeCommand - default constructor
-     * @param itemName
+     * @param itemName item to take from a room and add to user's inventory
      */
     TakeCommand(String itemName) {
         this.itemName = itemName;
     }
 
     /**
-     * execute() - this method executes "take" command and returns the text that should be printed to the user
-     * in response to that command being entered
-     * @return text description about which items the user can take
+     * execute - this method executes "take" command and returns the text that should be printed to the user
+     * in response to this command being entered
+     * @return text description about which items the user took from a room
      */
     String execute() {
         GameState state = GameState.instance();
@@ -80,7 +86,7 @@ class TakeCommand extends Command {
 /**
  * DropCommand - this class extends Command class and implements "drop" command, which removes
  * an item(s) from the user's current inventory
- * @author Richard Volynski
+ * @author OOO
  * @version 1.0
  * 6 July 2020
  */
@@ -89,16 +95,16 @@ class DropCommand extends Command {
 
     /**
      * DropCommand - default constructor
-     * @param itemName - user input
+     * @param itemName - item name to drop (user input)
      */
     DropCommand(String itemName) {
         this.itemName = itemName;
     }
 
     /**
-     * execute() - this method executes "drop" command and returns the text that should be printed to the user
-     * in response to that command being executed
-     * @return text description about which items the user can drop
+     * execute() - this method executes "drop" command, removes items from user's inventory
+     * and returns the text that should be printed to the user in response to that command being executed
+     * @return text description about which items were removed from user's inventory
      */
     String execute() {
         GameState state = GameState.instance();
@@ -137,8 +143,8 @@ class DropCommand extends Command {
 
 
 /**
- * MovementCommand - this class extends Command class and implements movement command(s), which moves the user into
- * the direction they entered, if a valid command was entered
+ * MovementCommand - this class extends Command class and implements movement command(s), which moves the user
+ * into/towards the direction they entered, if a valid command was entered
  * @author OOO
  * @version 1.0
  * 6 July 2020
@@ -149,16 +155,17 @@ class MovementCommand extends Command {
     /**
      * MovementCommand - For now, this constructor takes a valid move command entered by the user and stores it
      * as an instance variable
-     * @param dir - user inputted direction, including save
+     * @param dir - direction (user input)
      */
     MovementCommand(String dir) {
         this.dir = dir;
     }
 
     /**
-     * execute() - this method executes a movement command and returns the text that should be
-     * printed to the user in response to that command being executed
-     * @return text description where the user is going
+     * execute() - this method executes a movement command, moves the user into/towards the direction
+     * they entered, and returns the text that should be printed to the user
+     * in response to that command being executed
+     * @return text description about where the user is going
      */
     String execute() {
         Room room = GameState.instance().getAdventurersCurrentRoom().leaveBy(dir);
@@ -171,26 +178,27 @@ class MovementCommand extends Command {
 
 /**
  * SaveCommand - this class extends Command class and implements a "save" command, which saves the
- * game at its current state and prompts the user to enter a file where the game data will be saved
+ * game vitals at its current state and prompts the user to enter a file name where the game data will be saved
  * @author OOO
- * @version 1.0
- * 6 July 2020
+ * @version 1.1
+ * 7 July 2020
  */
 class SaveCommand extends Command {
     private String saveFilename;
 
     /**
      * SaveCommand - default constructor
-     * @param saveFilename - user input
+     * @param saveFilename - file name (user input)
      */
     SaveCommand(String saveFilename) {
         this.saveFilename = saveFilename;
     }
 
     /**
-     * execute() - this method executes "save" and returns the text that should be printed to the user
-     * in response to that command being entered
-     * @return String
+     * execute() - this method executes "save" and returns text that should be printed to the user
+     * in response to that command being entered or returns an error message if an exception happened when the user
+     * tried to save the game.
+     * @return message
      */
     String execute() {
         try {
@@ -204,27 +212,26 @@ class SaveCommand extends Command {
 
 
 /**
- * UnknownCommand - this class extends Command class, implements an unknown command, and returns a
- * message to the user in response
- * to that command being entered
+ * UnknownCommand - this class extends Command class, implements an unknown command, and returns an
+ * error message to the user in response to that command being entered
  * @author OOO
- * @version 1.0
- * 6 July 2020
+ * @version 1.1
+ * 7 July 2020
  */
 class UnknownCommand extends Command {
     private String bogusCommand;
 
     /**
      * UnknownCommand - default constructor
-     * @param bogusCommand
+     * @param bogusCommand - unknown command
      */
     UnknownCommand(String bogusCommand) {
         this.bogusCommand = bogusCommand;
     }
 
     /**
-     * execute() - this method executes an unknown command and returns the text that should be printed
-     * to the user in response to that command being entered
+     * execute() - this method executes an unknown command and returns an error message (String)
+     * in response to that command being entered
      * @return message
      */
     String execute() {
@@ -252,10 +259,10 @@ class QuitCommand extends Command {
 
 /**
  * InventoryCommand - this class extends Command class, implements the inventory/i command, and
- * prints a message in response to that command being entered
+ * prints the user's current items or prints a message that user has no items
  * @author OOO
- * @version 1.0
- * 6 July 2020
+ * @version 1.1
+ * 7 July 2020
  */
 class InventoryCommand extends Command {
 
@@ -267,7 +274,7 @@ class InventoryCommand extends Command {
 
     /**
      * execute - this method executes the inventory/i command and returns the user's current inventory
-     * @return result
+     * @return inventory items
      */
     String execute() {
         ArrayList<Item> inventory = GameState.instance().getInventory();
@@ -286,7 +293,7 @@ class InventoryCommand extends Command {
 
 /**
  * ItemSpecificCommand - this class extends Command class, implements a(n) item-specific command,
- * and prints a message for certain items
+ * and prints a message for certain items or an error message
  * @author OOO
  * @version 1.0
  * 6 July 2020
@@ -307,6 +314,7 @@ class ItemSpecificCommand extends Command {
 
     /**
      * execute - this method executes the item-specific commands and prints a message about a certain item
+     * or prints an error message
      * @return String message
      */
     String execute() {
@@ -327,8 +335,8 @@ class ItemSpecificCommand extends Command {
  * LookCommand - this class extends Command class, implements the "look" command, returns a message
  * containing a description of the user's current room, surrounding rooms, and surrounding exits
  * @author Richard Volynski
- * @version 1.0
- * 6 July 2020
+ * @version 1.1
+ * 7 July 2020
  */
 class LookCommand extends Command {
 
@@ -341,7 +349,7 @@ class LookCommand extends Command {
     /**
      * execute - this method executes the "look" command and returns the description of the user's current room
      * and nearest exits
-     * @return execute
+     * @return room description and nearest exits
      */
     String execute() {
         GameState.instance().getAdventurersCurrentRoom().setRoomDescriptionNeeded();
@@ -398,7 +406,7 @@ class HealthCommand extends Command {
 
     /**
      * execute - this method executes health command and returns current user's health as a message
-     * @return string message
+     * @return health message
      */
     String execute() {
         GameState state = GameState.instance();
