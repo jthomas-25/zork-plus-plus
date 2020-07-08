@@ -32,10 +32,9 @@ class GameState {
      * instance - this method returns single instance of GameState class
      * @return single instance of GameState class
      * */
-    public static synchronized GameState instance() {
+    static synchronized GameState instance() {
         if (single_instance == null)
             single_instance = new GameState();
-
         return single_instance;
     }
 
