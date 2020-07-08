@@ -3,16 +3,25 @@
  * @author Object Oriented Optimists (OOO)
  * @author John Thomas
  * @author Richard Volynski
- * @version 1.1
+ * @version 1.2
  * 8 July 2020
  */
 abstract class ZorkEvent {
+
+    ZorkEvent() {
+    }
 
     /**
      * trigger - this is an abstract method that will be implemented at the subclass level
      * @return event return code
      */
-    abstract String trigger();
+    abstract String trigger(); //throws ZorkEventException;
+
+//    abstract String trigger(int score) throws ZorkEventException;
+//
+//    abstract String trigger(String item) throws ZorkEventException;
+//
+//    abstract String trigger(String item1, String item2) throws ZorkEventException;
 }
 
 /**
@@ -22,7 +31,8 @@ abstract class ZorkEvent {
  * a ScoreEvent will only increase it.
  * @author Object Oriented Optimists (OOO)
  * @author John Thomas
- * @version 1.0
+ * @author Richard Volynski
+ * @version 1.2
  * 8 July 2020
  */
 class ScoreEvent extends ZorkEvent {
@@ -31,7 +41,7 @@ class ScoreEvent extends ZorkEvent {
     /**
      * ScoreEvent - Constructor to set a given number of points.
      * @param points the number of points to be added to the player's score
-     * @throws IllegalArgumentException if the number of points is less than or equal to 0
+     * @throws IllegalArgumentException if the number of points is less than 0
      */
     ScoreEvent(int points) throws IllegalArgumentException {
     }
@@ -41,6 +51,8 @@ class ScoreEvent extends ZorkEvent {
      * It adds this event's number of points to the player's score.
      * @return event message
      */
+
+    @Override
     String trigger() {
         return null;    //TODO implement
     }
@@ -53,7 +65,7 @@ class ScoreEvent extends ZorkEvent {
  * @author Object Oriented Optimists (OOO)
  * @author John Thomas
  * @author Richard Volynski
- * @version 1.1
+ * @version 1.2
  * 8 July 2020
  */
 class WoundEvent extends ZorkEvent {
@@ -83,7 +95,7 @@ class WoundEvent extends ZorkEvent {
  * @author Object Oriented Optimists (OOO)
  * @author John Thomas
  * @author Richard Volynski
- * @version 1.1
+ * @version 1.2
  * 8 July 2020
  */
 class DieEvent extends ZorkEvent {
@@ -110,7 +122,7 @@ class DieEvent extends ZorkEvent {
  * @author Object Oriented Optimists (OOO)
  * @author John Thomas
  * @author Richard Volynski
- * @version 1.1
+ * @version 1.2
  * 8 July 2020
  */
 class WinEvent extends ZorkEvent {
@@ -139,7 +151,7 @@ class WinEvent extends ZorkEvent {
  * @author Object Oriented Optimists (OOO)
  * @author John Thomas
  * @author Richard Volynski
- * @version 1.1
+ * @version 1.2
  * 8 July 2020
  */
 class DropEvent extends ZorkEvent {
@@ -172,7 +184,7 @@ class DropEvent extends ZorkEvent {
  * @author Object Oriented Optimists (OOO)
  * @author John Thomas
  * @author Richard Volynski
- * @version 1.1
+ * @version 1.2
  * 8 July 2020
  */
 class DisappearEvent extends ZorkEvent {
@@ -205,16 +217,23 @@ class DisappearEvent extends ZorkEvent {
  * @author Object Oriented Optimists (OOO)
  * @author John Thomas
  * @author Richard Volynski
- * @version 1.1
+ * @version 1.2
  * 8 July 2020
  */
 class TransformEvent extends ZorkEvent {
 
+    private String itemToReplace;
+    private String newItem;
+
     /**
-     * TransformEvent - default constructor
+     * TransformEvent - constructor to initialize TransformEvent
+     * @param itemToReplace - item to replace
+     * @param newItem - new item in user's inventory
+     *
      */
-    TransformEvent() {
-        //TODO implement
+    TransformEvent(String itemToReplace, String newItem) {
+        this.itemToReplace = itemToReplace;
+        this.newItem = newItem;
     }
 
     /**
@@ -228,21 +247,23 @@ class TransformEvent extends ZorkEvent {
 }
 
 /**
- * TeleportEvent - this class extends ZorkEvent and, when triggered, move the user to another room,
+ * TeleportEvent - this class extends ZorkEvent and, when triggered, moves the user to another room,
  * regardless if the user already visited that room.
  * @author Object Oriented Optimists (OOO)
  * @author John Thomas
  * @author Richard Volynki
- * @version 1.1
+ * @version 1.2
  * 8 July 2020
  */
 class TeleportEvent extends ZorkEvent {
+    private String roomName;
 
     /**
-     * TeleportEvent - default constructor
+     * TeleportEvent - constructor to initialize TeleportEvent
+     * @param roomName - room to go to
      */
-    TeleportEvent() {
-        //TODO implement
+    TeleportEvent(String roomName) {
+        this.roomName = roomName;
     }
 
     /**
