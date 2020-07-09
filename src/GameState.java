@@ -4,13 +4,15 @@ import java.util.Hashtable;
 import java.util.Scanner;
 import java.util.Iterator;
 
-
 /**
  * GameState Class - represents the current state of the game: which dungeon is being played
  * and what room the adventurer is currently in.
+ * GameState is a Singleton class.
  * @author Object Oriented Optimists (OOO)
- * @version 2.6
- * 1 July 2020
+ * @author John Thomas
+ * @author Richard Volynski
+ * @version 2.7
+ * 9 July 2020
  */
 class GameState {
     private Dungeon dungeon = null;
@@ -68,8 +70,8 @@ class GameState {
     }
 
     /**
-     * initialize - This method initializes the dungeon and name of the starting room.
-     * @param dungeon - controls entire game function
+     * initialize - This method initializes the entire game and the name of the starting room.
+     * @param dungeon   Dungeon class which controls entire game function
      */
     void initialize(Dungeon dungeon) {
 //        this.dungeon = new Dungeon(currentRoom, dungeonDesc);
@@ -89,7 +91,7 @@ class GameState {
     /**
      * This method sets the current room of the adventurer by changing GameState's currentRoom member variable.
      *
-     * @param room Room object, intended to be set as new current room.
+     * @param room  Room object, intended to be set as new current room.
      */
     void setAdventurersCurrentRoom(Room room) {
         this.currentRoom = room;
@@ -110,7 +112,7 @@ class GameState {
      * in the file, line by line.
      * A file generated with this method can be restored using the {@link #restore restore} method.
      *
-     * @param saveName String, sets the name of the save file.  Cannot contain the following characters. " / * < > ? | \ . :
+     * @param saveName  String, sets the name of the save file.  Cannot contain the following characters. " / * < > ? | \ . :
      */
     void store(String saveName) throws IllegalSaveFormatException {
         try {
@@ -144,7 +146,7 @@ class GameState {
      * If the file exists, this method will set several GameState member variables to those found within the file.
      * A (dot)sav compatible file can be generated with the {@link #store(String) store} method.
      *
-     * @param fileName String, the (dot)sav file to restore.
+     * @param fileName  String, the (dot)sav file to restore.
      */
     void restore(String fileName) throws FileNotFoundException, NoRoomException, IllegalDungeonFormatException, IllegalSaveFormatException {
         File file = new File(fileName);
@@ -190,7 +192,7 @@ class GameState {
 
     /**
      * This method will add the passed Item to the player's inventory.
-     * @param item The item to be added to the inventory.
+     * @param item  The item to be added to the inventory.
      */
     void addToInventory(Item item) {
         this.inventory.add(item);
@@ -198,7 +200,7 @@ class GameState {
     }
     /**
      * This method will remove the passed Item from the player's {@link #inventory inventory}.
-     * @param item The item to be removed from inventory.
+     * @param item  The item to be removed from inventory.
      */
     void removeFromInventory(Item item) {
         this.inventory.remove(item);
@@ -207,7 +209,7 @@ class GameState {
     /**
      * This method will actually let you remove multiple items while iterating
      * over them, thereby avoiding a ConcurrentModificationException.
-     * @param itr the iterator which will do the removing.
+     * @param itr   the iterator which will do the removing.
      */
     void removeFromInventory(Iterator<Item> itr, Item item) {
         itr.remove();
@@ -218,7 +220,7 @@ class GameState {
      * This method attempts to return a requested Item in the vicinity of the player.
      * The current vicinity is represented by the player's current {@link #inventory inventory} and the player's
      * {@link #currentRoom current room}.
-     * @param name a string, containing the name of the desired item in the vicinity.
+     * @param name  a string, containing the name of the desired item in the vicinity.
      */
     Item getItemInVicinityNamed(String name) throws NoItemException {
         Item item = currentRoom.getItemNamed(name);
@@ -239,7 +241,7 @@ class GameState {
      * If there is an Item in the player's inventory with the requested name, the Item is returned.
      * If there is no Item in the player's inventory with the requested name, this method throws a
      * NoItemException exception and will return nothing.
-     * @param name a string, containing the name of the desired item in player's inventory.
+     * @param name  a string, containing the name of the desired item in player's inventory.
      */
     Item getItemFromInventoryNamed(String name) throws NoItemException {
         for (Item item : inventory) {
@@ -255,7 +257,7 @@ class GameState {
      * the {@link #MAX_INVENTORY_WEIGHT MAX_INVENTORY_WEIGHT}.
      * If the Item will cause the player to exceed their {@link #MAX_INVENTORY_WEIGHT MAX_INVENTORY_WEIGHT}, the method
      * returns false.  Otherwise, it will return true.
-     * @param item the item to check.
+     * @param item  the item to check.
      */
     boolean inventoryWeightLimitReached(Item item) {
         return inventoryWeight + item.getWeight() > MAX_INVENTORY_WEIGHT;
@@ -318,4 +320,5 @@ class IllegalSaveFormatException extends Exception {
     public IllegalSaveFormatException(String errorMsg) {
     }
 }
+
 
