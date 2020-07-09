@@ -73,7 +73,8 @@ class GameState {
     }
 
     /**
-     * This method gets the current room of the adventurer by getting GameState's currentRoom member variable.
+     * This method gets the current room of the adventurer by getting GameState's {@link #currentRoom currentRoom} member variable.
+     * The {@link #currentRoom currentRoom} is a Room that represents the player's current location.
      *
      * @return currentRoom Room object.
      */
@@ -83,7 +84,7 @@ class GameState {
 
     /**
      * This method sets the current room of the adventurer by changing GameState's currentRoom member variable.
-     *
+     * The {@link #currentRoom currentRoom} is a Room that represents the player's current location.
      * @param room Room object, intended to be set as new current room.
      */
     void setAdventurersCurrentRoom(Room room) {
@@ -91,9 +92,10 @@ class GameState {
     }
 
     /**
-     * This method gets the dungeon of the GameState's currentRoom member variable.
+     * This method gets the {@link #dungeon dungeon} of the GameState.
+     * The {@link #dungeon dungeon} is a member variable, representing the dungeon in play.
      *
-     * @return Dungeon
+     * @return dungeon, a Dungeon belonging to GameState.
      */
     Dungeon getDungeon() {
         return dungeon;
@@ -177,7 +179,9 @@ class GameState {
     }
 
     /**
-     * This method will add the passed Item to the player's inventory.
+     * This method gets the {@link #inventory inventory} of GameState, a member variable, arraylist of Item(s).
+     *
+     * @return ArrayList of Item objects.
      */
     ArrayList<Item> getInventory() {
         return this.inventory;
@@ -256,61 +260,125 @@ class GameState {
         return inventoryWeight + item.getWeight() > MAX_INVENTORY_WEIGHT;
     }
 
-    int getInventoryWeight() {
-        return inventoryWeight;
-    }
+    // Unused method, afaik.
+//    int getInventoryWeight() {
+//        return inventoryWeight;
+//    }
 
+    /**
+     * Gets the {@link #score score} of GameState.  A member variable, representing the player's score.
+     *
+     * @return Int, representing the current score.
+     */
     int getScore() {
         return score;
     }
 
+    /**
+     * Sets the {@link #score score} of GameState.  A member variable, representing the player's score.
+     *
+     * @param score integer intended to be new score.
+     */
     void setScore(int score) {
         this.score = score;
     }
 
+    /**
+     * Gets the {@link #health health} of GameState.  A member variable, representing the player's health.
+     *
+     * @return integer, representing the player's health.
+     */
     int getHealth() {
         return health;
     }
 
+    /**
+     * Sets the {@link #health health} of GameState.  A member variable, representing the player's health.
+     *
+     * @param health integer intended to be the new health of player.
+     */
     void setHealth(int health) {
         this.health = health;
     }
 
+    /**
+     * Gets a String, declaring the rank of the player, based on their current {@link #score score}.
+     *
+     * @return String, the current rank of player, based on the current {@link #score score}.
+     */
     String getRank() {
         return ranks.get(this.score);
     }
 
+    /**
+     * Checks to see if {@link #getRank() getRank} returns null.
+     * If {@link #getRank() getRank} is not null, this method will return true.  If {@link #getRank() getRank} is null,
+     * this method returns false.
+     *
+     * @return boolean.
+     */
     boolean rankAssigned() {
         return getRank() != null;
     }
 
-    void setRank(int score, String scoreMsg) {
+    /**
+     * Adds a rank to the {@link #ranks ranks} hashtable.  A rank represents the player's current {@link #score score}
+     * as a message, with lower scores corresponding with lower ranks and higher scores with higher ranks.
+     *
+     * @param score Integer, represents the max score necessary for obtaining a certain rank.
+     * @param scoreMsg String, representing a rank to be added.
+     */
+    private void setRank(int score, String scoreMsg) {
         ranks.put(score, scoreMsg);
     }
 
+    /**
+     * Gets an appropriate message, corresponding to the player's current {@link #health health}.
+     * Lower health will return more dire messages, while higher or full health will indicate
+     * the player is fine.
+     *
+     * @return String, representing the player's {@link #health health} as a message.
+     */
     String getHealthMsg() {
         return healthMsgs.get(this.health);
     }
 
+    /**
+     * Checks to see if {@link #getHealthMsg() getHealthMsg} returns null.
+     * If {@link #getHealthMsg() getHealthMsg} is not null, this method will return true.  If {@link #getRank() getRank} is null,
+     * this method returns false.
+     *
+     * @return boolean, will return true if {@link #getHealthMsg() getHealthMsg} returns anything but null.
+     */
     boolean healthInfoAvailable() {
         return getHealthMsg() != null;
     }
 
-    void setHealthMsg(int health, String healthMsg) {
+
+    /**
+     * Adds a health message to the {@link #healthMsgs healthMsgs} hashtable.  A health message
+     * represents the player's current {@link #health health} as a message.
+     *
+     * @param health Integer, represents the max health necessary for obtaining a certain health message.
+     * @param healthMsg String, representing the health message to be added.
+     */
+    private void setHealthMsg(int health, String healthMsg) {
         healthMsgs.put(health, healthMsg);
     }
 
 }
 
 /**
- * class IllegalDungeonFormatException is a custom exception
+ *
+ *
+ *
  */
 class IllegalSaveFormatException extends Exception {
 
     /**
-     * IllegalDungeonFormatException - default constructor
+     * An exception, intended to be thrown if the format of the save file is illegal (not properly formatted).
      */
-    public IllegalSaveFormatException(String errorMsg) {
+    IllegalSaveFormatException(String errorMsg) {
     }
 }
 
