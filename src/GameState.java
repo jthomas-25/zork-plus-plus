@@ -369,14 +369,13 @@ class GameState {
 }
 
 /**
- *
- *
- *
+ * An exception, intended to be thrown if the format of the save file is illegal (not properly formatted).
  */
 class IllegalSaveFormatException extends Exception {
 
     /**
-     * An exception, intended to be thrown if the format of the save file is illegal (not properly formatted).
+     * Default constructor.
+     * @param errorMsg String, message to print when error is thrown.
      */
     IllegalSaveFormatException(String errorMsg) {
     }
