@@ -29,7 +29,7 @@ class GameState {
     private static GameState single_instance = null;
 
     /**
-     * instance - this method returns single instance of GameState class
+     * This method returns single instance of GameState class.
      * @return single instance of GameState class
      * */
     static synchronized GameState instance() {
@@ -73,35 +73,39 @@ class GameState {
     }
 
     /**
-     * getAdventurersCurrentRoom - this method returns the current room the user is in. The room updates as the
-     * user moves.
-     * @return currentRoom
+     * This method gets the current room of the adventurer by getting GameState's currentRoom member variable.
+     *
+     * @return currentRoom Room object.
      */
     Room getAdventurersCurrentRoom() {
         return currentRoom;
     }
 
     /**
-     * setAdventurersCurrentRoom - this method sets the current room the user is in. The room updates as the
-     * user moves.
-     * @param room - new current room
+     * This method sets the current room of the adventurer by changing GameState's currentRoom member variable.
+     *
+     * @param room Room object, intended to be set as new current room.
      */
     void setAdventurersCurrentRoom(Room room) {
         this.currentRoom = room;
     }
 
     /**
-     * getDungeon - this method gets the Dungeon
+     * This method gets the dungeon of the GameState's currentRoom member variable.
+     *
+     * @return Dungeon
      */
     Dungeon getDungeon() {
         return dungeon;
     }
 
     /**
-     * store - this method stores the input from the file so that when the user saves the game, the user wll be
-     * able to resume playing where they left off.
-     * @param saveName
-     * @exception IOException
+     * This method stores essential GameState member variables into a file, ending in (dot)sav.
+     * If the saveName parameter is a legal file name string, this method stores several GameState member variables
+     * in the file, line by line.
+     * A file generated with this method can be restored using the {@link #restore restore} method.
+     *
+     * @param saveName String, sets the name of the save file.  Cannot contain the following characters. " / * < > ? | \ . :
      */
     void store(String saveName) throws IllegalSaveFormatException {
         try {
@@ -131,12 +135,12 @@ class GameState {
     }
 
     /**
-     * restore - this method restores the game at the state which it was saved.
-     * @param fileName
-     * @exception IllegalSaveFormatException
-     * @exception NoExitException
-     * @exception FileNotFoundException
-     * */
+     * This method restores essential GameState member variables from the requested file.
+     * If the file exists, this method will set several GameState member variables to those found within the file.
+     * A (dot)sav compatible file can be generated with the {@link #store(String) store} method.
+     *
+     * @param fileName String, the (dot)sav file to restore.
+     */
     void restore(String fileName) throws FileNotFoundException, NoRoomException, IllegalDungeonFormatException, IllegalSaveFormatException {
         File file = new File(fileName);
         Scanner gameScanner = new Scanner(file);
@@ -172,15 +176,25 @@ class GameState {
         gameScanner.close();
     }
 
+    /**
+     * This method will add the passed Item to the player's inventory.
+     */
     ArrayList<Item> getInventory() {
         return this.inventory;
     }
 
+    /**
+     * This method will add the passed Item to the player's inventory.
+     * @param item The item to be added to the inventory.
+     */
     void addToInventory(Item item) {
         this.inventory.add(item);
         inventoryWeight += item.getWeight();
     }
-
+    /**
+     * This method will remove the passed Item from the player's {@link #inventory inventory}.
+     * @param item The item to be removed from inventory.
+     */
     void removeFromInventory(Item item) {
         this.inventory.remove(item);
         inventoryWeight -= item.getWeight();
@@ -195,6 +209,12 @@ class GameState {
         inventoryWeight -= item.getWeight();
     }
 
+    /**
+     * This method attempts to return a requested Item in the vicinity of the player.
+     * The current vicinity is represented by the player's current {@link #inventory inventory} and the player's
+     * {@link #currentRoom current room}.
+     * @param name a string, containing the name of the desired item in the vicinity.
+     */
     Item getItemInVicinityNamed(String name) throws NoItemException {
         Item item = currentRoom.getItemNamed(name);
         if (item == null) {
@@ -209,6 +229,13 @@ class GameState {
         }
     }
 
+    /**
+     * This method attempts to return a requested Item within the player's {@link #inventory inventory}.
+     * If there is an Item in the player's inventory with the requested name, the Item is returned.
+     * If there is no Item in the player's inventory with the requested name, this method throws a
+     * NoItemException exception and will return nothing.
+     * @param name a string, containing the name of the desired item in player's inventory.
+     */
     Item getItemFromInventoryNamed(String name) throws NoItemException {
         for (Item item : inventory) {
             if (item.goesBy(name)) {
@@ -218,6 +245,13 @@ class GameState {
         throw new NoItemException(String.format("You're not carrying a(n) %s.", name));
     }
 
+    /**
+     * This method checks if the player's current inventory, plus the weight of the given object exceeds
+     * the {@link #MAX_INVENTORY_WEIGHT MAX_INVENTORY_WEIGHT}.
+     * If the Item will cause the player to exceed their {@link #MAX_INVENTORY_WEIGHT MAX_INVENTORY_WEIGHT}, the method
+     * returns false.  Otherwise, it will return true.
+     * @param item the item to check.
+     */
     boolean inventoryWeightLimitReached(Item item) {
         return inventoryWeight + item.getWeight() > MAX_INVENTORY_WEIGHT;
     }
