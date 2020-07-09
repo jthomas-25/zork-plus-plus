@@ -23,6 +23,8 @@ class GameState {
     private int health;
     private Hashtable<Integer, String> ranks;
     private Hashtable<Integer, String> healthMsgs;
+    private boolean gameWon;
+    private boolean gameLost;
 
 
     //Singleton instance of GameState class
@@ -60,6 +62,9 @@ class GameState {
         setHealthMsg(2, "Message 3");
         setHealthMsg(3, "Message 4");
         setHealthMsg(4, "Message 5");
+
+        gameWon = false;
+        gameLost = false;
     }
 
     /**

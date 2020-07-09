@@ -1,5 +1,14 @@
 /**
- * ZorkEvent class - An abstract class as the base class for all sub classes for Zork+.
+ * A ZorkEvent is anything that alters the game state when it occurs. (see {@link GameState}
+ * for a summary of what information the game tracks.) A common way to implement ZorkEvents
+ * is to associate them with item-specific commands in a .zork dungeon file, such that they
+ * will be triggered when the player uses an item in a way that is recognizable to the game.
+ * 
+ * Note that ZorkEvents can exist independently of a dungeon file; they can be incorporated
+ * in a hardcoded dungeon as well. Also, there is nothing preventing a ZorkEvent's occurrence
+ * from depending on factors besides item interaction (e.g. an enemy that instantly kills the
+ * player when the player enters a room). This is so the users of this API have greater
+ * flexibility in adding their own features.
  * @author Object Oriented Optimists (OOO)
  * @author John Thomas
  * @author Richard Volynski
@@ -7,25 +16,17 @@
  * 8 July 2020
  */
 abstract class ZorkEvent {
-
-    ZorkEvent() {
-    }
+    protected String message;
 
     /**
-     * trigger - this is an abstract method that will be implemented at the subclass level
-     * @return event return code
+     * Activates this event, which modifies the game state.
+     * @return this event's message
      */
-    abstract String trigger(); //throws ZorkEventException;
-
-//    abstract String trigger(int score) throws ZorkEventException;
-//
-//    abstract String trigger(String item) throws ZorkEventException;
-//
-//    abstract String trigger(String item1, String item2) throws ZorkEventException;
+    abstract String trigger();
 }
 
 /**
- * ScoreEvent - this class extends ZorkEvent class, when triggered, changes the player's score
+ * A ScoreEvent represents a ZorkEvent that, when triggered, changes the player's score
  * by a positive number of points.
  * Note that while the {@link GameState#setScore} method can also affect the player's score,
  * a ScoreEvent will only increase it.
@@ -39,29 +40,27 @@ class ScoreEvent extends ZorkEvent {
     private int points;
 
     /**
-     * ScoreEvent - Constructor to set a given number of points.
+     * Constructs a ScoreEvent with the given number of points.
      * @param points the number of points to be added to the player's score
-     * @throws IllegalArgumentException if the number of points is less than 0
+     * @throws IllegalArgumentException if the number of points is less than or equal to 0
      */
     ScoreEvent(int points) throws IllegalArgumentException {
+        //TODO implement
     }
 
     /**
-     * trigger - this method implements abstract method from the base class.
-     * It adds this event's number of points to the player's score.
-     * @return event message
+     * Adds this event's number of points to the player's score.
+     * @return this event's message
      */
-
-    @Override
     String trigger() {
         return null;    //TODO implement
     }
 }
 
 /**
- * WoundEvent - this class extends ZorkEvent class, changes the player's health
- * by a nonzero number of points. Note that a negative number of points will
- * effectively heal the player.
+ * A WoundEvent represents a ZorkEvent that, when triggered, changes the player's health
+ * by a nonzero number of points.
+ * Note that a negative number of points will effectively heal the player.
  * @author Object Oriented Optimists (OOO)
  * @author John Thomas
  * @author Richard Volynski
@@ -72,17 +71,16 @@ class WoundEvent extends ZorkEvent {
     private int points;
 
     /**
-     * WoundEvent - this constructor implements a wound event and awards a given number of points.
-     * @param points - the number of points to be added to the player's health
-     * @throws IllegalArgumentException if the number of points is less than or equal to 0
+     * Constructs a WoundEvent with the given number of points.
+     * @param points the number of points to be subtracted from the player's health
+     * @throws IllegalArgumentException if the number of points is equal to 0
      */
     WoundEvent(int points) throws IllegalArgumentException {
+        //TODO implement
     }
 
     /**
-     * trigger - this method implements abstract method from the base class and adds
-     * this event's number of points to the player's health.
-     * If the number of points is negative, it will be converted to a positive number before the addition.
+     * Subtracts this event's number of points from the player's health.
      * @return a non-numeric message indicating the player's physical condition
      */
     String trigger() {
@@ -91,7 +89,9 @@ class WoundEvent extends ZorkEvent {
 }
 
 /**
- * DieEvent - this class extends ZorkEvent class and, when triggered, ends the game with the player defeated.
+ * A DieEvent represents a ZorkEvent that, when triggered, ends the game with the player defeated.
+ * Note that if the player loses the game, the {@link Interpreter} will stop processing typed commands;
+ * it will instead prompt the player with a question asking them if they want to continue or start over.
  * @author Object Oriented Optimists (OOO)
  * @author John Thomas
  * @author Richard Volynski
@@ -101,16 +101,16 @@ class WoundEvent extends ZorkEvent {
 class DieEvent extends ZorkEvent {
 
     /**
-     * DieEvent - default constructor
+     * Constructs a new DieEvent with the given message.
+     * @param message the message indicating that the player is dead and has lost the game
      */
-    DieEvent() {
+    DieEvent(String message) {
         //TODO implement
     }
 
     /**
-     * trigger - this method implements abstract method from the base class and ends the game at its current state,
-     * as well as resets user's health
-     * @return String message indicating that the player is dead
+     * Ends the game in a "lose" state, and returns a losing message telling the player they are dead.
+     * @return this event's "lose" message
      */
     String trigger() {
         return null;    //TODO implement
@@ -118,7 +118,9 @@ class DieEvent extends ZorkEvent {
 }
 
 /**
- * A WinEvent extends ZorkEvent class and, when triggered, ends the game with the player victorious.
+ * A WinEvent represents a ZorkEvent that, when triggered, ends the game with the player victorious.
+ * Note that if the player wins the game, the {@link Interpreter} will stop processing typed commands;
+ * it will instead prompt the player with a yes/no question asking them if they want to start over.
  * @author Object Oriented Optimists (OOO)
  * @author John Thomas
  * @author Richard Volynski
@@ -128,17 +130,16 @@ class DieEvent extends ZorkEvent {
 class WinEvent extends ZorkEvent {
 
     /**
-     * WinEvent - default constructor
+     * Constructs a new WinEvent with the given message.
+     * @param message the message indicating that the player has won
      */
-    WinEvent() {
+    WinEvent(String message) {
         //TODO implement
     }
 
     /**
-     * trigger - this method implements abstract method from the base class and ends the game at its current state.
-     * This method will print a win message and ask the user if they want to start over. If the user types
-     * yes, reset the game. If user types no, end the game without saving user progress.
-     * @return event message
+     * Ends the game in a "win" state, and returns a message telling the player they have won.
+     * @return this event's "win" message
      */
     String trigger() {
         return null;    //TODO implement
@@ -146,7 +147,7 @@ class WinEvent extends ZorkEvent {
 }
 
 /**
- * DropEvent - this class extends ZorkEvent and, when triggered, places an item in the current room,
+ * A DropEvent represents a ZorkEvent that, when triggered, places an item in the current room,
  * mimicking the effect of the player typing a drop command.
  * @author Object Oriented Optimists (OOO)
  * @author John Thomas
@@ -158,19 +159,19 @@ class DropEvent extends ZorkEvent {
     private Item item;
 
     /**
-     * DropEvent - this constructor constructs a new DropEvent with the given item.
+     * Constructs a new DropEvent with the given item.
      * @param item the item to be dropped into the current room
      * @throws NoItemException if the item does not exist in the current room or the player's inventory
      */ 
     DropEvent(Item item) throws NoItemException {
+        //TODO implement
     }
 
     /**
-     * trigger - this method implements abstract method from the base class and removes the item
-     * from the player's inventory and adds it to the current room, if the item exists. If the item
-     * already exists in the current room, both the room's contents and the player's inventory
-     * remain unchanged.
-     * @return event message
+     * Removes the item from the player's inventory and adds it to the current room, if the item exists.
+     * If the item already exists in the current room, both the room's contents
+     * and the player's inventory remain unchanged.
+     * @return this event's message
      */
     String trigger() {
         return null;    //TODO implement
@@ -178,9 +179,9 @@ class DropEvent extends ZorkEvent {
 }
 
 /**
- * DisappearEvent - this class extends ZorkEvent class and, when triggered, removes an item
- * from the game entirely: the item will no longer exist in the current room, the player's inventory,
- * or the dungeon.
+ * A DisappearEvent represents a ZorkEvent that, when triggered, removes an item
+ * from the game entirely: the item will no longer exist in the current room,
+ * the player's inventory, or the dungeon.
  * @author Object Oriented Optimists (OOO)
  * @author John Thomas
  * @author Richard Volynski
@@ -188,23 +189,24 @@ class DropEvent extends ZorkEvent {
  * 8 July 2020
  */
 class DisappearEvent extends ZorkEvent {
-    private String name;
+    private String itemName;
 
     /**
-     * DisappearEvent - this constructor constructs a new DisappearEvent with the given name.
-     * @param name the name of the item to be removed from the game
+     * Constructs a new DisappearEvent with the given item name.
+     * @param itemName the name of the item to be removed from the game
      * @throws NoItemException if this name does not correspond to any item in the current room,
      * the player's inventory, or the dungeon.
      */
-    DisappearEvent(String name) throws NoItemException {
+    DisappearEvent(String itemName) throws NoItemException {
+        //TODO implement
     }
 
     /**
-     * trigger - this method implements abstract method from the base class and removes the item
-     * corresponding to this name from either the current room or the player's inventory, as well
-     * as from the dungeon itself. In other words, if the item does not exist in the current room
-     * or the inventory, it will simply be removed from the dungeon.
-     * @return event message
+     * Removes the item corresponding to this name from either the current room or the player's inventory,
+     * as well as from the dungeon itself, if it exists in any of these places. In other words, if the item
+     * does not exist in the current room or the inventory, it will simply be removed from the
+     * dungeon (if it exists there).
+     * @return this event's message
      */
     String trigger() {
         return null;    //TODO implement
@@ -212,8 +214,8 @@ class DisappearEvent extends ZorkEvent {
 }
 
 /**
- * TransformEvent - this class extends ZorkEvent and, when triggered, remove an item from the user's current
- * room and replace it another item.
+ * A TransformEvent represents a ZorkEvent that, when triggered, removes an item
+ * from the game entirely and replaces it with a previously nonexistent item.
  * @author Object Oriented Optimists (OOO)
  * @author John Thomas
  * @author Richard Volynski
@@ -221,25 +223,24 @@ class DisappearEvent extends ZorkEvent {
  * 8 July 2020
  */
 class TransformEvent extends ZorkEvent {
-
-    private String itemToReplace;
-    private String newItem;
+    private String nameOfItemToReplace;
+    private String primaryNameOfNewItem;
 
     /**
-     * TransformEvent - constructor to initialize TransformEvent
-     * @param itemToReplace - item to replace
-     * @param newItem - new item in user's inventory
-     *
+     * Constructs a new TransformEvent with the given item names.
+     * @param nameOfItemToReplace the name of the item to be replaced
+     * @param primaryNameOfNewItem the name of the brand-new item
+     * @throws NoItemException if the item to be replaced does not exist in the current room or the player's inventory,
+     * or if the new item does not exist in the dungeon
      */
-    TransformEvent(String itemToReplace, String newItem) {
-        this.itemToReplace = itemToReplace;
-        this.newItem = newItem;
+    TransformEvent(String nameOfItemToReplace, String primaryNameOfNewItem) {
+        //TODO implement
     }
 
     /**
-     * trigger - implements abstract method from the base class and removes an item from the user's current
-     * room and replace it with another item.
-     * @return event message
+     * Removes the existing item and replaces it with the new item, if both of these items
+     * are known by these names, respectively.
+     * @return this event's message
      */
     String trigger() {
         return null;    //TODO implement
@@ -247,8 +248,10 @@ class TransformEvent extends ZorkEvent {
 }
 
 /**
- * TeleportEvent - this class extends ZorkEvent and, when triggered, moves the user to another room,
- * regardless if the user already visited that room.
+ * A TeleportEvent represents a ZorkEvent that, when triggered, moves the player
+ * to a random room in the dungeon.
+ * Note that this room may be one the player has already visited, or even one
+ * that is not otherwise reachable (e.g. a room with no exits).
  * @author Object Oriented Optimists (OOO)
  * @author John Thomas
  * @author Richard Volynki
@@ -259,19 +262,19 @@ class TeleportEvent extends ZorkEvent {
     private String roomName;
 
     /**
-     * TeleportEvent - constructor to initialize TeleportEvent
-     * @param roomName - room to go to
+     * Constructs a new TeleportEvent with the given room name.
+     * @param roomName the name of the room to teleport the player to
+     * @throws NoRoomException if no room by this name exists in the dungeon
      */
-    TeleportEvent(String roomName) {
-        this.roomName = roomName;
+    TeleportEvent(String roomName) throws NoRoomException {
+        //TODO implement
     }
 
     /**
-     * trigger - implements abstract method from the base class and moves the user to another room
-     * @return event message
+     * Moves the player to the room corresponding to this name, if the room exists.
+     * @return this event's message
      */
     String trigger() {
         return null;    //TODO implement
     }
 }
-
