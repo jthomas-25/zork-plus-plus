@@ -17,6 +17,10 @@ public class Item {
     private ArrayList<String> aliases = new ArrayList<String>();
 
 
+    /**
+     * Represents an in game item with unique attributes.  These attributes are represented as member variables
+     * they include {@link #primaryName primary name}, {@link #messages messages} (for interaction) and {@link #aliases aliases}.
+     */
     Item (Scanner s) throws NoItemException {
         String line = s.nextLine(); //name, aliases
         if (line.equals("===") || line.equals("---")) {
