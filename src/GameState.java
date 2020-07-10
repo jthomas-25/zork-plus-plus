@@ -23,8 +23,9 @@ class GameState {
     private int health;
     private Hashtable<Integer, String> ranks;
     private Hashtable<Integer, String> healthMsgs;
-    private boolean gameWon;
-    private boolean gameLost;
+    private boolean gameOver;
+    private boolean playerWon;
+    //private boolean playerLost;
 
 
     //Singleton instance of GameState class
@@ -63,8 +64,9 @@ class GameState {
         setHealthMsg(3, "Message 4");
         setHealthMsg(4, "Message 5");
 
-        gameWon = false;
-        gameLost = false;
+        gameOver = false;
+        playerWon = false;
+        //playerLost = false;
     }
 
     /**
@@ -305,6 +307,33 @@ class GameState {
         healthMsgs.put(health, healthMsg);
     }
 
+    boolean gameisOver() {
+        return gameOver == true;
+    }
+
+    void setGameOver(boolean gameOver) {
+        this.gameOver = gameOver;
+    }
+
+    boolean playerHasWon() {
+        return playerWon == true;
+    }
+
+    void setPlayerWon(boolean playerWon) {
+        this.playerWon = playerWon;
+        //playerLost = !this.playerWon;
+    }
+
+/*
+    boolean playerHasLost() {
+        return playerLost == true;
+    }
+
+    void setPlayerLost(boolean playerLost) {
+        this.playerLost = playerLost;
+        playerWon = !this.playerLost;
+    }
+*/
 }
 
 /**

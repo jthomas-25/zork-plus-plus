@@ -8,7 +8,6 @@
  */
 class CommandFactory {
     private static CommandFactory single_instance = null;
-    private String itemName;
 
     /**
      * instance() - this method is represented by the Singleton CommandFactory Class
@@ -61,15 +60,21 @@ class CommandFactory {
                         return new UnknownCommand(words[0]);
                 }
             default:
+                String itemName;
                 switch (words[0]) {
                     case "take":
-                        return new TakeCommand(words[1]);
+                        itemName = words[1];
+                        return new TakeCommand(itemName);
                     case "drop":
-                        return new DropCommand(words[1]);
+                        itemName = words[1];
+                        return new DropCommand(itemName);
                     case "save":
-                        return new SaveCommand(words[1]);
+                        String saveFilename = words[1];
+                        return new SaveCommand(saveFilename);
                     default:
-                        return new ItemSpecificCommand(words[0], words[1]);
+                        String verb = words[0];
+                        String noun = words[1];
+                        return new ItemSpecificCommand(verb, noun);
                 }
         }
     }
