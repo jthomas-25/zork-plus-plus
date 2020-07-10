@@ -31,7 +31,7 @@ import java.util.Random;
  * @author Object Oriented Optimists (OOO)
  * @author John Thomas
  * @author Richard Volynski
- * @version 1.2
+ * @version 1.4
  * 10 July 2020
  */
 abstract class ZorkEvent {
@@ -52,7 +52,7 @@ abstract class ZorkEvent {
  * @author Object Oriented Optimists (OOO)
  * @author John Thomas
  * @author Richard Volynski
- * @version 1.2
+ * @version 1.4
  * 10 July 2020
  */
 class ScoreEvent extends ZorkEvent {
@@ -83,7 +83,7 @@ class ScoreEvent extends ZorkEvent {
  * @author Object Oriented Optimists (OOO)
  * @author John Thomas
  * @author Richard Volynski
- * @version 1.2
+ * @version 1.4
  * 10 July 2020
  */
 class WoundEvent extends ZorkEvent {
@@ -114,7 +114,7 @@ class WoundEvent extends ZorkEvent {
  * @author Object Oriented Optimists (OOO)
  * @author John Thomas
  * @author Richard Volynski
- * @version 1.2
+ * @version 1.4
  * 10 July 2020
  */
 class DieEvent extends ZorkEvent {
@@ -143,13 +143,13 @@ class DieEvent extends ZorkEvent {
  * @author Object Oriented Optimists (OOO)
  * @author John Thomas
  * @author Richard Volynski
- * @version 1.2
+ * @version 1.4
  * 10 July 2020
  */
 class WinEvent extends ZorkEvent {
 
     /**
-     * Constructs a new WinEvent with the given message.
+     * Constructs a new WinEvent with a given message.
      * @param message the message indicating that the player has won
      */
     WinEvent(String message) {
@@ -157,8 +157,11 @@ class WinEvent extends ZorkEvent {
     }
 
     /**
-     * Ends the game in a "win" state, and returns a message telling the player they have won.
-     * @return this event's "win" message
+     * Ends the game in a "win" state, and returns a message telling the player they have won and ask
+     * if they want to start over. TODO implement/don't delete
+     *
+     * If the user types yes, reset the game. If user types no, end the game without saving user progress.
+     * @return this event's "win" message   TODO implement/don't delete
      */
     String trigger() {
         return null;    //TODO implement
@@ -171,7 +174,7 @@ class WinEvent extends ZorkEvent {
  * @author Object Oriented Optimists (OOO)
  * @author John Thomas
  * @author Richard Volynski
- * @version 1.2
+ * @version 1.4
  * 10 July 2020
  */
 class DropEvent extends ZorkEvent {
@@ -204,7 +207,7 @@ class DropEvent extends ZorkEvent {
  * @author Object Oriented Optimists (OOO)
  * @author John Thomas
  * @author Richard Volynski
- * @version 1.2
+ * @version 1.4
  * 10 July 2020
  */
 class DisappearEvent extends ZorkEvent {
@@ -238,7 +241,7 @@ class DisappearEvent extends ZorkEvent {
  * @author Object Oriented Optimists (OOO)
  * @author John Thomas
  * @author Richard Volynski
- * @version 1.2
+ * @version 1.4
  * 10 July 2020
  */
 class TransformEvent extends ZorkEvent {
@@ -274,7 +277,7 @@ class TransformEvent extends ZorkEvent {
  * @author Object Oriented Optimists (OOO)
  * @author John Thomas
  * @author Richard Volynki
- * @version 1.2
+ * @version 1.4
  * 10 July 2020
  */
 class TeleportEvent extends ZorkEvent {
@@ -298,3 +301,4 @@ class TeleportEvent extends ZorkEvent {
         return null;    //TODO implement
     }
 }
+
