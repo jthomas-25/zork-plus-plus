@@ -42,56 +42,94 @@ public class Item {
         }
     }
 
+//    /**
+//     * This method stores ess
+//     * @param w a PrintWriter
+//     */
+//    void storeState(PrintWriter w) {
+//        String primaryNameAndAliases = getPrimaryName();
+//
+//        for (int i = 0; i < aliases.size(); i++) {
+//            primaryNameAndAliases+= "," + aliases.get(i);
+//        }
+//        w.write(primaryNameAndAliases + "\n");
+//        w.write(Integer.toString(weight) + "\n");
+//        Iterator keys = messages.keySet().iterator();
+//        while (keys.hasNext()) {
+//            String key = (String) keys.next();
+//            String value = (String) messages.get(key);
+//            w.write(key + ":" + value + "\n");
+//        }
+//        w.write("---" + "\n");
+//    }
+
+
     /**
-     * storeState - this method stores the state of the room in the file, whether it was visited or not
-     * @param w - PrintWriter to write to file
+     * Checks to see if the Item goes by a given alias. It achieves this by checking if the {@link #aliases aliases}
+     * ArrayList member variable contains a string equaling the given name.
+     *
+     * @param name a string, representing the alias one wishes to check.
      */
-    void storeState(PrintWriter w) {
-        String primaryNameAndAliases = getPrimaryName();
-
-        for (int i = 0; i < aliases.size(); i++) {
-            primaryNameAndAliases+= "," + aliases.get(i);
-        }
-        w.write(primaryNameAndAliases + "\n");
-        w.write(Integer.toString(weight) + "\n");
-        Iterator keys = messages.keySet().iterator();
-        while (keys.hasNext()) {
-            String key = (String) keys.next();
-            String value = (String) messages.get(key);
-            w.write(key + ":" + value + "\n");
-        }
-        w.write("---" + "\n");
-    }
-
-
     boolean goesBy(String name) {
         return primaryName.equals(name) || aliases.contains(name);
     }
 
+    /**
+     * Gets the primary name of an Item.  The primary name is a string, member variable, called {@link #primaryName primaryName}.
+     *
+     * @return {@link #primaryName primaryName} member variable.
+     */
     String getPrimaryName() {
         return primaryName;
     }
 
+    /**
+     * Gets the message for an Item that is associated with a given verb. The message indicates what happens
+     * to the Item after being acted upon by the given verb.
+     *
+     * @param verb a verb that has an associated message within the Item's {@link #messages messages}
+     * member variable.
+     * @return a string, representing the message for the given verb.
+     */
     String getMessageForVerb(String verb) {
         return messages.get(verb);
     }
 
+    /**
+     * This method replaces the default toString method, returning a string
+     * of the item's {@link #primaryName primary name}.
+     *
+     * @return a string, representing the {@link #primaryName primary name} of an Item.
+     */
     public String toString() {
         return primaryName;
     }
 
+    /**
+     * This method returns the weight of an Item.  The weight is represented by the
+     * {@link #weight weight} member variable of an Item.
+     *
+     * @return an int, representing the {@link #weight weight} of an Item.
+     */
     int getWeight() {
         return weight;
     }
 }
 
+/**
+ * This exception is thrown when a method attempts to return an Item where none can be found.
+ */
 class NoItemException extends Exception {
     /**
      * NoItemException - default constructor
      */
     NoItemException() {
+
     }
 
+    /**
+     * @param message a string representing the message to be used if the error is thrown.
+     */
     NoItemException(String message) {
         super(message);
     }
