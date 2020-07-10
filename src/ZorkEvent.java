@@ -6,15 +6,15 @@ import java.util.Random;
  * for a summary of what information the game tracks.) A common way to implement events
  * is to associate them with item-specific commands in a .zork dungeon file, such that they
  * will be triggered when the player uses an item in a way that is recognizable to the game.</p>
- * 
+ *
  * <ul>
  *   <li>When using {@link EventFactory#parse} to instantiate a ZorkEvent object, the proper syntax
  * for the event string is as follows: eventName or eventName(optional parameters).</li>
- * 
+ *
  *   <li>If attached to an item-specific command in a .zork file, an event must be written in
  * the following [] syntax: verb[eventName(optional parameters)]:message.</li>
  * </ul>
- * 
+ *
  * <p>Here is a detailed example:</p>
  * <pre>
  *  DrPepper,can,soda
@@ -189,7 +189,7 @@ class DropEvent extends ZorkEvent {
      * Constructs a new DropEvent with the given item.
      * @param item the item to be dropped into the current room
      * @throws NoItemException if the item does not exist in the current room or the player's inventory
-     */ 
+     */
     DropEvent(Item item) throws NoItemException {
         //TODO implement
     }
@@ -301,6 +301,29 @@ class TeleportEvent extends ZorkEvent {
     /**
      * Moves the player to the room corresponding to this name, if the room exists.
      * @return this event's message
+     */
+    String trigger() {
+        return null;    //TODO implement
+    }
+}
+
+/**
+ * A PotionEffect is an event that when triggered, alters the way the player interacts with the dungeon.
+ * For example, a dizzy effect will cause the player's movement commands to send them through a random exit, despite
+ * what direction they give.  Another example, the "babble" effect will cause printed statements to come out reversed.
+ */
+class PotionEffect extends ZorkEvent {
+    private String effect;
+
+    /**
+     * Constructs a new PotionEffect based on the given effect.
+     */
+    PotionEffect(String effect) {
+        //TODO implement
+    }
+
+    /**
+     * Triggers the PotionEffect.
      */
     String trigger() {
         return null;    //TODO implement

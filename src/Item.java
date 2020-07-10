@@ -5,21 +5,22 @@ import java.util.Iterator;
 import java.util.Scanner;
 
 /**
- * Item Class - An Item has a name, weight, and a Hashtable of verb/message pairs (called "messages").
- * @author Object Oriented Optimists (OOO)
- * @version 2.6
- * 10 June 2020
+ * Represents an in game item with unique attributes.  These attributes are represented as member variables
+ * they include {@link #primaryName primary name}, {@link #messages messages} (for interaction) and {@link #aliases aliases}.
+ * @author Robert
+ * @version 3.0
  */
 public class Item {
     private String primaryName;
     private int weight;
     private Hashtable<String, String> messages = new Hashtable<String, String>();
     private ArrayList<String> aliases = new ArrayList<String>();
+    private ArrayList<Item> contents = new ArrayList<>();
 
 
     /**
-     * Represents an in game item with unique attributes.  These attributes are represented as member variables.
-     * They include {@link #primaryName primary name}, {@link #messages messages} (for interaction) and {@link #aliases aliases}.
+     * Default constructor, takes a Scanner object in order to hydrate the item.
+     * Assigning essential values to the member variables.
      */
     Item (Scanner s) throws NoItemException {
         String line = s.nextLine(); //name, aliases
@@ -118,6 +119,41 @@ public class Item {
     int getWeight() {
         return weight;
     }
+
+    /**
+     * This method returns the contents of an Item.  The contents of the Item are other Items.
+     * This can be useful for items such as "chests" or "swords" where they may be comprised of things such as:
+     * a blade, hilt, diamond, etc.
+     *
+     * @return an arraylist, representing the {@link #contents contents} of an Item.
+     */
+    ArrayList<Item> getContents() {
+        return this.contents;
+    }
+    // TODO: hydrate item contents
+
+    /**
+     * Adds given Item to the {@link #contents contents} of this Item.
+     * @param item an Item to be added to {@link #contents contents}.
+     */
+    void addToContents(Item item) {
+        this.contents.add(item);
+    }
+
+    /**
+     * Removes given Item from the {@link #contents contents} of this Item.
+     * @param itemName name of item to remove from {@link #contents contents}.
+     */
+    void removeFromContents(String itemName) {
+
+        for (Item item : this.contents) {
+            if (item.getPrimaryName().equals(itemName) || item.goesBy(itemName)) {
+                this.contents.remove(item);
+            }
+        }
+
+    }
+
 }
 
 /**
