@@ -1,19 +1,24 @@
 /**
- * EventFactory Class - A factory class whose purpose is to parse text strings
- * and produce the appropriate Event objects.
- * EventFactory is a Singleton class.
+ * An EventFactory represents a factory whose purpose is to parse text strings
+ * and produce the appropriate {@link ZorkEvent} objects.
+ * The EventFactory is a Singleton class, which means there will only ever be
+ * one object of this type. Other classes can access this object via the
+ * {@link EventFactory#instance()} method.
+ * Note that the EventFactory class is the only class that should instantiate
+ * ZorkEvent objects.
  * @author Object Oriented Optimists (OOO)
  * @author John Thomas
  * @author Richard Volynski
  * @version 2.8
- * 8 July 2020
+ * 10 July 2020
  */
 class EventFactory {
     private static EventFactory singleInstance = null;
 
     /**
-     * instance() - this method is represented by the Singleton EventFactory Class
-     * @return single static instance of EventFactory class
+     * This method ensures the instantiation of a single EventFactory object.
+     * @return the new instance of the event factory the first time this method
+     * is called, or the same EventFactory object if it has already been instantiated
      */
     static synchronized EventFactory instance() {
         if (singleInstance == null)
@@ -22,18 +27,19 @@ class EventFactory {
     }
 
     /**
-     * EventFactory - default constructor
+     * Constructs a new instance of an EventFactory.
      */
     private EventFactory() {
     }
 
     /**
-     * parse - this method parses entered events (and parameters) and produces ZorkEvent objects
-     * @param eventString - event with parameters read from .zork file
-     * @return - ZorkEvent object
+     * Analyzes the given string to obtain information about an event, and produces
+     * the corresponding ZorkEvent object.
+     * @param eventString the event's info (with optional parameters)
+     * @return the ZorkEvent object relevant to this string
+     * @throws IllegalArgumentException if this string does not match the proper event syntax
      */
-     ZorkEvent parse (String eventString) {
+     ZorkEvent parse(String eventString) throws IllegalArgumentException {
         return null;    //TODO implement
     }
 }
-

@@ -1,22 +1,46 @@
+import java.util.Random;
+
+
 /**
- * A ZorkEvent is anything that alters the game state when it occurs. (see {@link GameState}
- * for a summary of what information the game tracks.) A common way to implement ZorkEvents
+ * <p>A ZorkEvent is anything that alters the game state when it occurs. (see {@link GameState}
+ * for a summary of what information the game tracks.) A common way to implement events
  * is to associate them with item-specific commands in a .zork dungeon file, such that they
- * will be triggered when the player uses an item in a way that is recognizable to the game.
+ * will be triggered when the player uses an item in a way that is recognizable to the game.</p>
  * 
- * Note that ZorkEvents can exist independently of a dungeon file; they can be incorporated
+ * <ul>
+ *   <li>When using {@link EventFactory#parse} to instantiate a ZorkEvent object, the proper syntax
+ * for the event string is as follows: eventName or eventName(optional parameters).</li>
+ * 
+ *   <li>If attached to an item-specific command in a .zork file, an event must be written in
+ * the following [] syntax: verb[eventName(optional parameters)]:message.</li>
+ * </ul>
+ * 
+ * <p>Here is a detailed example:</p>
+ * <pre>
+ *  DrPepper,can,soda
+ *  10
+ *  kick[Drop]:The can skitters down the hallway.
+ *  shake:A liquid fizzes menacingly inside the can.
+ *  drink[Transform(emptyCan),Wound(-1)]:Gulp, gulp -- that was GOOD!  *belch*</pre>
+ *
+ * <p>ZorkEvents can exist independently of a dungeon file; they can be incorporated
  * in a hardcoded dungeon as well. Also, there is nothing preventing a ZorkEvent's occurrence
  * from depending on factors besides item interaction (e.g. an enemy that instantly kills the
  * player when the player enters a room). This is so the users of this API have greater
- * flexibility in adding their own features.
+ * flexibility in adding their own features.</p>
  * @author Object Oriented Optimists (OOO)
  * @author John Thomas
  * @author Richard Volynski
- * @version 1.3
- * 9 July 2020
+ * @version 1.4
+ * 10 July 2020
  */
 abstract class ZorkEvent {
     protected String message;
+    /**
+     * ZorkEvent - default constructor
+     */
+    ZorkEvent() {
+    }
 
     /**
      * Activates this event, which modifies the game state.
@@ -33,8 +57,8 @@ abstract class ZorkEvent {
  * @author Object Oriented Optimists (OOO)
  * @author John Thomas
  * @author Richard Volynski
- * @version 1.3
- * 9 July 2020
+ * @version 1.4
+ * 10 July 2020
  */
 class ScoreEvent extends ZorkEvent {
     private int points;
@@ -64,8 +88,8 @@ class ScoreEvent extends ZorkEvent {
  * @author Object Oriented Optimists (OOO)
  * @author John Thomas
  * @author Richard Volynski
- * @version 1.3
- * 9 July 2020
+ * @version 1.4
+ * 10 July 2020
  */
 class WoundEvent extends ZorkEvent {
     private int points;
@@ -95,8 +119,8 @@ class WoundEvent extends ZorkEvent {
  * @author Object Oriented Optimists (OOO)
  * @author John Thomas
  * @author Richard Volynski
- * @version 1.3
- * 9 July 2020
+ * @version 1.4
+ * 10 July 2020
  */
 class DieEvent extends ZorkEvent {
 
@@ -124,8 +148,8 @@ class DieEvent extends ZorkEvent {
  * @author Object Oriented Optimists (OOO)
  * @author John Thomas
  * @author Richard Volynski
- * @version 1.3
- * 9 July 2020
+ * @version 1.4
+ * 10 July 2020
  */
 class WinEvent extends ZorkEvent {
 
@@ -155,8 +179,8 @@ class WinEvent extends ZorkEvent {
  * @author Object Oriented Optimists (OOO)
  * @author John Thomas
  * @author Richard Volynski
- * @version 1.3
- * 9 July 2020
+ * @version 1.4
+ * 10 July 2020
  */
 class DropEvent extends ZorkEvent {
     private Item item;
@@ -188,8 +212,8 @@ class DropEvent extends ZorkEvent {
  * @author Object Oriented Optimists (OOO)
  * @author John Thomas
  * @author Richard Volynski
- * @version 1.3
- * 9 July 2020
+ * @version 1.4
+ * 10 July 2020
  */
 class DisappearEvent extends ZorkEvent {
     private String itemName;
@@ -222,8 +246,8 @@ class DisappearEvent extends ZorkEvent {
  * @author Object Oriented Optimists (OOO)
  * @author John Thomas
  * @author Richard Volynski
- * @version 1.3
- * 9 July 2020
+ * @version 1.4
+ * 10 July 2020
  */
 class TransformEvent extends ZorkEvent {
     private String nameOfItemToReplace;
@@ -258,11 +282,12 @@ class TransformEvent extends ZorkEvent {
  * @author Object Oriented Optimists (OOO)
  * @author John Thomas
  * @author Richard Volynki
- * @version 1.3
- * 9 July 2020
+ * @version 1.4
+ * 10 July 2020
  */
 class TeleportEvent extends ZorkEvent {
     private String roomName;
+    private Random rng;
 
     /**
      * Constructs a new TeleportEvent with the given room name.

@@ -9,8 +9,8 @@ import java.util.Iterator;
  * GameState Class - represents the current state of the game: which dungeon is being played
  * and what room the adventurer is currently in.
  * @author Object Oriented Optimists (OOO)
- * @version 2.6
- * 1 July 2020
+ * @version 2.8
+ * 10 July 2020
  */
 class GameState {
     private Dungeon dungeon = null;
@@ -23,6 +23,9 @@ class GameState {
     private int health;
     private Hashtable<Integer, String> ranks;
     private Hashtable<Integer, String> healthMsgs;
+    private boolean gameOver;
+    private boolean playerWon;
+    //private boolean playerLost;
 
 
     //Singleton instance of GameState class
@@ -60,6 +63,10 @@ class GameState {
         setHealthMsg(2, "Message 3");
         setHealthMsg(3, "Message 4");
         setHealthMsg(4, "Message 5");
+
+        gameOver = false;
+        playerWon = false;
+        //playerLost = false;
     }
 
     /**
@@ -366,6 +373,33 @@ class GameState {
         healthMsgs.put(health, healthMsg);
     }
 
+    boolean gameisOver() {
+        return gameOver == true;
+    }
+
+    void setGameOver(boolean gameOver) {
+        this.gameOver = gameOver;
+    }
+
+    boolean playerHasWon() {
+        return playerWon == true;
+    }
+
+    void setPlayerWon(boolean playerWon) {
+        this.playerWon = playerWon;
+        //playerLost = !this.playerWon;
+    }
+
+/*
+    boolean playerHasLost() {
+        return playerLost == true;
+    }
+
+    void setPlayerLost(boolean playerLost) {
+        this.playerLost = playerLost;
+        playerWon = !this.playerLost;
+    }
+*/
 }
 
 /**
