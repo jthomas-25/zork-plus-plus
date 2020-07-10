@@ -36,6 +36,11 @@ import java.util.Random;
  */
 abstract class ZorkEvent {
     protected String message;
+    /**
+     * ZorkEvent - default constructor
+     */
+    ZorkEvent() {
+    }
 
     /**
      * Activates this event, which modifies the game state.
