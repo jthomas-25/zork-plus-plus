@@ -23,7 +23,7 @@ public class Interpreter {
      * hydrate, creating a new game.
      * If no save or dungeon file is provided, the method exits with a message indicating the right arguments.
      * If a dungeon file format is Illegal, the method exits while throwing an IllegalSaveFormatException exception.
-     * 
+     *
      */
     public static void main(String[] args) throws IllegalSaveFormatException {
         Scanner stdin = new Scanner(System.in);
