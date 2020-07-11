@@ -93,14 +93,15 @@ class Exit {
 }
 
 /**
- * class NoExitException is a custom exception, which is thrown when there are no more exits available
+ * Thrown when an Exit constructor, given a Scanner object,
+ * detects the end of the exits section of a .zork file.
+ * @author John Thomas
  */
 class NoExitException extends Exception {
 
     /**
-     * NoExitException - default constructor
+     * Constructs a new NoExitException.
      */
     NoExitException() {
     }
 }
-

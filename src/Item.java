@@ -117,22 +117,22 @@ public class Item {
 }
 
 /**
- * This exception is thrown when a method attempts to return an Item where none can be found.
+ * Thrown when a method attempts to return an Item where none can be found.
+ * @author John Thomas
  */
 class NoItemException extends Exception {
+
     /**
-     * NoItemException - default constructor
+     * Constructs a new NoItemException with no message.
      */
     NoItemException() {
-
     }
 
     /**
-     * @param message a string representing the message to be used if the error is thrown.
+     * Constructs a new NoItemException with the given message.
+     * @param message the message to be printed if this exception is thrown
      */
     NoItemException(String message) {
         super(message);
     }
 }
-
-

@@ -28,9 +28,7 @@ import java.util.Random;
  * from depending on factors besides item interaction (e.g. an enemy that instantly kills the
  * player when the player enters a room). This is so the users of this API have greater
  * flexibility in adding their own features.</p>
- * @author Object Oriented Optimists (OOO)
  * @author John Thomas
- * @author Richard Volynski
  * @version 1.4
  * 10 July 2020
  */
@@ -49,9 +47,7 @@ abstract class ZorkEvent {
  * by a positive number of points.
  * Note that while the {@link GameState#setScore} method can also affect the player's score,
  * a ScoreEvent will only increase it.
- * @author Object Oriented Optimists (OOO)
  * @author John Thomas
- * @author Richard Volynski
  * @version 1.4
  * 10 July 2020
  */
@@ -80,9 +76,7 @@ class ScoreEvent extends ZorkEvent {
  * A WoundEvent represents a ZorkEvent that, when triggered, changes the player's health
  * by a nonzero number of points.
  * Note that a negative number of points will effectively heal the player.
- * @author Object Oriented Optimists (OOO)
  * @author John Thomas
- * @author Richard Volynski
  * @version 1.4
  * 10 July 2020
  */
@@ -111,9 +105,7 @@ class WoundEvent extends ZorkEvent {
  * A DieEvent represents a ZorkEvent that, when triggered, ends the game with the player defeated.
  * Note that if the player loses the game, the {@link Interpreter} will stop processing typed commands;
  * it will instead prompt the player with a question asking them if they want to continue or start over.
- * @author Object Oriented Optimists (OOO)
  * @author John Thomas
- * @author Richard Volynski
  * @version 1.4
  * 10 July 2020
  */
@@ -140,9 +132,7 @@ class DieEvent extends ZorkEvent {
  * A WinEvent represents a ZorkEvent that, when triggered, ends the game with the player victorious.
  * Note that if the player wins the game, the {@link Interpreter} will stop processing typed commands;
  * it will instead prompt the player with a yes/no question asking them if they want to start over.
- * @author Object Oriented Optimists (OOO)
  * @author John Thomas
- * @author Richard Volynski
  * @version 1.4
  * 10 July 2020
  */
@@ -171,9 +161,7 @@ class WinEvent extends ZorkEvent {
 /**
  * A DropEvent represents a ZorkEvent that, when triggered, places an item in the current room,
  * mimicking the effect of the player typing a drop command.
- * @author Object Oriented Optimists (OOO)
  * @author John Thomas
- * @author Richard Volynski
  * @version 1.4
  * 10 July 2020
  */
@@ -204,9 +192,7 @@ class DropEvent extends ZorkEvent {
  * A DisappearEvent represents a ZorkEvent that, when triggered, removes an item
  * from the game entirely: the item will no longer exist in the current room,
  * the player's inventory, or the dungeon.
- * @author Object Oriented Optimists (OOO)
  * @author John Thomas
- * @author Richard Volynski
  * @version 1.4
  * 10 July 2020
  */
@@ -217,7 +203,7 @@ class DisappearEvent extends ZorkEvent {
      * Constructs a new DisappearEvent with the given item name.
      * @param itemName the name of the item to be removed from the game
      * @throws NoItemException if this name does not correspond to any item in the current room,
-     * the player's inventory, or the dungeon.
+     * the player's inventory, or the dungeon
      */
     DisappearEvent(String itemName) throws NoItemException {
         //TODO implement
@@ -238,9 +224,7 @@ class DisappearEvent extends ZorkEvent {
 /**
  * A TransformEvent represents a ZorkEvent that, when triggered, removes an item
  * from the game entirely and replaces it with a previously nonexistent item.
- * @author Object Oriented Optimists (OOO)
  * @author John Thomas
- * @author Richard Volynski
  * @version 1.4
  * 10 July 2020
  */
@@ -274,9 +258,7 @@ class TransformEvent extends ZorkEvent {
  * to a random room in the dungeon.
  * Note that this room may be one the player has already visited, or even one
  * that is not otherwise reachable (e.g. a room with no exits).
- * @author Object Oriented Optimists (OOO)
  * @author John Thomas
- * @author Richard Volynki
  * @version 1.4
  * 10 July 2020
  */
@@ -301,4 +283,3 @@ class TeleportEvent extends ZorkEvent {
         return null;    //TODO implement
     }
 }
-

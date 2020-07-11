@@ -14,7 +14,7 @@ import java.util.Iterator;
  * @author Object Oriented Optimists (OOO)
  * @author Richard Volynski
  * @version 2.7
- * 8 July 2020
+ * 10 July 2020
  */
 public class Room {
     private Hashtable <String, Exit> exits;
@@ -315,15 +315,15 @@ public class Room {
 }
 
 /**
- * class NoRoomException is a custom exception
+ * Thrown when a Room constructor, given a Scanner object,
+ * detects the end of the rooms section of a .zork or .sav file.
+ * @author John Thomas
  */
 class NoRoomException extends Exception {
 
     /**
-     * NoRoomException - default constructor
+     * Constructs a new NoRoomException.
      */
     NoRoomException() {
     }
 }
-
-

@@ -6,9 +6,7 @@
  * {@link EventFactory#instance()} method.
  * Note that the EventFactory class is the only class that should instantiate
  * ZorkEvent objects.
- * @author Object Oriented Optimists (OOO)
  * @author John Thomas
- * @author Richard Volynski
  * @version 2.8
  * 10 July 2020
  */

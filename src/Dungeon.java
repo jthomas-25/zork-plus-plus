@@ -12,7 +12,7 @@ import java.util.Scanner;
  * as an ArrayList does.
  * @author Object Oriented Optimists (OOO)
  * @version 2.5
- * 1 July 2020
+ * 10 July 2020
  */
 public class Dungeon {
     private String title = "Simple Dungeon";    //default
@@ -242,14 +242,16 @@ public class Dungeon {
 }
 
 /**
- * class IllegalDungeonFormatException is a custom exception
+ * Thrown by any method that parses a .zork dungeon file if the file
+ * does not adhere to the correct format.
+ * @author John Thomas
  */
 class IllegalDungeonFormatException extends Exception {
 
     /**
-     * IllegalDungeonFormatException - default constructor
+     * Constructs a new exception with the given error message.
+     * @param errorMsg the detailed message that is returned when this exception is thrown
      */
     IllegalDungeonFormatException(String errorMsg) {
     }
 }
-
