@@ -9,6 +9,8 @@ import java.util.Iterator;
  * GameState Class - represents the current state of the game: which dungeon is being played
  * and what room the adventurer is currently in.
  * @author Object Oriented Optimists (OOO)
+ * @author John Thomas
+ * @author Richard Volynski
  * @version 2.8
  * 10 July 2020
  */
@@ -114,7 +116,7 @@ class GameState {
      * in the file, line by line.
      * A file generated with this method can be restored using the {@link #restore restore} method.
      *
-     * @param saveName String, sets the name of the save file.  Cannot contain the following characters. " / * &lt; &gt; ? | \ . :
+     * @param saveName String, sets the name of the save file.  Cannot contain the following characters. " / * < > ? | \ . :
      */
     void store(String saveName) throws IllegalSaveFormatException {
         try {
@@ -403,16 +405,16 @@ class GameState {
 }
 
 /**
- * Thrown by any method that parses a .sav file if the format of the
- * save file is incorrect (not properly formatted).
- * @author John Thomas
+ * An exception, intended to be thrown if the format of the save file is illegal (not properly formatted).
  */
 class IllegalSaveFormatException extends Exception {
 
     /**
-     * Constructs a new exception with the given error message.
-     * @param errorMsg the detailed message to be printed when this exception is thrown
+     * Default constructor.
+     * @param errorMsg String, message to print when error is thrown.
      */
     IllegalSaveFormatException(String errorMsg) {
     }
 }
+
+
