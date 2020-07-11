@@ -11,13 +11,7 @@ import java.util.Iterator;
  * 10 July 2020
  */
 abstract class Command {
-
-    /**
-     * Command - Default constructor
-     */
-    Command() {
-    }
-
+    
     /**
      * execute - this is an abstract command, which will be implemented at the subclass level.
      * @return String command message
@@ -495,4 +489,3 @@ class KillCommand extends Command {
         return null;    //TODO implement
     }
 }
-

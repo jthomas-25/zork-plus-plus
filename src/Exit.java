@@ -10,7 +10,7 @@ import java.util.Scanner;
  * reading from the .zork file.
  * @author Richard Volynski (OOO)
  * @version 2.7
- * 7 July 2020
+ * 10 July 2020
  */
 class Exit {
     private String dir;
@@ -93,7 +93,7 @@ class Exit {
 }
 
 /**
- * Thrown when an Exit constructor, given a Scanner object,
+ * Thrown when an {@link Exit} constructor, given a Scanner object,
  * detects the end of the exits section of a .zork file.
  * @author John Thomas
  */

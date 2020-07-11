@@ -26,8 +26,7 @@ class GameState {
     private Hashtable<Integer, String> ranks;
     private Hashtable<Integer, String> healthMsgs;
     private boolean gameOver;
-    private boolean playerWon;
-    //private boolean playerLost;
+    private boolean playerDead;
 
 
     //Singleton instance of GameState class
@@ -67,8 +66,7 @@ class GameState {
         setHealthMsg(4, "Message 5");
 
         gameOver = false;
-        playerWon = false;
-        //playerLost = false;
+        playerDead = false;
     }
 
     /**
@@ -116,7 +114,7 @@ class GameState {
      * in the file, line by line.
      * A file generated with this method can be restored using the {@link #restore restore} method.
      *
-     * @param saveName String, sets the name of the save file.  Cannot contain the following characters. " / * < > ? | \ . :
+     * @param saveName String, sets the name of the save file.  Cannot contain the following characters. " / * &lt; &gt; ? | \ . :
      */
     void store(String saveName) throws IllegalSaveFormatException {
         try {
@@ -213,9 +211,10 @@ class GameState {
         inventoryWeight -= item.getWeight();
     }
     /**
-     * This method will actually let you remove multiple items while iterating
-     * over them, thereby avoiding a ConcurrentModificationException.
-     * @param itr the iterator which will do the removing.
+     * Removes multiple items from the player's inventory while iterating over them, thereby
+     * avoiding a ConcurrentModificationException.
+     * @param itr the iterator which will do the removing
+     * @param item the item to be removed from the inventory
      */
     void removeFromInventory(Iterator<Item> itr, Item item) {
         itr.remove();
@@ -375,46 +374,41 @@ class GameState {
         healthMsgs.put(health, healthMsg);
     }
 
-    boolean gameisOver() {
+    /**
+     * Checks to see if the game has ended.
+     * @return true if and only if the game has ended, false otherwise
+     */
+    boolean gameIsOver() {
         return gameOver == true;
     }
 
-    void setGameOver(boolean gameOver) {
-        this.gameOver = gameOver;
-    }
-
+    /**
+     * Checks to see if a {@link WinEvent} has been triggered.
+     * @return true if and only if the game is over and the player is not dead, false otherwise
+     */
     boolean playerHasWon() {
-        return playerWon == true;
+        return gameOver && !playerDead;
     }
 
-    void setPlayerWon(boolean playerWon) {
-        this.playerWon = playerWon;
-        //playerLost = !this.playerWon;
+    /**
+     * Causes the game to be over.
+     */
+    void endGame() {
+        this.gameOver = true;
     }
-
-/*
-    boolean playerHasLost() {
-        return playerLost == true;
-    }
-
-    void setPlayerLost(boolean playerLost) {
-        this.playerLost = playerLost;
-        playerWon = !this.playerLost;
-    }
-*/
 }
 
 /**
- * An exception, intended to be thrown if the format of the save file is illegal (not properly formatted).
+ * Thrown by any method that parses a .sav file if the format of
+ * the save file is illegal (not properly formatted).
+ * @author John Thomas
  */
 class IllegalSaveFormatException extends Exception {
 
     /**
-     * Default constructor.
-     * @param errorMsg String, message to print when error is thrown.
+     * Constructs a new exception with the given error message.
+     * @param errorMsg the detailed message to be printed when this exception is thrown
      */
     IllegalSaveFormatException(String errorMsg) {
     }
 }
-
-

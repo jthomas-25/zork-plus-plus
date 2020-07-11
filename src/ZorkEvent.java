@@ -3,9 +3,9 @@ import java.util.Random;
 
 /**
  * <p>A ZorkEvent is anything that alters the game state when it occurs. (see {@link GameState}
- * for a summary of what information the game tracks.) A common way to implement events
- * is to associate them with item-specific commands in a .zork dungeon file, such that they
- * will be triggered when the player uses an item in a way that is recognizable to the game.</p>
+ * for a summary of what information the game tracks.) A common way to implement events is to
+ * associate one or more of them with an item-specific command in a .zork dungeon file, such that
+ * they will be triggered when the player uses an item in a way that is recognizable to the game.</p>
  *
  * <ul>
  *   <li>When using {@link EventFactory#parse} to instantiate a ZorkEvent object, the proper syntax
@@ -34,11 +34,6 @@ import java.util.Random;
  */
 abstract class ZorkEvent {
     protected String message;
-    /**
-     * ZorkEvent - default constructor
-     */
-    ZorkEvent() {
-    }
 
     /**
      * Activates this event, which modifies the game state.
@@ -48,7 +43,7 @@ abstract class ZorkEvent {
 }
 
 /**
- * A ScoreEvent represents a ZorkEvent that, when triggered, changes the player's score
+ * A ScoreEvent represents a {@link ZorkEvent} that, when triggered, changes the player's score
  * by a positive number of points.
  * Note that while the {@link GameState#setScore} method can also affect the player's score,
  * a ScoreEvent will only increase it.
@@ -78,7 +73,7 @@ class ScoreEvent extends ZorkEvent {
 }
 
 /**
- * A WoundEvent represents a ZorkEvent that, when triggered, changes the player's health
+ * A WoundEvent represents a {@link ZorkEvent} that, when triggered, changes the player's health
  * by a nonzero number of points.
  * Note that a negative number of points will effectively heal the player.
  * @author John Thomas
@@ -107,7 +102,7 @@ class WoundEvent extends ZorkEvent {
 }
 
 /**
- * A DieEvent represents a ZorkEvent that, when triggered, ends the game with the player defeated.
+ * A DieEvent represents a {@link ZorkEvent} that, when triggered, ends the game with the player defeated.
  * Note that if the player loses the game, the {@link Interpreter} will stop processing typed commands;
  * it will instead prompt the player with a question asking them if they want to continue or start over.
  * @author John Thomas
@@ -134,7 +129,7 @@ class DieEvent extends ZorkEvent {
 }
 
 /**
- * A WinEvent represents a ZorkEvent that, when triggered, ends the game with the player victorious.
+ * A WinEvent represents a {@link ZorkEvent} that, when triggered, ends the game with the player victorious.
  * Note that if the player wins the game, the {@link Interpreter} will stop processing typed commands;
  * it will instead prompt the player with a yes/no question asking them if they want to start over.
  * @author John Thomas
@@ -164,7 +159,7 @@ class WinEvent extends ZorkEvent {
 }
 
 /**
- * A DropEvent represents a ZorkEvent that, when triggered, places an item in the current room,
+ * A DropEvent represents a {@link ZorkEvent} that, when triggered, places an item in the current room,
  * mimicking the effect of the player typing a drop command.
  * @author John Thomas
  * @version 1.4
@@ -194,7 +189,7 @@ class DropEvent extends ZorkEvent {
 }
 
 /**
- * A DisappearEvent represents a ZorkEvent that, when triggered, removes an item
+ * A DisappearEvent represents a {@link ZorkEvent} that, when triggered, removes an item
  * from the game entirely: the item will no longer exist in the current room,
  * the player's inventory, or the dungeon.
  * @author John Thomas
@@ -227,7 +222,7 @@ class DisappearEvent extends ZorkEvent {
 }
 
 /**
- * A TransformEvent represents a ZorkEvent that, when triggered, removes an item
+ * A TransformEvent represents a {@link ZorkEvent} that, when triggered, removes an item
  * from the game entirely and replaces it with a previously nonexistent item.
  * @author John Thomas
  * @version 1.4
@@ -259,7 +254,7 @@ class TransformEvent extends ZorkEvent {
 }
 
 /**
- * A TeleportEvent represents a ZorkEvent that, when triggered, moves the player
+ * A TeleportEvent represents a {@link ZorkEvent} that, when triggered, moves the player
  * to a random room in the dungeon.
  * Note that this room may be one the player has already visited, or even one
  * that is not otherwise reachable (e.g. a room with no exits).
@@ -290,9 +285,10 @@ class TeleportEvent extends ZorkEvent {
 }
 
 /**
- * A PotionEffect is an event that when triggered, alters the way the player interacts with the dungeon.
+ * A PotionEffect is a {@link ZorkEvent} that when triggered, alters the way the player interacts with the dungeon.
  * For example, a dizzy effect will cause the player's movement commands to send them through a random exit, despite
  * what direction they give.  Another example, the "babble" effect will cause printed statements to come out reversed.
+ * @author Robert Carroll
  */
 class PotionEffect extends ZorkEvent {
     private String effect;

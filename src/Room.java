@@ -315,7 +315,7 @@ public class Room {
 }
 
 /**
- * Thrown when a Room constructor, given a Scanner object,
+ * Thrown when a {@link Room} constructor, given a Scanner object,
  * detects the end of the rooms section of a .zork or .sav file.
  * @author John Thomas
  */

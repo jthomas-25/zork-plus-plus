@@ -7,8 +7,9 @@ import java.util.Scanner;
 /**
  * Represents an in game item with unique attributes.  These attributes are represented as member variables
  * they include {@link #primaryName primary name}, {@link #messages messages} (for interaction) and {@link #aliases aliases}.
- * @author Robert
+ * @author Robert Carroll
  * @version 3.0
+ * 10 July 2020
  */
 public class Item {
     private String primaryName;
@@ -157,7 +158,7 @@ public class Item {
 }
 
 /**
- * Thrown when a method attempts to return an Item where none can be found.
+ * Thrown when a method attempts to return an {@link Item} where none can be found.
  * @author John Thomas
  */
 class NoItemException extends Exception {
