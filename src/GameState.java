@@ -9,7 +9,7 @@ import java.util.Iterator;
  * GameState Class - represents the current state of the game: which dungeon is being played
  * and what room the adventurer is currently in.
  * @author Object Oriented Optimists (OOO)
- * @version 2.6
+ * @version 2.8
  * 10 July 2020
  */
 class GameState {

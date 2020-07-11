@@ -7,10 +7,16 @@ import java.util.Iterator;
  * this abstract Command class.
  * @author Object Oriented Optimists (OOO)
  * @author Richard Volynski
- * @version 2.9
- * 7 July 2020
+ * @version 3.0
+ * 10 July 2020
  */
 abstract class Command {
+
+    /**
+     * Command - Default constructor
+     */
+    Command() {
+    }
 
     /**
      * execute - this is an abstract command, which will be implemented at the subclass level.
