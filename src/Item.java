@@ -1,23 +1,21 @@
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.Scanner;
 
 /**
  * Represents an in game item with unique attributes.  These attributes are represented as member variables
- * they include {@link #primaryName primary name}, {@link #messages messages} (for interaction) and {@link #aliases aliases}.
+ * they include {@link #primaryName primary name}, {@link #itemHolder itemHolder} (for interaction) and {@link #aliases aliases}.
  * @author Robert Carroll
- * @version 3.0
- * 10 July 2020
+ * @author Richard Volynski
+ * @version 3.1
+ * 13 July 2020
  */
 public class Item {
     private String primaryName;
     private int weight;
-    private Hashtable<String, String> messages = new Hashtable<String, String>();
+    private Hashtable<String, ItemHolder> itemHolder = new Hashtable<String, ItemHolder>();
     private ArrayList<String> aliases = new ArrayList<String>();
-    private ArrayList<Item> contents = new ArrayList<>();
-
+//    private ArrayList<Item> contents = new ArrayList<>();
 
     /**
      * Default constructor, takes a Scanner object in order to hydrate the item.
@@ -38,12 +36,62 @@ public class Item {
         line = s.nextLine();
         this.weight = Integer.parseInt(line);
 
+        String lastVerb = null;
+
         line = s.nextLine();
         while (!line.equals("---")) {
             String[] commandParts = line.split(":");
+            String event = null;
+            String eventParameter = null;
+
             String verb = commandParts[0];
+            if (commandParts.length == 1) {
+                itemHolder.get(lastVerb).setMessage(itemHolder.get(lastVerb).getMessage() + "\n" + verb);
+                line = s.nextLine();
+                continue;
+            }
             String message = commandParts[1];
-            messages.put(verb, message);
+
+            if (verb.contains("[") && verb.contains("]")) {
+
+                if (verb.contains("(") && verb.contains(")")) {
+                   String[] verbSplit = verb.split("\\[");
+                   verb = verbSplit[0];
+
+                   String[] verb2Split = verbSplit[1].split("\\(");
+                   event = verb2Split[0];
+
+                   String[] verb3split = verb2Split[1].split("\\)");
+                   eventParameter = verb3split[0];
+
+                    ItemHolder itemEvent = new ItemHolder(event, eventParameter, message);
+                    itemHolder.put(verb, itemEvent);
+                }
+                    else {
+                        String[] verbSplit = verb.split("\\[");
+                        verb = verbSplit[0];
+
+                        String[] verb2Split = verbSplit[1].split("\\(");
+                        event = verb2Split[0];
+
+                    if (event.contains(",")) {
+                        String[] eventToSplit = event.split(",");
+                        for (String event0 : eventToSplit) {
+                            ItemHolder itemEvent = new ItemHolder(event0, eventParameter, message);
+                            itemHolder.put(verb, itemEvent);
+                        }
+                    }
+                    else {
+                        ItemHolder itemEvent = new ItemHolder(event, eventParameter, message);
+                        itemHolder.put(verb, itemEvent);
+                    }
+                }
+            }
+            else {
+                ItemHolder itemEvent = new ItemHolder(event, eventParameter, message);
+                itemHolder.put(verb, itemEvent);
+            }
+            lastVerb = verb;
             line = s.nextLine();
         }
     }
@@ -60,10 +108,10 @@ public class Item {
 //        }
 //        w.write(primaryNameAndAliases + "\n");
 //        w.write(Integer.toString(weight) + "\n");
-//        Iterator keys = messages.keySet().iterator();
+//        Iterator keys = itemHolder.keySet().iterator();
 //        while (keys.hasNext()) {
 //            String key = (String) keys.next();
-//            String value = (String) messages.get(key);
+//            String value = (String) itemHolder.get(key);
 //            w.write(key + ":" + value + "\n");
 //        }
 //        w.write("---" + "\n");
@@ -93,12 +141,12 @@ public class Item {
      * Gets the message for an Item that is associated with a given verb. The message indicates what happens
      * to the Item after being acted upon by the given verb.
      *
-     * @param verb a verb that has an associated message within the Item's {@link #messages messages}
+     * @param verb a verb that has an associated message within the Item's {@link #itemHolder itemHolder}
      * member variable.
      * @return a string, representing the message for the given verb.
      */
     String getMessageForVerb(String verb) {
-        return messages.get(verb);
+        return itemHolder.get(verb).getMessage();
     }
 
     /**
@@ -128,32 +176,32 @@ public class Item {
      *
      * @return an arraylist, representing the {@link #contents contents} of an Item.
      */
-    ArrayList<Item> getContents() {
-        return this.contents;
-    }
-    // TODO: hydrate item contents
+//    ArrayList<Item> getContents() {
+//        return this.contents;
+//    }
+//    TODO: hydrate item contents
 
     /**
      * Adds given Item to the {@link #contents contents} of this Item.
      * @param item an Item to be added to {@link #contents contents}.
      */
-    void addToContents(Item item) {
-        this.contents.add(item);
-    }
+//    void addToContents(Item item) {
+//        this.contents.add(item);
+//    }
 
     /**
      * Removes given Item from the {@link #contents contents} of this Item.
      * @param itemName name of item to remove from {@link #contents contents}.
      */
-    void removeFromContents(String itemName) {
-
-        for (Item item : this.contents) {
-            if (item.getPrimaryName().equals(itemName) || item.goesBy(itemName)) {
-                this.contents.remove(item);
-            }
-        }
-
-    }
+//    void removeFromContents(String itemName) {
+//
+//        for (Item item : this.contents) {
+//            if (item.getPrimaryName().equals(itemName) || item.goesBy(itemName)) {
+//                this.contents.remove(item);
+//            }
+//        }
+//
+//    }
 
 }
 
@@ -177,3 +225,40 @@ class NoItemException extends Exception {
         super(message);
     }
 }
+
+class ItemHolder {
+    private String event;
+    private String eventParameter;
+    private String message;
+
+    public String getEvent() {
+        return event;
+    }
+
+    public void setEvent(String event) {
+        this.event = event;
+    }
+
+    public String getEventParameter() {
+        return eventParameter;
+    }
+
+    public void setEventParameter(String eventParameter) {
+        this.eventParameter = eventParameter;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    ItemHolder(String event, String eventParameter, String message) {
+        this.event = event;
+        this.eventParameter = eventParameter;
+        this.message = message;
+    }
+}
+
