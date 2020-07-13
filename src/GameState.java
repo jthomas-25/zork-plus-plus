@@ -1,8 +1,8 @@
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.Scanner;
 import java.util.Iterator;
+import java.util.Scanner;
 
 
 /**
@@ -36,7 +36,7 @@ class GameState {
      * This method returns single instance of GameState class.
      * @return single instance of GameState class
      * */
-    static synchronized GameState instance() {
+    public static synchronized GameState instance() {
         if (single_instance == null)
             single_instance = new GameState();
         return single_instance;
@@ -124,8 +124,8 @@ class GameState {
             dungeon.storeState(printWriter);
             printWriter.write("Adventurer:\n");
             printWriter.write("Current room: " + currentRoom.getName() + "\n");
-            printWriter.write("Inventory: ");
             if (!inventory.isEmpty()) {
+                printWriter.write("Inventory: ");
                 for (int i = 0; i < inventory.size(); i++) {
                     Item item = inventory.get(i);
                     printWriter.write(item.getPrimaryName());
@@ -268,11 +268,6 @@ class GameState {
         return inventoryWeight + item.getWeight() > MAX_INVENTORY_WEIGHT;
     }
 
-    // Unused method, afaik.
-//    int getInventoryWeight() {
-//        return inventoryWeight;
-//    }
-
     /**
      * Gets the {@link #score score} of GameState.  A member variable, representing the player's score.
      *
@@ -370,7 +365,7 @@ class GameState {
      * @param health Integer, represents the max health necessary for obtaining a certain health message.
      * @param healthMsg String, representing the health message to be added.
      */
-    private void setHealthMsg(int health, String healthMsg) {
+    void setHealthMsg(int health, String healthMsg) {
         healthMsgs.put(health, healthMsg);
     }
 
@@ -391,10 +386,12 @@ class GameState {
     }
 
     /**
-     * Causes the game to be over.
+     * Causes the game to be over. Does nothing if the game is already over.
      */
     void endGame() {
-        this.gameOver = true;
+        if (!gameOver) {
+            gameOver = true;
+        }
     }
 }
 

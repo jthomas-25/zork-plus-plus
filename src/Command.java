@@ -151,7 +151,7 @@ class DropCommand extends Command {
  * @author Object Oriented Optimists (OOO)
  * @author Richard Volynski
  * @version 1.0
- * 6 July 2020
+ * 12 July 2020
  */
 class MovementCommand extends Command {
     private String dir;
@@ -172,10 +172,14 @@ class MovementCommand extends Command {
      * @return text description about where the user is going
      */
     String execute() {
-        Room room = GameState.instance().getAdventurersCurrentRoom().leaveBy(dir);
-        GameState.instance().setAdventurersCurrentRoom(room);
-        String execute = GameState.instance().getAdventurersCurrentRoom().describe();
-        return execute;
+        try {
+            Room room = GameState.instance().getAdventurersCurrentRoom().leaveBy(dir);
+            GameState.instance().setAdventurersCurrentRoom(room);
+            String execute = GameState.instance().getAdventurersCurrentRoom().describe();
+            return execute;
+        } catch (Exit.ExitLockedException e) {
+            return e.getMessage();
+        }
     }
 }
 

@@ -12,7 +12,7 @@ import java.util.Scanner;
  * as an ArrayList does.
  * @author Object Oriented Optimists (OOO)
  * @version 2.5
- * 10 July 2020
+ * 13 July 2020
  */
 public class Dungeon {
     private String title = "Simple Dungeon";    //default
@@ -69,32 +69,31 @@ public class Dungeon {
             if (lineNumber == 4) {
                 if (line.equals("Items:")) {
                     while (!line.equals("===")) {
+                        
                         Item item;
                         try {
                             item = new Item(stdin);
+                            this.add(item);
                         } catch (NoItemException ex) {
                             break;
                         }
-
-                        this.add(item);
                     }
                 }
 
                 line = stdin.nextLine();
                 if (line.equals("Rooms:")) {
                     while (!line.equals("===")) {
-
+                        
                         Room room;
                         try {
                             room = new Room(stdin, this, initState);
+                            rooms.add(room);
+                            if (firstRoom) {
+                                this.entry = room;
+                                firstRoom = false;
+                            }
                         } catch (NoRoomException ex) {
                             break;
-                        }
-
-                        rooms.add(room);
-                        if (firstRoom) {
-                            this.entry = room;
-                            firstRoom = false;
                         }
                     }
                 }
@@ -102,23 +101,21 @@ public class Dungeon {
                 line = stdin.nextLine();
                 if (line.equals("Exits:")) {
                     while (!line.equals("===")) {
-
+                        
                         Exit exit;
                         try {
-                            exit = new Exit(stdin, this);
-                        } catch (NoExitException ex) {
-                            break;
-                        }
-                        line = stdin.nextLine();
-                        Room exitSrc = exit.getSrc();
-                        String exitSrcRoomName = exitSrc.getName();
-
-                        for (int i = 0; i < rooms.size(); i++) {
-                            Room currentRoom = rooms.get(i);
-                            if (currentRoom.getName().equals(exitSrcRoomName)) {
-                                currentRoom.addExit(exit);
-                                break;
+                            exit = new Exit(stdin, this, initState);
+                            Room exitSrc = exit.getSrc();
+                            String exitSrcRoomName = exitSrc.getName();
+                            for (int i = 0; i < rooms.size(); i++) {
+                                Room currentRoom = rooms.get(i);
+                                if (currentRoom.getName().equals(exitSrcRoomName)) {
+                                    currentRoom.addExit(exit);
+                                    break;
+                                }
                             }
+                        } catch (Exit.NoExitException ex) {
+                            break;
                         }
                     }
                 }

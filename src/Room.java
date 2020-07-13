@@ -2,9 +2,8 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Scanner;
-import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Scanner;
 
 
 /**
@@ -14,10 +13,11 @@ import java.util.Iterator;
  * @author Object Oriented Optimists (OOO)
  * @author Richard Volynski
  * @version 2.7
- * 10 July 2020
+ * 13 July 2020
  */
 public class Room {
-    private Hashtable <String, Exit> exits;
+    private Hashtable<String, Exit> exits;
+    private ArrayList<Exit> lockedExits;
     private String name;
     private boolean roomDescriptionNeeded;
     private String desc;
@@ -91,7 +91,7 @@ public class Room {
      * @param s - Scanner for .zork file
      * @throws NoRoomException - if a line contains "===" (indicating end of rooms in the zork file).
      */
-    public Room (Scanner s) throws NoRoomException {
+    public Room(Scanner s) throws NoRoomException {
         init();
         String line = s.nextLine();
         if (line.equals("===")) {
@@ -107,7 +107,7 @@ public class Room {
      * Constructor Room - which stores room name in instance variable name
      * @param name - Room name
      */
-    Room (String name) throws NoExitException {
+    public Room(String name) {
         init();
         this.name = name;
     }
@@ -118,6 +118,7 @@ public class Room {
      */
     private void init() {
         exits = new Hashtable<>();
+        lockedExits = new ArrayList<>();
         roomDescriptionNeeded = false;
         beenHere = false;
         contents = new ArrayList<>();
@@ -179,28 +180,38 @@ public class Room {
      * leaveBy - this method returns the Room object from the direction PATH     String the user is going from the current room to the destination room
      * @param dir - direction ("n", "s", "w", "e", "u/up", "d/down")
      * @return room the user is going to
+     * @throws Exit.ExitLockedException if the exit connecting the two rooms is locked
      */
-    Room leaveBy(String dir) {
-        if (exits.get(dir.toLowerCase()) == null) {
+    Room leaveBy(String dir) throws Exit.ExitLockedException {
+        Exit exit = exits.get(dir.toLowerCase());
+        if (exit == null) {
             return this;
         }
         else {
-            Room newRoom = exits.get(dir.toLowerCase()).getDest();
-            return newRoom;
+            Room newRoom = exit.getDest();
+            if (exit.isLocked()) {
+                throw new Exit.ExitLockedException("The exit to " + newRoom.getName() + " is locked.");
+            } else {
+                return newRoom;
+            }
         }
     }
 
     /**
      * addExit - this method adds an exit to the hashtable of the exits in the room
+     * and the room's list of locked exits if it is locked
      * @param exit - exit
      */
-    public void addExit (Exit exit) {
+    public void addExit(Exit exit) {
         exits.put(exit.getDir(), exit);
+        if (exit.isLocked()) {
+            lockedExits.add(exit);
+        }
     }
 
     /**
      * storeState - this method stores the state of the room in the .sav file, whether the room was visited or not
-     * as well as room contents (items)
+     * as well as room contents (items) and which of its exits are locked, if any
      * @param w - PrintWriter to write to .sav file
      */
     void storeState(PrintWriter w) {
@@ -212,6 +223,17 @@ public class Room {
                 Item item = contents.get(i);
                 w.write(item.getPrimaryName());
                 if (i < contents.size() - 1) {
+                    w.write(",");
+                }
+            }
+            w.write("\n");
+        }
+        if (!lockedExits.isEmpty()) {
+            w.write("Locked exits: ");
+            for (int i = 0; i < lockedExits.size(); i++) {
+                Exit exit = lockedExits.get(i);
+                exit.storeState(w);
+                if (i < lockedExits.size() - 1) {
                     w.write(",");
                 }
             }
@@ -232,21 +254,33 @@ public class Room {
     /**
      * restoreState - this method first calls restoreState with Scanner parameter to restore
      * room's beenHere flag. Then, this method restores room contents (items) and adds them to the list of items
-     * in the room.
+     * in the room. Also restores the states of its exits.
      * @param s - Scanner to read from .sav file
      * @param d - current Dungeon
      */
     void restoreState(Scanner s, Dungeon d) {
         restoreState(s);
         String line = s.nextLine();
-        String[] splitLine = line.split(": ");
-        if (splitLine[0].equals("Contents")) {
-            String[] itemNames = splitLine[1].split(",");
-            for (String itemName : itemNames) {
-                Item item = d.getItem(itemName);
-                this.add(item);
+        while (!line.equals("---")) {
+            String[] splitLine = line.split(": ");
+            switch (splitLine[0]) {
+                case "Contents":
+                    String[] itemNames = splitLine[1].split(",");
+                    for (String itemName : itemNames) {
+                        Item item = d.getItem(itemName);
+                        this.add(item);
+                    }
+                    break;
+                case "Locked exits":
+                    String[] exitDirs = splitLine[1].split(",");
+                    for (String dir : exitDirs) {
+                        Exit exit = exits.get(dir);
+                        exit.lock();
+                        lockedExits.add(exit);
+                    }
+                    break;
             }
-            s.nextLine();   //Skip "---" delimiter
+            line = s.nextLine();
         }
     }
 
@@ -299,10 +333,10 @@ public class Room {
     }
 
     /**
-     * isBeenHere - this method determines whether or not the user visited a room
+     * hasBeenHere - this method determines whether or not the user visited a room
      * @return beenHere flag
      */
-    public boolean isBeenHere() {
+    public boolean hasBeenHere() {
         return beenHere;
     }
 
@@ -319,11 +353,4 @@ public class Room {
  * detects the end of the rooms section of a .zork or .sav file.
  * @author John Thomas
  */
-class NoRoomException extends Exception {
-
-    /**
-     * Constructs a new NoRoomException.
-     */
-    NoRoomException() {
-    }
-}
+class NoRoomException extends Exception {}
