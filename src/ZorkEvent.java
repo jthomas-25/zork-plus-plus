@@ -29,8 +29,8 @@ import java.util.Random;
  * player when the player enters a room). This is so the users of this API have greater
  * flexibility in adding their own features.</p>
  * @author John Thomas
- * @version 1.4
- * 10 July 2020
+ * @version 1.5
+ * 13 July 2020
  */
 abstract class ZorkEvent {
     protected String message;
@@ -225,8 +225,8 @@ class DisappearEvent extends ZorkEvent {
  * A TransformEvent represents a {@link ZorkEvent} that, when triggered, removes an item
  * from the game entirely and replaces it with a previously nonexistent item.
  * @author John Thomas
- * @version 1.4
- * 10 July 2020
+ * @version 1.5
+ * 13 July 2020
  */
 class TransformEvent extends ZorkEvent {
     private String nameOfItemToReplace;
@@ -307,3 +307,4 @@ class PotionEffect extends ZorkEvent {
         return null;    //TODO implement
     }
 }
+

@@ -10,7 +10,7 @@ import java.io.PrintWriter;
  * which direction they can go and the name of the surrounding room(s). Also, Exit class initializes itself by
  * reading from the .zork file.
  * @author Richard Volynski (OOO)
- * @version 2.7
+ * @version 2.8
  * 13 July 2020
  */
 class Exit {
@@ -18,29 +18,6 @@ class Exit {
     private Room src;
     private Room dest;
     private boolean locked;
-
-    
-    /**
-     * Thrown when an {@link Exit} constructor, given a Scanner object,
-     * detects the end of the exits section of a .zork file.
-     * @author John Thomas
-     */
-    class NoExitException extends Exception {}
-
-    /**
-     * Thrown when the player attempts to leave the current room through a locked exit.
-     * @author John Thomas
-     */
-    static class ExitLockedException extends Exception {
-        
-        /**
-         * Constructs a new ExitLockedException with the given message.
-         * @param message the message to be printed if this exception is thrown
-         */
-        ExitLockedException(String message) {
-            super(message);
-        }
-    }
     
     /**
      * Exit - this constructor initializes itself, reading lines from .zork file using a scanner, which is provided
@@ -171,5 +148,27 @@ class Exit {
         if (locked) {
             locked = false;
         }
+    }
+}
+
+/**
+ * Thrown when an {@link Exit} constructor, given a Scanner object,
+ * detects the end of the exits section of a .zork file.
+ * @author John Thomas
+ */
+class NoExitException extends Exception {}
+
+/**
+ * Thrown when the player attempts to leave the current room through a locked exit.
+ * @author John Thomas
+ */
+class ExitLockedException extends Exception {
+
+    /**
+     * Constructs a new ExitLockedException with the given message.
+     * @param message the message to be printed if this exception is thrown
+     */
+    ExitLockedException(String message) {
+        super(message);
     }
 }

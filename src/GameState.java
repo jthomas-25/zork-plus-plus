@@ -11,8 +11,8 @@ import java.util.Scanner;
  * @author Object Oriented Optimists (OOO)
  * @author John Thomas
  * @author Richard Volynski
- * @version 2.8
- * 10 July 2020
+ * @version 2.9
+ * 13 July 2020
  */
 class GameState {
     private Dungeon dungeon = null;
@@ -409,3 +409,4 @@ class IllegalSaveFormatException extends Exception {
     IllegalSaveFormatException(String errorMsg) {
     }
 }
+

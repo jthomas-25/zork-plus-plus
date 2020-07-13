@@ -7,8 +7,8 @@ import java.util.Iterator;
  * this abstract Command class.
  * @author Object Oriented Optimists (OOO)
  * @author Richard Volynski
- * @version 3.0
- * 10 July 2020
+ * @version 3.1
+ * 13 July 2020
  */
 abstract class Command {
     
@@ -177,7 +177,7 @@ class MovementCommand extends Command {
             GameState.instance().setAdventurersCurrentRoom(room);
             String execute = GameState.instance().getAdventurersCurrentRoom().describe();
             return execute;
-        } catch (Exit.ExitLockedException e) {
+        } catch (Exception e) {
             return e.getMessage();
         }
     }
@@ -493,3 +493,4 @@ class KillCommand extends Command {
         return null;    //TODO implement
     }
 }
+

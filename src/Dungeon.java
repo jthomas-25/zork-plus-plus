@@ -11,7 +11,7 @@ import java.util.Scanner;
  * A Hashtable is a class that makes it easy to look up entries by a "key" rather than by a numbered index,
  * as an ArrayList does.
  * @author Object Oriented Optimists (OOO)
- * @version 2.5
+ * @version 2.6
  * 13 July 2020
  */
 public class Dungeon {
@@ -114,7 +114,7 @@ public class Dungeon {
                                     break;
                                 }
                             }
-                        } catch (Exit.NoExitException ex) {
+                        } catch (NoExitException ex) {
                             break;
                         }
                     }
@@ -252,3 +252,4 @@ class IllegalDungeonFormatException extends Exception {
     IllegalDungeonFormatException(String errorMsg) {
     }
 }
+

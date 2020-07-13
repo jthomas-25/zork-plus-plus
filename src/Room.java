@@ -12,7 +12,7 @@ import java.util.Scanner;
  * Also, the Room Class contains lists of Exits.
  * @author Object Oriented Optimists (OOO)
  * @author Richard Volynski
- * @version 2.7
+ * @version 2.8
  * 13 July 2020
  */
 public class Room {
@@ -180,9 +180,9 @@ public class Room {
      * leaveBy - this method returns the Room object from the direction PATH     String the user is going from the current room to the destination room
      * @param dir - direction ("n", "s", "w", "e", "u/up", "d/down")
      * @return room the user is going to
-     * @throws Exit.ExitLockedException if the exit connecting the two rooms is locked
+     * @throws ExitLockedException if the exit connecting the two rooms is locked
      */
-    Room leaveBy(String dir) throws Exit.ExitLockedException {
+    Room leaveBy(String dir) throws ExitLockedException {
         Exit exit = exits.get(dir.toLowerCase());
         if (exit == null) {
             return this;
@@ -190,7 +190,7 @@ public class Room {
         else {
             Room newRoom = exit.getDest();
             if (exit.isLocked()) {
-                throw new Exit.ExitLockedException("The exit to " + newRoom.getName() + " is locked.");
+                throw new ExitLockedException("The exit to " + newRoom.getName() + " is locked.");
             } else {
                 return newRoom;
             }
@@ -354,3 +354,4 @@ public class Room {
  * @author John Thomas
  */
 class NoRoomException extends Exception {}
+
