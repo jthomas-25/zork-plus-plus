@@ -1,7 +1,6 @@
 # Object Oriented Optimists (OOO)
 Team design assignment #4 — Zork++ implementation part 1
 
-### To do:
 For Zork++ phase 3a, your team will fully implement (code) and debug your game engine's standard features.
 
 Recall that the standard features were described in detail in the Zork++ phase 1 description, and that your code must work exactly as described, with .zork files in exactly the format described. This is so that every team's engine works (in part) in the same way and I can therefore reliably and efficiently test everybody's functionality.
