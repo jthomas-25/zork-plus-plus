@@ -1,5 +1,5 @@
 # Object Oriented Optimists (OOO)
-#### Team design assignment #4 — Zork++ implementation part 1
+### Team design assignment #4 — Zork++ implementation part 1
 
 For Zork++ phase 3a, your team will fully implement (code) and debug your game engine's standard features.
 
