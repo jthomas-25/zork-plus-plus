@@ -493,3 +493,26 @@ class KillCommand extends Command {
         return null;    //TODO implement
     }
 }
+
+/**
+ * 
+ * @author John Thomas
+ * @version 1.0
+ * 14 July 2020
+ */
+class UnlockCommand extends Command {
+    private String dir;
+
+    /**
+     * Constructs a new UnlockCommand with the given exit.
+     * @param dir the direction of the exit to be unlocked
+     */
+    UnlockCommand(String dir) {
+        this.dir = dir;
+    }
+
+    String execute() {
+        ZorkEvent event = EventFactory.instance().parse(String.format("Unlock(%s)", this.dir));
+        return event.trigger();
+    }
+}

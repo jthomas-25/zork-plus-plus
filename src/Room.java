@@ -17,7 +17,7 @@ import java.util.Scanner;
  */
 public class Room {
     private Hashtable<String, Exit> exits;
-    private ArrayList<Exit> lockedExits;
+    private Hashtable<String, Exit> lockedExits;
     private String name;
     private boolean roomDescriptionNeeded;
     private String desc;
@@ -118,7 +118,7 @@ public class Room {
      */
     private void init() {
         exits = new Hashtable<>();
-        lockedExits = new ArrayList<>();
+        lockedExits = new Hashtable<>();
         roomDescriptionNeeded = false;
         beenHere = false;
         contents = new ArrayList<>();
@@ -162,10 +162,9 @@ public class Room {
         }
 
         // Show all balances in hash table
-        Enumeration directions = exits.keys();
-
+        Enumeration<String> directions = exits.keys();
         while (directions.hasMoreElements()) {
-            String dir = (String)directions.nextElement();
+            String dir = directions.nextElement();
             Exit exit = exits.get(dir);
             output += exit.describe() + "\n";
         }
@@ -183,7 +182,7 @@ public class Room {
      * @throws Exit.ExitLockedException if the exit connecting the two rooms is locked
      */
     Room leaveBy(String dir) throws Exit.ExitLockedException {
-        Exit exit = exits.get(dir.toLowerCase());
+        Exit exit = exits.get(dir);
         if (exit == null) {
             return this;
         }
@@ -199,13 +198,51 @@ public class Room {
 
     /**
      * addExit - this method adds an exit to the hashtable of the exits in the room
-     * and the room's list of locked exits if it is locked
      * @param exit - exit
      */
     public void addExit(Exit exit) {
         exits.put(exit.getDir(), exit);
-        if (exit.isLocked()) {
-            lockedExits.add(exit);
+    }
+
+    public void lockExit(Exit exit) {
+        exit.lock();
+        lockedExits.put(exit.getDir(), exit);
+    }
+
+    public void lockExit(String dir) throws Exception {
+        if (exits.isEmpty()) {
+            throw new Exception("This room has no exits.");
+        }
+        Exit exit = exits.get(dir);
+        if (exit == null) {
+            throw new Exception("No exit in that direction.");
+        } else {
+            if (exit.isLocked()) {
+                throw new Exception("Already locked.");
+            } else {
+                this.lockExit(exit);
+            }
+        }
+    }
+
+    public void unlockExit(Exit exit) {
+        exit.unlock();
+        lockedExits.remove(exit);
+    }
+    
+    public void unlockExit(String dir) throws Exception {
+        if (exits.isEmpty()) {
+            throw new Exception("This room has no exits.");
+        }
+        Exit exit = exits.get(dir);
+        if (exit == null) {
+            throw new Exception("No exit in that direction.");
+        } else {
+            if (!exit.isLocked()) {
+                throw new Exception("Already unlocked.");
+            } else {
+                this.unlockExit(exit);
+            }
         }
     }
 
@@ -230,9 +267,14 @@ public class Room {
         }
         if (!lockedExits.isEmpty()) {
             w.write("Locked exits: ");
-            for (int i = 0; i < lockedExits.size(); i++) {
-                Exit exit = lockedExits.get(i);
+            Enumeration<String> directions = lockedExits.keys();
+            int i = 0;
+            while (directions.hasMoreElements()) {
+                String dir = directions.nextElement();
+                Exit exit = exits.get(dir);
                 exit.storeState(w);
+                i++;
+                System.out.println("Wrote");
                 if (i < lockedExits.size() - 1) {
                     w.write(",");
                 }
@@ -276,7 +318,6 @@ public class Room {
                     for (String dir : exitDirs) {
                         Exit exit = exits.get(dir);
                         exit.lock();
-                        lockedExits.add(exit);
                     }
                     break;
             }

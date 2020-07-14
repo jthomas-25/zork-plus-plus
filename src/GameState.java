@@ -171,15 +171,17 @@ class GameState {
         String currentRoomName = currentRoomSplit[1];
         currentRoom = dungeon.getRoom(currentRoomName);
         dungeon.setEntry(currentRoom);
-        String[] splitLine = gameScanner.nextLine().split(": ");
-        if (splitLine[0].equals("Inventory")) {
-            try {
-                String[] itemNames = splitLine[1].split(",");
-                for (String itemName : itemNames) {
-                    Item item = dungeon.getItem(itemName);
-                    this.addToInventory(item);
+        if (gameScanner.hasNextLine()) {
+            String[] splitLine = gameScanner.nextLine().split(": ");
+            if (splitLine[0].equals("Inventory")) {
+                try {
+                    String[] itemNames = splitLine[1].split(",");
+                    for (String itemName : itemNames) {
+                        Item item = dungeon.getItem(itemName);
+                        this.addToInventory(item);
+                    }
+                } catch (Exception e) {
                 }
-            } catch (Exception e) {
             }
         }
         gameScanner.close();
@@ -383,6 +385,11 @@ class GameState {
      */
     boolean playerHasWon() {
         return gameOver && !playerDead;
+    }
+
+    void killPlayer() {
+        health = 0;
+        playerDead = true;
     }
 
     /**

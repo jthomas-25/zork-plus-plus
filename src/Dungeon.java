@@ -105,15 +105,6 @@ public class Dungeon {
                         Exit exit;
                         try {
                             exit = new Exit(stdin, this, initState);
-                            Room exitSrc = exit.getSrc();
-                            String exitSrcRoomName = exitSrc.getName();
-                            for (int i = 0; i < rooms.size(); i++) {
-                                Room currentRoom = rooms.get(i);
-                                if (currentRoom.getName().equals(exitSrcRoomName)) {
-                                    currentRoom.addExit(exit);
-                                    break;
-                                }
-                            }
                         } catch (Exit.NoExitException ex) {
                             break;
                         }

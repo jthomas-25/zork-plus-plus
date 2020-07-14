@@ -1,5 +1,6 @@
-import java.util.Scanner;
 import java.io.PrintWriter;
+import java.util.Iterator;
+import java.util.Scanner;
 
 /**
  * Exit Class is designed to be a link between rooms, allowing the user to travel from one room
@@ -21,7 +22,7 @@ class Exit {
 
     
     /**
-     * Thrown when an {@link Exit} constructor, given a Scanner object,
+     * Thrown when an Exit constructor, given a Scanner object,
      * detects the end of the exits section of a .zork file.
      * @author John Thomas
      */
@@ -72,10 +73,12 @@ class Exit {
         roomName = line;
         this.dest = d.getRoom(roomName);
 
+        this.src.addExit(this);
+
         line = s.nextLine();
         if (line.equals("locked")) {
             if (initState) {
-                this.locked = true;
+                this.src.lockExit(this);
             }
             line = s.nextLine();
         }
@@ -139,7 +142,7 @@ class Exit {
     }
 
     void storeState(PrintWriter w) {
-        w.write(dir);
+        w.write(this.dir);
 /*
         if (this.isLocked()) {
             w.write(dir);
@@ -159,17 +162,13 @@ class Exit {
      * Prevents this exit from being passed through. Does nothing if this exit is already locked.
      */
     public void lock() {
-        if (!locked) {
-            locked = true;
-        }
+        locked = true;
     }
 
     /**
      * Allows this exit to be passed through. Does nothing if this exit is already unlocked.
      */
     public void unlock() {
-        if (locked) {
-            locked = false;
-        }
+        locked = false;
     }
 }

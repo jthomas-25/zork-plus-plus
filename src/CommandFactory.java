@@ -13,7 +13,7 @@ class CommandFactory {
      * instance() - this method is represented by the Singleton CommandFactory Class
      * @return single static instance of CommandFactory class
      */
-    static synchronized CommandFactory instance() {
+    public static synchronized CommandFactory instance() {
         if (single_instance == null)
             single_instance = new CommandFactory();
         return single_instance;
@@ -30,7 +30,7 @@ class CommandFactory {
      * @param commandString - user input
      * @return - Command objects
      */
-    Command parse (String commandString) {
+    Command parse(String commandString) {
         String[] words = commandString.split(" ");
         switch (words.length) {
             case 1:
@@ -59,6 +59,33 @@ class CommandFactory {
                     default:
                         return new UnknownCommand(words[0]);
                 }
+            case 3:
+                switch (words[0]) {
+                    case "unlock":
+                        switch (words[2]) {
+                            case "exit":
+                                return new UnlockCommand(words[1]);
+                            default:
+                                return new UnknownCommand(commandString);
+                        }
+                    default:
+                        return new UnknownCommand(words[0]);
+                }
+/*
+            case 4:
+                switch (words[0]) {
+                    case "use":
+                        switch (words[2]) {
+                            case "on":
+                                switch (words[3]) {
+                                    case "exit":
+                                        return new UnlockCommand();
+                                }
+                            break;
+                        }
+                    break;
+                }
+*/
             default:
                 String itemName;
                 switch (words[0]) {
@@ -71,6 +98,10 @@ class CommandFactory {
                     case "save":
                         String saveFilename = words[1];
                         return new SaveCommand(saveFilename);
+//                    case "unlock":
+//                        String roomName = words[1];
+//                        return new UnlockCommand(roomName);
+
                     default:
                         String verb = words[0];
                         String noun = words[1];

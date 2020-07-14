@@ -8,7 +8,7 @@
  * {@link ZorkEvent} objects.
  * @author John Thomas
  * @version 2.8
- * 10 July 2020
+ * 14 July 2020
  */
 class EventFactory {
     private static EventFactory singleInstance = null;
@@ -37,7 +37,78 @@ class EventFactory {
      * @return the {@link ZorkEvent} object relevant to this string
      * @throws IllegalArgumentException if this string does not match the proper event syntax
      */
-     ZorkEvent parse(String eventString) throws IllegalArgumentException {
-        return null;    //TODO implement
+    ZorkEvent parse(String eventString) throws IllegalArgumentException {
+        String[] sa = eventString.replace(")","").split("\\(");
+        String eventName = sa[0];
+        ZorkEvent event = null;
+        try {
+            switch (sa.length) {
+                case 1:
+                    switch (eventName) {
+                        case "Die":
+                            event = new DieEvent();
+                            break;
+    /*
+                        case "Disappear":
+                            event = new DisappearEvent();
+                            break;
+                        case "Drop":
+                            event = new DropEvent();
+                            break;
+    */
+                        case "Teleport":
+                            event = new TeleportEvent();
+                            break;
+                        case "Win":
+                            event = new WinEvent();
+                            break;
+                    }
+                default:
+                    int points;
+                    String message;;
+                    switch (eventName) {
+                        case "Die":
+                            message = sa[1];
+                            event = new DieEvent(message);
+                            break;
+                        case "Score":
+                            points = Integer.parseInt(sa[1]);
+                            event = new ScoreEvent(points);
+                            break;
+    /*
+                        case "Teleport":
+                            String roomName = sa[1];
+                            event = new TeleportEvent(roomName);
+                            break;
+                        case "Transform":
+                            event = new TransformEvent();
+                            break;
+    */
+                        case "Unlock":
+                            String exitDir = sa[1];
+                            event = new UnlockEvent(exitDir);
+                            break;
+                        case "Win":
+                            message = sa[1];
+                            event = new WinEvent(message);
+                            break;
+                        case "Wound":
+                            points = Integer.parseInt(sa[1]);
+                            event = new WoundEvent(points);
+                            break;
+                    }
+            }
+            return event;
+        } catch (Exception e) {
+            return null;    //TODO implement
+        }
+/*
+        //Reflection technique
+        try {
+            Class clazz = Class.forName(eventName + "Event");
+            event = (ZorkEvent) clazz.newInstance();
+        } catch (Exception e) {
+        }
+*/
     }
 }

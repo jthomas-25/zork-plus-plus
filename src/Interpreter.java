@@ -1,7 +1,7 @@
 import java.io.File;
 import java.io.IOException;
+//import java.util.Hashtable;
 import java.util.Scanner;
-import java.util.*;
 
 /**
  * CPSC 240
@@ -16,6 +16,7 @@ import java.util.*;
  */
 public class Interpreter {
     private String commandEntered;
+    //private Hashtable<String, String> specialCommands = new Hashtable<>();;
 
     /**
      * The main method, argument(s) should be the file path of the dungeon or save (dot sav file) to be played/restored.
@@ -60,12 +61,20 @@ public class Interpreter {
             commandEntered = stdin.nextLine();
             Command command;
 
-            if (commandEntered.toLowerCase().equals("save")) {
-                System.out.print("Enter the name of your save file: ");
-                String saveFilename = stdin.nextLine();
-                command = CommandFactory.instance().parse(commandEntered + " " + saveFilename);
-            } else {
-                command = CommandFactory.instance().parse(commandEntered);
+            switch (commandEntered) {
+                case "save":
+                    System.out.print("Enter the name of your save file: ");
+                    String saveFilename = stdin.nextLine();
+                    command = CommandFactory.instance().parse(commandEntered + " " + saveFilename);
+                break;
+                case "unlock exit":
+                    System.out.print("Which exit? Enter a direction: ");
+                    String exitDir = stdin.nextLine();
+                    command = CommandFactory.instance().parse(commandEntered.replace(" ", String.format(" %s ", exitDir)));
+                break;
+                default:
+                    command = CommandFactory.instance().parse(commandEntered);
+                    break;
             }
             if (command != null) {
                 String output = command.execute();
@@ -78,5 +87,3 @@ public class Interpreter {
         }
     }
 }
-
-
