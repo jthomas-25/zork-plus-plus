@@ -1,3 +1,5 @@
+import com.sun.jdi.event.BreakpointEvent;
+
 /**
  * An EventFactory represents a factory whose purpose is to parse text strings
  * and produce the appropriate {@link ZorkEvent} objects.
@@ -7,7 +9,8 @@
  * Note that the EventFactory class is the only class that should instantiate
  * {@link ZorkEvent} objects.
  * @author John Thomas
- * @version 2.8
+ * @author Richard Volynski
+ * @version 2.9
  * 14 July 2020
  */
 class EventFactory {
@@ -15,6 +18,7 @@ class EventFactory {
 
     /**
      * Ensures the instantiation of a single EventFactory object.
+     *
      * @return the new instance of the event factory the first time this method
      * is called, or the same EventFactory object if it has already been instantiated
      */
@@ -33,7 +37,9 @@ class EventFactory {
     /**
      * Analyzes the given string to obtain information about an event, and produces
      * the corresponding {@link ZorkEvent} object.
-     * @param eventString the event's info (with optional parameters)
+     *
+     * @param eventName  the event's info (with optional parameters)
+     * @param eventParam - event parameters
      * @return the {@link ZorkEvent} object relevant to this string
      * @throws IllegalArgumentException if this string does not match the proper event syntax
      */
@@ -110,5 +116,42 @@ class EventFactory {
         } catch (Exception e) {
         }
 */
+    }
+
+    String triggerEvent(String eventName, String eventParam) throws IllegalArgumentException, NoItemException, NoRoomException {
+        ZorkEvent event;
+        switch (eventName.toLowerCase()) {
+            case "score":
+                int points = Integer.parseInt(eventParam);
+                event = new ScoreEvent(points);
+                break;
+            case "wound":
+                int hp = Integer.parseInt(eventParam);
+                event = new WoundEvent(hp);
+                break;
+            case "die":
+                event = new DieEvent(eventParam);
+                break;
+            case "win":
+                event = new WinEvent(eventParam);
+                break;
+            case "drop":
+                event = new DropEvent(eventParam);
+                break;
+            case "disappear":
+                event = new DisappearEvent(eventParam);
+                break;
+            case "transform":
+                event = new TransformEvent(eventName,eventParam);
+                break;
+/*
+            case "teleport":
+                event = new TeleportEvent(eventParam);
+                break;
+*/
+            default:
+                throw new IllegalArgumentException("Event not found: " + eventName);
+        }
+        return event.trigger();
     }
 }

@@ -3,8 +3,8 @@
  * and produce the appropriate Command objects.
  * CommandFactory is a Singleton class.
  * @author Object Oriented Optimists (OOO)
- * @version 3.0
- * 10 July 2020
+ * @version 3.2
+ * 14 July 2020
  */
 class CommandFactory {
     private static CommandFactory single_instance = null;
@@ -42,7 +42,7 @@ class CommandFactory {
                     case "u":
                     case "d":
                         return new MovementCommand(words[0]);
-                    case "look":
+                    case "look": case "l":
                         return new LookCommand();
                     case "take":
                         return new TakeCommand("");
@@ -56,8 +56,15 @@ class CommandFactory {
                         return new ScoreCommand();
                     case "health":
                         return new HealthCommand();
+                    case "swap":
+                        return new SwapCommand("", "");
                     default:
-                        return new UnknownCommand(words[0]);
+                        if (GameState.instance().hasItemSpecificCommand(words[0])) {
+                            return new ItemSpecificCommand(words[0], "");
+                        }
+                        else {
+                            return new UnknownCommand(words[0]);
+                        }
                 }
             case 3:
                 switch (words[0]) {
@@ -92,6 +99,21 @@ class CommandFactory {
                     case "take":
                         itemName = words[1];
                         return new TakeCommand(itemName);
+                    case "swap":
+                        String userItem = "";
+                        String itemInRoom = "";
+                        if (words.length == 4) {
+                            userItem = words[1];
+                            itemInRoom = words[3];
+                        }
+                        else if (words.length == 3) {
+                            userItem = words[1];
+                            itemInRoom = words[2];
+                        }
+                        else if (words.length == 2) {
+                            userItem = words[1];
+                        }
+                        return new SwapCommand(userItem,itemInRoom);
                     case "drop":
                         itemName = words[1];
                         return new DropCommand(itemName);
@@ -110,4 +132,5 @@ class CommandFactory {
         }
     }
 }
+
 

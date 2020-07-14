@@ -11,8 +11,8 @@ import java.util.Scanner;
  * @author Object Oriented Optimists (OOO)
  * @author John Thomas
  * @author Richard Volynski
- * @version 2.8
- * 10 July 2020
+ * @version 3.0
+ * 14 July 2020
  */
 class GameState {
     private Dungeon dungeon = null;
@@ -49,21 +49,21 @@ class GameState {
         inventory = new ArrayList<>();
         inventoryWeight = 0;
         score = 0;
-        health = 0;
+        health = 100;   //initial health
         ranks = new Hashtable<>();
         healthMsgs = new Hashtable<>();
 
-        setRank(0, "Rank 1");
-        setRank(25, "Rank 2");
-        setRank(50, "Rank 3");
-        setRank(75, "Rank 4");
-        setRank(100, "Rank 5");
+        setRank(0, "Amateur Scout");
+        setRank(25, "Expert");
+        setRank(50, "Treasure Ranger");
+        setRank(75, "\"How did you get this far\" Adventurer");
+        setRank(100, "Dungeon Tour Guide");
 
-        setHealthMsg(0, "Message 1");
-        setHealthMsg(1, "Message 2");
-        setHealthMsg(2, "Message 3");
-        setHealthMsg(3, "Message 4");
-        setHealthMsg(4, "Message 5");
+        setHealthMsg(100,  health + " (number for testing purposes) - Health Message 1");
+        setHealthMsg(75, health + " (number for testing purposes) - Health Message 2");
+        setHealthMsg(50, health + " (number for testing purposes) - Health Message 3");
+        setHealthMsg(25, health + " (number for testing purposes) - Health Message 4");
+        setHealthMsg(0, health + " (number for testing purposes) - You are dead");
 
         gameOver = false;
         playerDead = false;
@@ -154,8 +154,8 @@ class GameState {
         File file = new File(fileName);
         Scanner gameScanner = new Scanner(file);
         String version = gameScanner.nextLine().split(" save data")[0];
-        if (!version.equals("Zork III")) {
-            throw new IllegalSaveFormatException("Save file incompatible with current version of Zork (Zork III).");
+        if (!version.equals("Zork++")) {
+            throw new IllegalSaveFormatException("Save file incompatible with current version of Zork (Zork++).");
         }
         String secLine = gameScanner.nextLine();  //reads Dungeon file name
         String[] secLineSplit = secLine.split(": ");
@@ -194,6 +194,15 @@ class GameState {
      */
     ArrayList<Item> getInventory() {
         return this.inventory;
+    }
+
+    boolean hasItemSpecificCommand(String command) {
+        for (Item item : getInventory()) {
+            if (item.hasItemSpecificCommand(command)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -257,6 +266,19 @@ class GameState {
             }
         }
         throw new NoItemException(String.format("You're not carrying a(n) %s.", name));
+    }
+
+    /**
+     * This method checks if an item exists in the user's inventory.
+     * @param name a string, containing the name of the desired item in player's inventory.
+     */
+    boolean ifItemExistsInInventory(String name) {
+        for (Item item : inventory) {
+            if (item.goesBy(name)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

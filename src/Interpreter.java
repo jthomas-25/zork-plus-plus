@@ -11,8 +11,8 @@ import java.util.Scanner;
  * inputs a command, it should use the CommandFactory to instantiate a new Command object and execute it.
  * If the user enters "q", it terminates the program.
  * @author Object Oriented Optimists (OOO)
- * @version 2.7
- * 1 July 2020
+ * @version 2.9
+ * 14 July 2020
  */
 public class Interpreter {
     private String commandEntered;
@@ -26,10 +26,10 @@ public class Interpreter {
      * If a dungeon file format is Illegal, the method exits while throwing an IllegalSaveFormatException exception.
      *
      */
-    public static void main(String[] args) throws IllegalSaveFormatException {
+    public static void main(String[] args) throws IllegalSaveFormatException, NoItemException, NoRoomException {
         Scanner stdin = new Scanner(System.in);
 
-        String defaultZorkFile = "ZorkIII_Test_File.zork";
+        String defaultZorkFile = "sample.zork";
         if (args.length > 0) {
             defaultZorkFile = args[0];
         } else {
@@ -43,6 +43,9 @@ public class Interpreter {
                 dungeon = GameState.instance().getDungeon();
             } else {
                 dungeon = new Dungeon(defaultZorkFile, true);
+                if (dungeon.getEntry() == null) {
+                    return;
+                }
                 GameState.instance().initialize(dungeon);
             }
         } catch (Exception e) {

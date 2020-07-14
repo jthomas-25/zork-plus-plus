@@ -1,3 +1,4 @@
+import javax.xml.namespace.QName;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -7,8 +8,8 @@ import java.util.Iterator;
  * this abstract Command class.
  * @author Object Oriented Optimists (OOO)
  * @author Richard Volynski
- * @version 3.0
- * 10 July 2020
+ * @version 3.1
+ * 13 July 2020
  */
 abstract class Command {
     
@@ -16,7 +17,7 @@ abstract class Command {
      * execute - this is an abstract command, which will be implemented at the subclass level.
      * @return String command message
      */
-    abstract String execute();
+    abstract String execute() throws NoItemException, NoRoomException;
 }
 
 /**
@@ -177,7 +178,7 @@ class MovementCommand extends Command {
             GameState.instance().setAdventurersCurrentRoom(room);
             String execute = GameState.instance().getAdventurersCurrentRoom().describe();
             return execute;
-        } catch (Exit.ExitLockedException e) {
+        } catch (Exception e) {
             return e.getMessage();
         }
     }
@@ -264,7 +265,7 @@ class QuitCommand extends Command {
      * @return null
      */
     String execute() {
-        return null;
+        return "Event will be implemented soon";    //TODO implement
     }
 }
 
@@ -308,8 +309,8 @@ class InventoryCommand extends Command {
  * and prints a message for certain items or an error message
  * @author Object Oriented Optimists (OOO)
  * @author Richard Volynski
- * @version 1.0
- * 6 July 2020
+ * @version 1.2
+ * 14 July 2020
  */
 class ItemSpecificCommand extends Command {
     private String verb;
@@ -330,17 +331,28 @@ class ItemSpecificCommand extends Command {
      * or prints an error message
      * @return String message
      */
-    String execute() {
-        try {
-            Item i = GameState.instance().getItemInVicinityNamed(this.noun);
-            if (i.getMessageForVerb(this.verb) != null) {
-                return i.getMessageForVerb(this.verb);
-            } else {
-                return String.format("You cannot '%s' the %s.", verb, i);
-            }
-        } catch (NoItemException e) {
-            return e.getMessage();
+    String execute() throws NoItemException, NoRoomException {
+
+        String returnMessage = "";
+
+        switch (this.noun) {
+            case "":
+                return String.format("%s what? (usage: %s <what?>)", verb, noun);
+            default:
+
+                if (GameState.instance().ifItemExistsInInventory(noun)) {
+                    Item item = GameState.instance().getItemFromInventoryNamed(noun);
+
+                    String eventName = item.getEventForVerb(verb);
+                    String eventParam = item.getEventParamForVerb(verb);
+
+                    if (!eventName.isEmpty()) {
+                        returnMessage = EventFactory.instance().triggerEvent(eventName, eventParam) + "\n";
+                    }
+                    return returnMessage += item.getMessageForVerb(verb);
+                }
         }
+        return String.format("You cannot '%s' the %s.", verb,noun);
     }
 }
 
@@ -443,25 +455,73 @@ class HealthCommand extends Command {
  * user's current inventory, and items in the user's current inventory become items in Room B6)
  * @author Object Oriented Optimists (OOO)
  * @author Richard Volynski
- * @version 1.0
- * 6 July 2020
+ * @version 1.1
+ * 13 July 2020
  */
 class SwapCommand extends Command {
+    private String userItemName;    //item in user's inventory
+    private String itemInRoomName;
 
     /**
      * SwapCommand - default constructor
      */
-    SwapCommand() {
-        //TODO implement
+    SwapCommand(String userItemName, String itemInRoomName) {
+        this.userItemName = userItemName;
+        this.itemInRoomName = itemInRoomName;
     }
 
     /**
      * execute() - this method will swap items in the user's current room with the user's current inventory
-     * @param //TODO implement
      * @return swap command message
      */
     String execute() {
-        return null;    //TODO implement
+
+        GameState state = GameState.instance();
+        Room currentRoom = state.getAdventurersCurrentRoom();
+        switch (userItemName) {
+            case "":
+                return "Swap what? (usage: swap <user item with room item>)";
+            case "all":
+
+                int numItemsInUserInventory = GameState.instance().getInventory().size();
+
+                String result = "";
+                ArrayList<Item> currentRoomContents = currentRoom.getContents();
+                if (!currentRoomContents.isEmpty()) {
+                    Iterator<Item> itr = currentRoomContents.iterator();
+                    while (itr.hasNext()) {
+                        Item roomItem = itr.next();
+                        state.addToInventory(roomItem);
+                        currentRoom.remove(roomItem);
+                    }
+                    for (int i = 0; i < numItemsInUserInventory; i++) {
+                        Item itemInInventory = GameState.instance().getInventory().get(i);
+                        GameState.instance().removeFromInventory(itemInInventory);
+                        currentRoom.add(itemInInventory);
+                    }
+                    result += String.format("Swapped %s with %s.\n", userItemName, itemInRoomName);
+                }
+                else {
+                    result = String.format("There are no items in %s.", currentRoom.getName());
+                }
+                return result;
+            default:
+                Item userItem;
+                Item itemInRoom;
+                try {
+                    userItem = GameState.instance().getItemFromInventoryNamed(userItemName);
+                    itemInRoom = GameState.instance().getAdventurersCurrentRoom().getItemNamed(itemInRoomName);
+                }
+                catch (NoItemException e) {
+                    result = String.format("No item %s found in user's inventory", userItemName);
+                    return result;
+                }
+                state.removeFromInventory(userItem);
+                state.addToInventory(itemInRoom);
+                currentRoom.remove(itemInRoom);
+                currentRoom.add(userItem);
+                return String.format("Swapped %s with %s.\n", userItemName, itemInRoomName);
+        }
     }
 }
 
@@ -490,7 +550,7 @@ class KillCommand extends Command {
      * @return //TODO implement
      */
     String execute() {
-        return null;    //TODO implement
+        return "Event will be implemented soon";    //TODO implement
     }
 }
 
