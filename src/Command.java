@@ -1,3 +1,4 @@
+import javax.xml.namespace.QName;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -16,7 +17,7 @@ abstract class Command {
      * execute - this is an abstract command, which will be implemented at the subclass level.
      * @return String command message
      */
-    abstract String execute();
+    abstract String execute() throws NoItemException;
 }
 
 /**
@@ -308,8 +309,8 @@ class InventoryCommand extends Command {
  * and prints a message for certain items or an error message
  * @author Object Oriented Optimists (OOO)
  * @author Richard Volynski
- * @version 1.0
- * 6 July 2020
+ * @version 1.1
+ * 13 July 2020
  */
 class ItemSpecificCommand extends Command {
     private String verb;
@@ -330,17 +331,28 @@ class ItemSpecificCommand extends Command {
      * or prints an error message
      * @return String message
      */
-    String execute() {
-        try {
-            Item i = GameState.instance().getItemInVicinityNamed(this.noun);
-            if (i.getMessageForVerb(this.verb) != null) {
-                return i.getMessageForVerb(this.verb);
-            } else {
-                return String.format("You cannot '%s' the %s.", verb, i);
-            }
-        } catch (NoItemException e) {
-            return e.getMessage();
+    String execute() throws NoItemException {
+
+        switch (this.noun) {
+            case "":
+                return String.format("%s what? (usage: %s <what?>)", verb, verb);
+
+            default:
+                if (GameState.instance().ifItemExistsInInventory(noun)) {
+                    return GameState.instance().getItemFromInventoryNamed(noun).getMessageForVerb(verb);
+                }
         }
+//        try {
+//            Item i = GameState.instance().getItemInVicinityNamed(this.noun);
+//            if (i.getMessageForVerb(this.verb) != null) {
+//                return i.getMessageForVerb(this.verb);
+//            } else {
+//                return String.format("You cannot '%s' the %s.", verb, i);
+//            }
+//        } catch (NoItemException e) {
+//            return e.getMessage();
+//        }
+        return "Hi";
     }
 }
 

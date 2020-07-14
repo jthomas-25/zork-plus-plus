@@ -194,6 +194,15 @@ class GameState {
         return this.inventory;
     }
 
+    boolean hasItemSpecificCommand(String command) {
+        for (Item item : getInventory()) {
+            if (item.hasItemSpecificCommand(command)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * This method will add the passed Item to the player's inventory.
      * @param item The item to be added to the inventory.
@@ -255,6 +264,19 @@ class GameState {
             }
         }
         throw new NoItemException(String.format("You're not carrying a(n) %s.", name));
+    }
+
+    /**
+     * This method checks if an item exists in the user's inventory.
+     * @param name a string, containing the name of the desired item in player's inventory.
+     */
+    boolean ifItemExistsInInventory(String name) {
+        for (Item item : inventory) {
+            if (item.goesBy(name)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
