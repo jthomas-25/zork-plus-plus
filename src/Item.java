@@ -7,8 +7,8 @@ import java.util.Scanner;
  * they include {@link #primaryName primary name}, {@link #itemHolder itemHolder} (for interaction) and {@link #aliases aliases}.
  * @author Robert Carroll
  * @author Richard Volynski
- * @version 3.1
- * 13 July 2020
+ * @version 3.2
+ * 14 July 2020
  */
 public class Item {
     private String primaryName;
@@ -41,8 +41,8 @@ public class Item {
         line = s.nextLine();
         while (!line.equals("---")) {
             String[] commandParts = line.split(":");
-            String event = null;
-            String eventParameter = null;
+            String event = "";
+            String eventParameter = "";
 
             String verb = commandParts[0];
             if (commandParts.length == 1) {
@@ -67,12 +67,12 @@ public class Item {
                     ItemHolder itemEvent = new ItemHolder(event, eventParameter, message);
                     itemHolder.put(verb, itemEvent);
                 }
-                    else {
-                        String[] verbSplit = verb.split("\\[");
-                        verb = verbSplit[0];
+                else {
+                    String[] verbSplit = verb.split("\\[");
+                    verb = verbSplit[0];
 
-                        String[] verb2Split = verbSplit[1].split("\\(");
-                        event = verb2Split[0];
+                    String[] verb2Split = verbSplit[1].split("\\]");
+                    event = verb2Split[0];
 
                     if (event.contains(",")) {
                         String[] eventToSplit = event.split(",");
@@ -150,6 +150,29 @@ public class Item {
     }
 
     /**
+     * Gets the event for an Item that is associated with a given verb. The events indicates what happens
+     * to the Item after being acted upon by the given verb.
+     *
+     * @param verb a verb that has an associated event within the Item's {@link #itemHolder itemHolder}
+     * member variable.
+     * @return a string, representing the event name for a given verb.
+     */
+    String getEventForVerb(String verb) {
+        return itemHolder.get(verb).getEvent();
+    }
+
+    /**
+     * Gets the event parameter for an Item that is associated with a given verb.
+     *
+     * @param verb a verb that has an associated event within the Item's {@link #itemHolder itemHolder}
+     * member variable.
+     * @return a string, representing the event parameter for a given verb.
+     */
+    String getEventParamForVerb(String verb) {
+        return itemHolder.get(verb).getEventParameter();
+    }
+
+    /**
      * This method replaces the default toString method, returning a string
      * of the item's {@link #primaryName primary name}.
      *
@@ -169,30 +192,30 @@ public class Item {
         return weight;
     }
 
-    /**
-     * This method returns the contents of an Item.  The contents of the Item are other Items.
-     * This can be useful for items such as "chests" or "swords" where they may be comprised of things such as:
-     * a blade, hilt, diamond, etc.
-     *
-     * @return an arraylist, representing the {@link #contents contents} of an Item.
-     */
+//    /**
+//     * This method returns the contents of an Item.  The contents of the Item are other Items.
+//     * This can be useful for items such as "chests" or "swords" where they may be comprised of things such as:
+//     * a blade, hilt, diamond, etc.
+//     *
+//     * @return an arraylist, representing the {@link #contents contents} of an Item.
+//     */
 //    ArrayList<Item> getContents() {
 //        return this.contents;
 //    }
 //    TODO: hydrate item contents
 
-    /**
-     * Adds given Item to the {@link #contents contents} of this Item.
-     * @param item an Item to be added to {@link #contents contents}.
-     */
+//    /**
+//     * Adds given Item to the {@link #contents contents} of this Item.
+//     * @param item an Item to be added to {@link #contents contents}.
+//     */
 //    void addToContents(Item item) {
 //        this.contents.add(item);
 //    }
 
-    /**
-     * Removes given Item from the {@link #contents contents} of this Item.
-     * @param itemName name of item to remove from {@link #contents contents}.
-     */
+//    /**
+//     * Removes given Item from the {@link #contents contents} of this Item.
+//     * @param itemName name of item to remove from {@link #contents contents}.
+//     */
 //    void removeFromContents(String itemName) {
 //
 //        for (Item item : this.contents) {
@@ -203,6 +226,9 @@ public class Item {
 //
 //    }
 
+    boolean hasItemSpecificCommand (String itemSpecificCommand) {
+        return itemHolder.containsKey(itemSpecificCommand);
+    }
 }
 
 /**

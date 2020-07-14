@@ -17,7 +17,7 @@ abstract class Command {
      * execute - this is an abstract command, which will be implemented at the subclass level.
      * @return String command message
      */
-    abstract String execute() throws NoItemException;
+    abstract String execute() throws NoItemException, NoRoomException;
 }
 
 /**
@@ -265,7 +265,7 @@ class QuitCommand extends Command {
      * @return null
      */
     String execute() {
-        return null;
+        return "Event will be implemented soon";    //TODO implement
     }
 }
 
@@ -309,8 +309,8 @@ class InventoryCommand extends Command {
  * and prints a message for certain items or an error message
  * @author Object Oriented Optimists (OOO)
  * @author Richard Volynski
- * @version 1.1
- * 13 July 2020
+ * @version 1.2
+ * 14 July 2020
  */
 class ItemSpecificCommand extends Command {
     private String verb;
@@ -331,28 +331,28 @@ class ItemSpecificCommand extends Command {
      * or prints an error message
      * @return String message
      */
-    String execute() throws NoItemException {
+    String execute() throws NoItemException, NoRoomException {
+
+        String returnMessage = "";
 
         switch (this.noun) {
             case "":
-                return String.format("%s what? (usage: %s <what?>)", verb, verb);
-
+                return String.format("%s what? (usage: %s <what?>)", verb, noun);
             default:
+
                 if (GameState.instance().ifItemExistsInInventory(noun)) {
-                    return GameState.instance().getItemFromInventoryNamed(noun).getMessageForVerb(verb);
+                    Item item = GameState.instance().getItemFromInventoryNamed(noun);
+
+                    String eventName = item.getEventForVerb(verb);
+                    String eventParam = item.getEventParamForVerb(verb);
+
+                    if (!eventName.isEmpty()) {
+                        returnMessage = EventFactory.instance().triggerEvent(eventName, eventParam) + "\n";
+                    }
+                    return returnMessage += item.getMessageForVerb(verb);
                 }
         }
-//        try {
-//            Item i = GameState.instance().getItemInVicinityNamed(this.noun);
-//            if (i.getMessageForVerb(this.verb) != null) {
-//                return i.getMessageForVerb(this.verb);
-//            } else {
-//                return String.format("You cannot '%s' the %s.", verb, i);
-//            }
-//        } catch (NoItemException e) {
-//            return e.getMessage();
-//        }
-        return "Hi";
+        return String.format("You cannot '%s' the %s.", verb,noun);
     }
 }
 
@@ -550,7 +550,6 @@ class KillCommand extends Command {
      * @return //TODO implement
      */
     String execute() {
-        return null;    //TODO implement
+        return "Event will be implemented soon";    //TODO implement
     }
 }
-

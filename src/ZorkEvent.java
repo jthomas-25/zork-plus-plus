@@ -8,7 +8,7 @@ import java.util.Random;
  * they will be triggered when the player uses an item in a way that is recognizable to the game.</p>
  *
  * <ul>
- *   <li>When using {@link EventFactory#parse} to instantiate a ZorkEvent object, the proper syntax
+ *   <li>When using {@link EventFactory#triggerEvent} to instantiate a ZorkEvent object, the proper syntax
  * for the event string is as follows: eventName or eventName(optional parameters).</li>
  *
  *   <li>If attached to an item-specific command in a .zork file, an event must be written in
@@ -44,60 +44,72 @@ abstract class ZorkEvent {
 
 /**
  * A ScoreEvent represents a {@link ZorkEvent} that, when triggered, changes the player's score
- * by a positive number of points.
+ * by a positive number of hp.
  * Note that while the {@link GameState#setScore} method can also affect the player's score,
  * a ScoreEvent will only increase it.
  * @author John Thomas
- * @version 1.4
- * 10 July 2020
+ * @author Richard Volynski
+ * @version 1.5
+ * 14 July 2020
  */
 class ScoreEvent extends ZorkEvent {
     private int points;
 
     /**
-     * Constructs a ScoreEvent with the given number of points.
-     * @param points the number of points to be added to the player's score
-     * @throws IllegalArgumentException if the number of points is less than or equal to 0
+     * Constructs a ScoreEvent with the given number of hp.
+     * @param points the number of hp to be added to the player's score
+     * @throws IllegalArgumentException if the number of hp is less than or equal to 0
      */
     ScoreEvent(int points) throws IllegalArgumentException {
-        //TODO implement
+        this.points = points;
     }
 
     /**
-     * Adds this event's number of points to the player's score.
+     * Adds this event's number of hp to the player's score.
      * @return this event's message
      */
     String trigger() {
-        return null;    //TODO implement
+        int currentScore = GameState.instance().getScore();
+        currentScore += points;
+        GameState.instance().setScore(points);
+        return String.format("New Score: %d", points);
     }
 }
 
 /**
  * A WoundEvent represents a {@link ZorkEvent} that, when triggered, changes the player's health
- * by a nonzero number of points.
- * Note that a negative number of points will effectively heal the player.
+ * by a nonzero number of hp.
+ * Note that a negative number of hp will effectively heal the player.
  * @author John Thomas
- * @version 1.4
- * 10 July 2020
+ * @author Richard Volynski
+ * @version 1.5
+ * 14 July 2020
  */
 class WoundEvent extends ZorkEvent {
-    private int points;
+    private int hp;
 
     /**
-     * Constructs a WoundEvent with the given number of points.
-     * @param points the number of points to be subtracted from the player's health
-     * @throws IllegalArgumentException if the number of points is equal to 0
+     * Constructs a WoundEvent with the given number of hp.
+     * @param hp the number of points to be subtracted from the player's health
      */
-    WoundEvent(int points) throws IllegalArgumentException {
-        //TODO implement
+    WoundEvent(int hp) {
+        this.hp = hp;
     }
 
     /**
-     * Subtracts this event's number of points from the player's health.
+     * Subtracts this event's number of hp from the player's health.
      * @return a non-numeric message indicating the player's physical condition
      */
     String trigger() {
-        return null;    //TODO implement
+        int currentScore = GameState.instance().getScore();
+        currentScore = currentScore - hp;
+        GameState.instance().setScore(currentScore);
+        if (currentScore < 0) {
+            currentScore += hp;
+            GameState.instance().setScore(currentScore);
+            System.out.println("Due to diminishing health, the admin has granted you another chance to live");
+        }
+        return String.format("Health %s" + "\n" + "Score %d", hp, currentScore);
     }
 }
 
@@ -116,7 +128,7 @@ class DieEvent extends ZorkEvent {
      * @param message the message indicating that the player is dead and has lost the game
      */
     DieEvent(String message) {
-        //TODO implement
+
     }
 
     /**
@@ -124,7 +136,8 @@ class DieEvent extends ZorkEvent {
      * @return this event's "lose" message
      */
     String trigger() {
-        return null;    //TODO implement
+        return "Event will be implemented soon";    //TODO implement
+
     }
 }
 
@@ -154,7 +167,7 @@ class WinEvent extends ZorkEvent {
      * @return this event's "win" message   TODO implement/don't delete
      */
     String trigger() {
-        return null;    //TODO implement
+        return "Event will be implemented soon";    //TODO implement
     }
 }
 
@@ -173,8 +186,8 @@ class DropEvent extends ZorkEvent {
      * @param item the item to be dropped into the current room
      * @throws NoItemException if the item does not exist in the current room or the player's inventory
      */
-    DropEvent(Item item) throws NoItemException {
-        //TODO implement
+    DropEvent(String item) throws NoItemException {
+        this.item = GameState.instance().getItemFromInventoryNamed(item);
     }
 
     /**
@@ -184,7 +197,15 @@ class DropEvent extends ZorkEvent {
      * @return this event's message
      */
     String trigger() {
-        return null;    //TODO implement
+
+        if (item != null) {
+            GameState.instance().removeFromInventory(item);
+            GameState.instance().getAdventurersCurrentRoom().add(item);
+            return String.format("Item %s was dropped from inventory and placed in %s", item, GameState.instance().getAdventurersCurrentRoom().getName());
+        }
+        else {
+            return String.format("%s not found", item.getPrimaryName());
+        }
     }
 }
 
@@ -217,7 +238,7 @@ class DisappearEvent extends ZorkEvent {
      * @return this event's message
      */
     String trigger() {
-        return null;    //TODO implement
+        return "Event will be implemented soon";    //TODO implement
     }
 }
 
@@ -249,7 +270,7 @@ class TransformEvent extends ZorkEvent {
      * @return this event's message
      */
     String trigger() {
-        return null;    //TODO implement
+        return "Event will be implemented soon";    //TODO implement
     }
 }
 
@@ -280,7 +301,7 @@ class TeleportEvent extends ZorkEvent {
      * @return this event's message
      */
     String trigger() {
-        return null;    //TODO implement
+        return "Event will be implemented soon";    //TODO implement
     }
 }
 
@@ -304,7 +325,7 @@ class PotionEffect extends ZorkEvent {
      * Triggers the PotionEffect.
      */
     String trigger() {
-        return null;    //TODO implement
+        return "Event will be implemented soon";    //TODO implement
     }
 }
 

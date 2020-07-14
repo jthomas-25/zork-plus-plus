@@ -12,8 +12,8 @@ import java.util.Scanner;
  * Also, the Room Class contains lists of Exits.
  * @author Object Oriented Optimists (OOO)
  * @author Richard Volynski
- * @version 2.8
- * 13 July 2020
+ * @version 2.9
+ * 14 July 2020
  */
 public class Room {
     private Hashtable<String, Exit> exits;
@@ -171,7 +171,7 @@ public class Room {
         }
 
         for (Item i : contents) {
-            output = output + "\n" + String.format("There is a(n) %s here.", i);
+            output += "\n" + String.format("There is a(n) %s here.", i);
         }
         return output;
     }
