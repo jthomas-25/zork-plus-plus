@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 /**
  * Represents an in game item with unique attributes.  These attributes are represented as member variables
- * they include {@link #primaryName primary name}, {@link #itemHolder itemHolder} (for interaction) and {@link #aliases aliases}.
+ * they include {@link #primaryName primary name}, and {@link #aliases aliases}.
  * @author Robert Carroll
  * @author Richard Volynski
  * @version 3.3
@@ -13,7 +13,7 @@ import java.util.Scanner;
 public class Item {
     private String primaryName;
     private int weight;
-    private Hashtable<String, ItemHolder> itemHolder = new Hashtable<>();
+//    private Hashtable<String, ItemHolder> itemHolder = new Hashtable<>();
     private Hashtable<String, String[]> eventStringListHolder = new Hashtable<>();
     private ArrayList<String> aliases = new ArrayList<String>();
     private Hashtable<String, String> messages = new Hashtable<>();
@@ -43,6 +43,8 @@ public class Item {
         }
 
         line = s.nextLine();
+
+        String verb = "";
         while (!line.equals("---")) {
             String itemCommandString = line;
             if (!hasCorrectSyntax(itemCommandString)) {
@@ -50,10 +52,18 @@ public class Item {
             } else {
                 String[] commandParts = line.split(":");
                 String verbString = commandParts[0];
-                String message = commandParts[1];
+                String message = "";
+
+                if (commandParts.length == 1) {
+                    message = messages.get(verb) + "\n" + verbString;
+                    messages.put(verb,message);
+                }
+                else {
+                    message = commandParts[1];
+                }
 
                 String[] verbSplit = verbString.split("\\[");
-                String verb = verbSplit[0];
+                verb = verbSplit[0];
                 //System.out.println("Verb: " + verb);
                 messages.put(verb, message);
 
@@ -268,7 +278,7 @@ public class Item {
 //    }
 
     boolean hasItemSpecificCommand (String itemSpecificCommand) {
-        return itemHolder.containsKey(itemSpecificCommand);
+        return eventStringListHolder.containsKey(itemSpecificCommand);
     }
 }
 
@@ -294,42 +304,43 @@ class NoItemException extends Exception {
     }
 }
 
-class ItemHolder {
-    private String eventName;
-    private String eventParameter;
-    private String message;
-    
-    ItemHolder(String eventName, String eventParameter, String message) {
-        this.eventName = eventName;
-        this.eventParameter = eventParameter;
-        this.message = message;
-    }
-    
-    ItemHolder(String message) {
-        this.message = message;
-    }
-    
-    public String getEventName(String eventName) {
-        return eventName;
-    }
-    
-    public void setEventName(String eventName) {
-        this.eventName = eventName;
-    }
-    
-    public String getEventParameter(String verb) {
-        return eventParameter;
-    }
-    
-    public void setEventParameter(String eventParameter) {
-        this.eventParameter = eventParameter;
-    }
-    
-    public String getMessage() {
-        return message;
-    }
-    
-    public void setMessage(String message) {
-        this.message = message;
-    }
-}
+//class ItemHolder {
+//    private String eventName;
+//    private String eventParameter;
+//    private String message;
+//
+//    ItemHolder(String eventName, String eventParameter, String message) {
+//        this.eventName = eventName;
+//        this.eventParameter = eventParameter;
+//        this.message = message;
+//    }
+//
+//    ItemHolder(String message) {
+//        this.message = message;
+//    }
+//
+//    public String getEventName(String eventName) {
+//        return eventName;
+//    }
+//
+//    public void setEventName(String eventName) {
+//        this.eventName = eventName;
+//    }
+//
+//    public String getEventParameter(String verb) {
+//        return eventParameter;
+//    }
+//
+//    public void setEventParameter(String eventParameter) {
+//        this.eventParameter = eventParameter;
+//    }
+//
+//    public String getMessage() {
+//        return message;
+//    }
+//
+//    public void setMessage(String message) {
+//        this.message = message;
+//    }
+//}
+

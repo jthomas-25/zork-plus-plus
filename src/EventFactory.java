@@ -10,8 +10,8 @@ import com.sun.jdi.event.BreakpointEvent;
  * {@link ZorkEvent} objects.
  * @author John Thomas
  * @author Richard Volynski
- * @version 2.9
- * 14 July 2020
+ * @version 3.0
+ * 15 July 2020
  */
 class EventFactory {
     private static EventFactory singleInstance = null;
@@ -38,8 +38,7 @@ class EventFactory {
      * Analyzes the given string to obtain information about an event, and produces
      * the corresponding {@link ZorkEvent} object.
      *
-     * @param eventName  the event's info (with optional parameters)
-     * @param eventParam - event parameters
+     * @param eventString  the event's info (with optional parameters)
      * @return the {@link ZorkEvent} object relevant to this string
      * @throws IllegalArgumentException if this string does not match the proper event syntax
      */
@@ -69,9 +68,11 @@ class EventFactory {
                             event = new WinEvent();
                             break;
                     }
+                    break;
+
                 default:
                     int points;
-                    String message;;
+                    String message;
                     switch (eventName) {
                         case "Die":
                             message = sa[1];
@@ -81,6 +82,7 @@ class EventFactory {
                             points = Integer.parseInt(sa[1]);
                             event = new ScoreEvent(points);
                             break;
+
     /*
                         case "Teleport":
                             String roomName = sa[1];
@@ -102,10 +104,18 @@ class EventFactory {
                             points = Integer.parseInt(sa[1]);
                             event = new WoundEvent(points);
                             break;
+                        case "Disappear":
+                            event = new DisappearEvent(sa[1]);
+                            break;
+                        case "Drop":
+                            event = new DropEvent(sa[1]);
+                            break;
+
                     }
             }
             return event;
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             return null;    //TODO implement
         }
 /*

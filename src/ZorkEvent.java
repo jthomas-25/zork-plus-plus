@@ -40,7 +40,7 @@ abstract class ZorkEvent {
      * Activates this event, which modifies the game state.
      * @return this event's message
      */
-    abstract String trigger();
+    abstract String trigger() throws NoItemException;
 }
 
 /**
@@ -79,7 +79,6 @@ class ScoreEvent extends ZorkEvent {
         GameState.instance().setScore(currentScore);
         this.message = String.format("Score: %d", currentScore);
         return this.message + "\n";
-        //return null;    //TODO implement
     }
 }
 
@@ -118,7 +117,6 @@ class WoundEvent extends ZorkEvent {
         GameState.instance().setHealth(playersHealth);
         this.message = String.format("Health: %s", playersHealth);
         return this.message + "\n";
-        //return null;    //TODO implement
     }
 }
 
@@ -155,7 +153,6 @@ class DieEvent extends ZorkEvent {
         GameState.instance().killPlayer();
         GameState.instance().endGame();
         return this.message;
-        //return null;    //TODO implement
     }
 }
 
@@ -186,15 +183,14 @@ class WinEvent extends ZorkEvent {
 
     /**
      * Ends the game in a "win" state, and returns a message telling the player they have won and ask
-     * if they want to start over. TODO implement/don't delete
+     * if they want to start over.
      *
      * If the user types yes, reset the game. If user types no, end the game without saving user progress.
-     * @return this event's "win" message   TODO implement/don't delete
+     * @return this event's "win" message
      */
     String trigger() {
         GameState.instance().endGame();
         return this.message;
-        //return null;    //TODO implement
     }
 }
 
@@ -240,8 +236,9 @@ class DropEvent extends ZorkEvent {
  * from the game entirely: the item will no longer exist in the current room,
  * the player's inventory, or the dungeon.
  * @author John Thomas
- * @version 1.4
- * 10 July 2020
+ * @author Richard Volynski
+ * @version 1.5
+ * 15 July 2020
  */
 class DisappearEvent extends ZorkEvent {
     private String itemName;
@@ -253,7 +250,7 @@ class DisappearEvent extends ZorkEvent {
      * the player's inventory, or the dungeon
      */
     DisappearEvent(String itemName) throws NoItemException {
-        //TODO implement
+       this.itemName = itemName;
     }
 
     /**
@@ -264,7 +261,14 @@ class DisappearEvent extends ZorkEvent {
      * @return this event's message
      */
     String trigger() {
-        return "Event will be implemented soon";    //TODO implement
+        GameState.instance().getAdventurersCurrentRoom().removeItem(itemName);
+        try {
+            GameState.instance().removeFromInventory(itemName);
+        }
+        catch (Exception e) {
+        }
+        GameState.instance().getDungeon().removeItem(itemName);
+        return String.format("item was removed from user's inventory, %s, and %s",GameState.instance().getAdventurersCurrentRoom(),GameState.instance().getDungeon());
     }
 }
 

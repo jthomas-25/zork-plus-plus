@@ -236,6 +236,15 @@ public class Dungeon {
     void add(Item item) {
         items.put(item.getPrimaryName(), item);
     }
+    void removeItem(Item item) {
+        items.remove(item);
+    }
+    void removeItem(String itemName) {
+        Item item = getItem(itemName);
+        if (item != null) {
+            removeItem(item);
+        }
+    }
 }
 
 /**

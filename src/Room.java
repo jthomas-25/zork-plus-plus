@@ -12,8 +12,8 @@ import java.util.Scanner;
  * Also, the Room Class contains lists of Exits.
  * @author Object Oriented Optimists (OOO)
  * @author Richard Volynski
- * @version 2.9
- * 14 July 2020
+ * @version 3.0
+ * 15 July 2020
  */
 public class Room {
     private Hashtable<String, Exit> exits;
@@ -341,6 +341,17 @@ public class Room {
     }
 
     /**
+     * removeItem - this method removes an item from the Room's list of items
+     * @param itemName - item to remove
+     */
+    void removeItem(String itemName) {
+        Item item = getItemNamed(itemName);
+        if (item != null) {
+            this.contents.remove(item);
+        }
+    }
+
+    /**
      * remove - This method removes multiple items while iterating over them.
      * @param itr - the iterator which will do the removing
      */
@@ -362,6 +373,22 @@ public class Room {
             }
         }
         return null;
+    }
+
+    /**
+     * hasItemNamed - this method checks if user inputted item matches the name
+     * of an item in the user's current room and returns the item if found.
+     * Otherwise, return null.
+     * @param name - item name (user input)
+     * @return true or false
+     */
+    boolean hasItemNamed(String name) {
+        for (Item item : contents) {
+            if (item.goesBy(name)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

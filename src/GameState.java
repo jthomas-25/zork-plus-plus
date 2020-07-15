@@ -11,8 +11,8 @@ import java.util.Scanner;
  * @author Object Oriented Optimists (OOO)
  * @author John Thomas
  * @author Richard Volynski
- * @version 3.0
- * 14 July 2020
+ * @version 3.1
+ * 15 July 2020
  */
 class GameState {
     private final String VERSION = "Zork++";
@@ -20,7 +20,7 @@ class GameState {
     private Room currentRoom = null;
     private String dungeonDesc = "Welcome to the Dungeon. Enjoy but you won't come out how you came in!";
     private ArrayList<Item> inventory;
-    private final int MAX_INVENTORY_WEIGHT = 40;
+    private final int MAX_INVENTORY_WEIGHT = 500000;
     private int inventoryWeight;
     private int score;
     private int health;
@@ -235,6 +235,19 @@ class GameState {
     void removeFromInventory(Iterator<Item> itr, Item item) {
         itr.remove();
         inventoryWeight -= item.getWeight();
+    }
+
+    /**
+     * This method will remove the passed Item from the player's {@link #inventory inventory}.
+     * @param itemName The item to be removed from inventory.
+     */
+    void removeFromInventory(String itemName) throws NoItemException {
+        try {
+            Item item = getItemFromInventoryNamed(itemName);
+            removeFromInventory(item);
+        }
+        catch (NoItemException e) {
+        }
     }
 
     /**

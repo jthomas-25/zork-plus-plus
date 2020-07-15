@@ -8,8 +8,8 @@ import java.util.Iterator;
  * this abstract Command class.
  * @author Object Oriented Optimists (OOO)
  * @author Richard Volynski
- * @version 3.1
- * 13 July 2020
+ * @version 3.2
+ * 15 July 2020
  */
 abstract class Command {
     
@@ -17,7 +17,7 @@ abstract class Command {
      * execute - this is an abstract command, which will be implemented at the subclass level.
      * @return String command message
      */
-    abstract String execute();
+    abstract String execute() throws NoItemException;
 }
 
 /**
@@ -587,7 +587,7 @@ class UnlockCommand extends Command {
         this.dir = dir;
     }
 
-    String execute() {
+    String execute() throws NoItemException {
         ZorkEvent event = EventFactory.instance().parse(String.format("Unlock(%s)", this.dir));
         return event.trigger();
     }
