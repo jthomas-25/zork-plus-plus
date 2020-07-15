@@ -356,9 +356,11 @@ class ItemSpecificCommand extends Command {
                     String[] eventStrings = item.getEventStrings(this.verb);
                     if (eventStrings != null) {
                         for (String eventString : eventStrings) {
-                            System.out.println(eventString);
+                            //System.out.println("Event string: " + eventString);
                             ZorkEvent event = EventFactory.instance().parse(eventString);
-                            returnMessage += event.trigger();
+                            if (event != null) {
+                                returnMessage += event.trigger();
+                            }
                             //returnMessage = EventFactory.instance().triggerEvent(eventName, eventParam) + "\n";
                         }
                     }

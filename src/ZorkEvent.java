@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Random;
 
 
@@ -74,9 +75,11 @@ class ScoreEvent extends ZorkEvent {
      */
     String trigger() {
         int currentScore = GameState.instance().getScore();
-        GameState.instance().setScore(currentScore + points);
-        return null;    //TODO implement
-        //return String.format("New Score: %d", points);
+        currentScore += points;
+        GameState.instance().setScore(currentScore);
+        this.message = String.format("Score: %d", currentScore);
+        return this.message + "\n";
+        //return null;    //TODO implement
     }
 }
 
@@ -111,9 +114,11 @@ class WoundEvent extends ZorkEvent {
      */
     String trigger() {
         int playersHealth = GameState.instance().getHealth();
-        GameState.instance().setHealth(playersHealth - damagePoints);
-        return null;    //TODO implement
-        //return String.format("Health %s" + "\n" + "Score %d", GameState.instance().getHealth(), GameState.instance().getScore());
+        playersHealth -= damagePoints;
+        GameState.instance().setHealth(playersHealth);
+        this.message = String.format("Health: %s", playersHealth);
+        return this.message + "\n";
+        //return null;    //TODO implement
     }
 }
 
@@ -301,11 +306,10 @@ class TransformEvent extends ZorkEvent {
  * Note that this room may be one the player has already visited, or even one
  * that is not otherwise reachable (e.g. a room with no exits).
  * @author John Thomas
- * @version 1.4
- * 14 July 2020
+ * @version 1.5
+ * 15 July 2020
  */
 class TeleportEvent extends ZorkEvent {
-    private String roomName;
     private Room newRoom;
     private Random rng;
 
@@ -313,6 +317,7 @@ class TeleportEvent extends ZorkEvent {
      * Constructs a new TeleportEvent with no room name.
      */
     TeleportEvent() {
+        rng = new Random();
     }
 
     /**
@@ -332,8 +337,20 @@ class TeleportEvent extends ZorkEvent {
      * @return this event's message
      */
     String trigger() {
+        ArrayList<Room> rooms = GameState.instance().getDungeon().getRooms();
+        String currentRoomName = GameState.instance().getAdventurersCurrentRoom().getName();
+
+        boolean sameRoom = false;
+        do {
+            int randomNumber = rng.nextInt(rooms.size());
+            this.newRoom = rooms.get(randomNumber);
+            String newRoomName = this.newRoom.getName();
+            sameRoom = newRoomName.equals(currentRoomName);
+        } while (sameRoom);
+            
         GameState.instance().setAdventurersCurrentRoom(this.newRoom);
-        return null;    //TODO implement
+        this.message = "\n" + this.newRoom.describe();
+        return this.message;
     }
 }
 

@@ -12,7 +12,7 @@ import java.util.Scanner;
  * as an ArrayList does.
  * @author Object Oriented Optimists (OOO)
  * @version 2.6
- * 13 July 2020
+ * 15 July 2020
  */
 public class Dungeon {
     private String title = "Simple Dungeon";    //default
@@ -130,6 +130,14 @@ public class Dungeon {
     private void init() {
         rooms = new ArrayList<>();
         items = new Hashtable<>();
+    }
+
+    ArrayList<Room> getRooms() {
+        return rooms;
+    }
+
+    int getNumRooms() {
+        return rooms.size();
     }
 
     /**

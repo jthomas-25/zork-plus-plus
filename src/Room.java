@@ -151,22 +151,23 @@ public class Room {
         String output = "";
         if (!beenHere) {
             beenHere = true;
-            output = name + "\n" + this.desc + "\n" + "\n";
-        }
-        else if (this.roomDescriptionNeeded) {
+            output = name + "\n" + this.desc + "\n";
+        } else if (this.roomDescriptionNeeded) {
             this.roomDescriptionNeeded = false;
-            output = name + "\n" + this.desc + "\n" + "\n";
-        }
-        else {
+            output = name + "\n" + this.desc + "\n";
+        } else {
             output = name + "\n";
         }
 
-        // Show all balances in hash table
         Enumeration<String> directions = exits.keys();
         while (directions.hasMoreElements()) {
             String dir = directions.nextElement();
             Exit exit = exits.get(dir);
-            output += exit.describe() + "\n";
+            output += "\n" + exit.describe();;
+        }
+        
+        if (!contents.isEmpty()) {
+            output += "\n";
         }
 
         for (Item i : contents) {
@@ -185,8 +186,7 @@ public class Room {
         Exit exit = exits.get(dir);
         if (exit == null) {
             return this;
-        }
-        else {
+        } else {
             Room newRoom = exit.getDest();
             if (exit.isLocked()) {
                 throw new Exit.ExitLockedException("The exit to " + newRoom.getName() + " is locked.");
