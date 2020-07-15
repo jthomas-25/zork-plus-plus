@@ -40,7 +40,7 @@ abstract class ZorkEvent {
      * Activates this event, which modifies the game state.
      * @return this event's message
      */
-    abstract String trigger() throws NoItemException;
+    abstract String trigger(String noun) throws NoItemException;
 }
 
 /**
@@ -73,7 +73,7 @@ class ScoreEvent extends ZorkEvent {
      * Adds this event's number of points to the player's score.
      * @return this event's message
      */
-    String trigger() {
+    String trigger(String noun) {
         int currentScore = GameState.instance().getScore();
         currentScore += points;
         GameState.instance().setScore(currentScore);
@@ -111,7 +111,7 @@ class WoundEvent extends ZorkEvent {
      * Subtracts this event's number of damage points from the player's health.
      * @return a non-numeric message indicating the player's physical condition
      */
-    String trigger() {
+    String trigger(String noun) {
         int playersHealth = GameState.instance().getHealth();
         playersHealth -= damagePoints;
         GameState.instance().setHealth(playersHealth);
@@ -149,7 +149,7 @@ class DieEvent extends ZorkEvent {
      * Ends the game in a "lose" state, and returns a losing message telling the player they are dead.
      * @return this event's "lose" message
      */
-    String trigger() {
+    String trigger(String noun) {
         GameState.instance().killPlayer();
         GameState.instance().endGame();
         return this.message;
@@ -188,7 +188,7 @@ class WinEvent extends ZorkEvent {
      * If the user types yes, reset the game. If user types no, end the game without saving user progress.
      * @return this event's "win" message
      */
-    String trigger() {
+    String trigger(String noun) {
         GameState.instance().endGame();
         return this.message;
     }
@@ -219,7 +219,7 @@ class DropEvent extends ZorkEvent {
      * and the player's inventory remain unchanged.
      * @return this event's message
      */
-    String trigger() {
+    String trigger(String noun) {
         if (this.item != null) {
             GameState.instance().removeFromInventory(this.item);
             GameState.instance().getAdventurersCurrentRoom().add(this.item);
@@ -250,7 +250,7 @@ class DisappearEvent extends ZorkEvent {
      * the player's inventory, or the dungeon
      */
     DisappearEvent(String itemName) throws NoItemException {
-       this.itemName = itemName;
+        //this.itemName = itemName;   itemName is passed to trigger event
     }
 
     /**
@@ -260,7 +260,8 @@ class DisappearEvent extends ZorkEvent {
      * dungeon (if it exists there).
      * @return this event's message
      */
-    String trigger() {
+    String trigger(String noun) {
+        this.itemName = noun;
         GameState.instance().getAdventurersCurrentRoom().removeItem(itemName);
         try {
             GameState.instance().removeFromInventory(itemName);
@@ -268,16 +269,16 @@ class DisappearEvent extends ZorkEvent {
         catch (Exception e) {
         }
         GameState.instance().getDungeon().removeItem(itemName);
-        return String.format("item was removed from user's inventory, %s, and %s",GameState.instance().getAdventurersCurrentRoom(),GameState.instance().getDungeon());
+        return String.format("\"%s\" was removed from user's inventory, %s, and %s", itemName, GameState.instance().getAdventurersCurrentRoom().getName(), GameState.instance().getDungeon().getTitle());
     }
 }
 
 /**
  * A TransformEvent represents a {@link ZorkEvent} that, when triggered, removes an item
  * from the game entirely and replaces it with a previously nonexistent item.
- * @author John Thomas
- * @version 1.5
- * 13 July 2020
+ * @author Richard Volynski
+ * @version 1.6
+ * 15 July 2020
  */
 class TransformEvent extends ZorkEvent {
     private String nameOfItemToReplace;
@@ -285,13 +286,12 @@ class TransformEvent extends ZorkEvent {
 
     /**
      * Constructs a new TransformEvent with the given item names.
-     * @param nameOfItemToReplace the name of the item to be replaced
      * @param primaryNameOfNewItem the name of the brand-new item
      * @throws NoItemException if the item to be replaced does not exist in the current room or the player's inventory,
      * or if the new item does not exist in the dungeon
      */
-    TransformEvent(String nameOfItemToReplace, String primaryNameOfNewItem) {
-        //TODO implement
+    TransformEvent(String primaryNameOfNewItem) {
+        this.primaryNameOfNewItem = primaryNameOfNewItem;
     }
 
     /**
@@ -299,8 +299,24 @@ class TransformEvent extends ZorkEvent {
      * are known by these names, respectively.
      * @return this event's message
      */
-    String trigger() {
-        return "Event will be implemented soon";    //TODO implement
+    String trigger(String noun) {
+        this.nameOfItemToReplace = noun;
+
+        //removed item from everywhere
+//        GameState.instance().getAdventurersCurrentRoom().removeItem(nameOfItemToReplace);
+        try {
+            GameState.instance().removeFromInventory(nameOfItemToReplace);
+            Item item = GameState.instance().getDungeon().getItem(primaryNameOfNewItem);
+            if (item != null) {
+                GameState.instance().addToInventory(item);
+            }
+        }
+        catch (Exception e) {
+        }
+//        GameState.instance().getDungeon().removeItem(nameOfItemToReplace);
+
+        return String.format("\n\"%s\" was removed from user's inventory and replaced by %s", nameOfItemToReplace,
+                primaryNameOfNewItem);
     }
 }
 
@@ -340,7 +356,7 @@ class TeleportEvent extends ZorkEvent {
      * Randomly moves the player to another room in the dungeon, if the room exists.
      * @return this event's message
      */
-    String trigger() {
+    String trigger(String noun) {
         ArrayList<Room> rooms = GameState.instance().getDungeon().getRooms();
         String currentRoomName = GameState.instance().getAdventurersCurrentRoom().getName();
 
@@ -377,7 +393,7 @@ class PotionEffect extends ZorkEvent {
     /**
      * Triggers the PotionEffect.
      */
-    String trigger() {
+    String trigger(String noun) {
         return "Event will be implemented soon";    //TODO implement
     }
 }
@@ -405,7 +421,7 @@ class UnlockEvent extends ZorkEvent {
      * @return this event's message indicating that the exit has been unlocked
      * or that the unlocking was unsuccessful
      */
-    String trigger() {
+    String trigger(String noun) {
         try {
             Room currentRoom = GameState.instance().getAdventurersCurrentRoom();
             currentRoom.unlockExit(this.dir);

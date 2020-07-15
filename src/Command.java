@@ -359,7 +359,7 @@ class ItemSpecificCommand extends Command {
                             //System.out.println("Event string: " + eventString);
                             ZorkEvent event = EventFactory.instance().parse(eventString);
                             if (event != null) {
-                                returnMessage += event.trigger();
+                                returnMessage += event.trigger(noun);
                             }
                             //returnMessage = EventFactory.instance().triggerEvent(eventName, eventParam) + "\n";
                         }
@@ -589,6 +589,6 @@ class UnlockCommand extends Command {
 
     String execute() throws NoItemException {
         ZorkEvent event = EventFactory.instance().parse(String.format("Unlock(%s)", this.dir));
-        return event.trigger();
+        return event.trigger("");
     }
 }

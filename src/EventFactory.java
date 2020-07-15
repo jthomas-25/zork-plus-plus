@@ -53,11 +53,11 @@ class EventFactory {
                         case "Die":
                             event = new DieEvent();
                             break;
-    /*
+
                         case "Disappear":
-                            event = new DisappearEvent();
+                            event = new DisappearEvent(""); //TODO
                             break;
-                        case "Drop":
+    /*                    case "Drop":
                             event = new DropEvent();
                             break;
     */
@@ -88,10 +88,10 @@ class EventFactory {
                             String roomName = sa[1];
                             event = new TeleportEvent(roomName);
                             break;
-                        case "Transform":
-                            event = new TransformEvent();
+    */                    case "Transform":
+                            event = new TransformEvent(sa[1]);
                             break;
-    */
+
                         case "Unlock":
                             String exitDir = sa[1];
                             event = new UnlockEvent(exitDir);
@@ -103,9 +103,6 @@ class EventFactory {
                         case "Wound":
                             points = Integer.parseInt(sa[1]);
                             event = new WoundEvent(points);
-                            break;
-                        case "Disappear":
-                            event = new DisappearEvent(sa[1]);
                             break;
                         case "Drop":
                             event = new DropEvent(sa[1]);
@@ -152,7 +149,7 @@ class EventFactory {
                 event = new DisappearEvent(eventParam);
                 break;
             case "transform":
-                event = new TransformEvent(eventName,eventParam);
+                event = new TransformEvent(eventParam);
                 break;
 /*
             case "teleport":
@@ -162,6 +159,6 @@ class EventFactory {
             default:
                 throw new IllegalArgumentException("Event not found: " + eventName);
         }
-        return event.trigger();
+        return event.trigger("");
     }
 }
