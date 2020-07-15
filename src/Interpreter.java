@@ -11,8 +11,8 @@ import java.util.Scanner;
  * inputs a command, it should use the CommandFactory to instantiate a new Command object and execute it.
  * If the user enters "q", it terminates the program.
  * @author Object Oriented Optimists (OOO)
- * @version 2.9
- * 14 July 2020
+ * @version 3.0
+ * 15 July 2020
  */
 public class Interpreter {
     private String commandEntered;
@@ -36,17 +36,18 @@ public class Interpreter {
             assert true; // essentially do nothing
         }
 
+        GameState state = GameState.instance();
         Dungeon dungeon = null;
         try {
             if (defaultZorkFile.endsWith(".sav")) {
-                GameState.instance().restore(defaultZorkFile);
-                dungeon = GameState.instance().getDungeon();
+                state.restore(defaultZorkFile);
+                dungeon = state.getDungeon();
             } else {
                 dungeon = new Dungeon(defaultZorkFile, true);
                 if (dungeon.getEntry() == null) {
                     return;
                 }
-                GameState.instance().initialize(dungeon);
+                state.initialize(dungeon);
             }
         } catch (Exception e) {
             System.out.println("Exception happened: " + e);
@@ -59,7 +60,7 @@ public class Interpreter {
         System.out.println(dungeon.getEntry().describe());
 
         String commandEntered = "";
-        while (!commandEntered.equalsIgnoreCase("q")) {
+        while (!state.gameIsOver()) {
             System.out.print("> ");
             commandEntered = stdin.nextLine();
             Command command;
@@ -73,7 +74,7 @@ public class Interpreter {
                 case "unlock exit":
                     System.out.print("Which exit? Enter a direction: ");
                     String exitDir = stdin.nextLine();
-                    command = CommandFactory.instance().parse(commandEntered.replace(" ", String.format(" %s ", exitDir)));
+                    command = CommandFactory.instance().parse(String.join(" ", "unlock", exitDir, "exit"));
                 break;
                 default:
                     command = CommandFactory.instance().parse(commandEntered);

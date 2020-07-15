@@ -48,10 +48,11 @@ public class Dungeon {
                 continue;
             }
             if (lineNumber == 2) {
-                if (line.equals("Zork III")) {
+                String version = GameState.instance().getVersion();
+                if (line.equals(version)) {
                     continue;
                 } else {
-                    throw new IllegalDungeonFormatException("Dungeon file is incompatible with the current version of Zork");
+                    throw new IllegalDungeonFormatException("Dungeon file is incompatible with the current version of Zork (" + version + ")");
                 }
             }
 

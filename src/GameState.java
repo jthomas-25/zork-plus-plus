@@ -15,6 +15,7 @@ import java.util.Scanner;
  * 14 July 2020
  */
 class GameState {
+    private final String VERSION = "Zork++";
     private Dungeon dungeon = null;
     private Room currentRoom = null;
     private String dungeonDesc = "Welcome to the Dungeon. Enjoy but you won't come out how you came in!";
@@ -67,6 +68,10 @@ class GameState {
 
         gameOver = false;
         playerDead = false;
+    }
+    
+    String getVersion() {
+        return VERSION;
     }
 
     /**
@@ -154,8 +159,8 @@ class GameState {
         File file = new File(fileName);
         Scanner gameScanner = new Scanner(file);
         String version = gameScanner.nextLine().split(" save data")[0];
-        if (!version.equals("Zork++")) {
-            throw new IllegalSaveFormatException("Save file incompatible with current version of Zork (Zork++).");
+        if (!version.equals(VERSION)) {
+            throw new IllegalSaveFormatException("Save file incompatible with current version of Zork (" + VERSION + ").");
         }
         String secLine = gameScanner.nextLine();  //reads Dungeon file name
         String[] secLineSplit = secLine.split(": ");
@@ -272,7 +277,7 @@ class GameState {
      * This method checks if an item exists in the user's inventory.
      * @param name a string, containing the name of the desired item in player's inventory.
      */
-    boolean ifItemExistsInInventory(String name) {
+    boolean itemExistsInInventory(String name) {
         for (Item item : inventory) {
             if (item.goesBy(name)) {
                 return true;

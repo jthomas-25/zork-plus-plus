@@ -7,21 +7,23 @@ import java.util.Scanner;
  * they include {@link #primaryName primary name}, {@link #itemHolder itemHolder} (for interaction) and {@link #aliases aliases}.
  * @author Robert Carroll
  * @author Richard Volynski
- * @version 3.2
- * 14 July 2020
+ * @version 3.3
+ * 15 July 2020
  */
 public class Item {
     private String primaryName;
     private int weight;
-    private Hashtable<String, ItemHolder> itemHolder = new Hashtable<String, ItemHolder>();
+    private Hashtable<String, ItemHolder> itemHolder = new Hashtable<>();
+    private Hashtable<String, String[]> eventStringListHolder = new Hashtable<>();
     private ArrayList<String> aliases = new ArrayList<String>();
+    private Hashtable<String, String> messages = new Hashtable<>();
 //    private ArrayList<Item> contents = new ArrayList<>();
 
     /**
      * Default constructor, takes a Scanner object in order to hydrate the item.
      * Assigning essential values to the member variables.
      */
-    Item (Scanner s) throws NoItemException {
+    Item(Scanner s) throws NoItemException {
         String line = s.nextLine(); //name, aliases
         if (line.equals("===") || line.equals("---")) {
             throw new NoItemException();
@@ -33,67 +35,85 @@ public class Item {
             aliases.add(itemNameSplit[i]);
         }
 
-        line = s.nextLine();
-        this.weight = Integer.parseInt(line);
-
-        String lastVerb = null;
+        try {
+            line = s.nextLine();
+            this.weight = Integer.parseInt(line);
+        } catch (Exception e) {
+            throw new NoItemException("Item weight required.");
+        }
 
         line = s.nextLine();
         while (!line.equals("---")) {
-            String[] commandParts = line.split(":");
-            String event = "";
-            String eventParameter = "";
+            String itemCommandString = line;
+            if (!hasCorrectSyntax(itemCommandString)) {
+                throw new NoItemException("Usage: verb:message | verb[eventName]:message | verb[eventName(eventParameter)]:message");
+            } else {
+                String[] commandParts = line.split(":");
+                String verbString = commandParts[0];
+                String message = commandParts[1];
 
-            String verb = commandParts[0];
-            if (commandParts.length == 1) {
-                itemHolder.get(lastVerb).setMessage(itemHolder.get(lastVerb).getMessage() + "\n" + verb);
-                line = s.nextLine();
-                continue;
-            }
-            String message = commandParts[1];
+                String[] verbSplit = verbString.split("\\[");
+                String verb = verbSplit[0];
+                //System.out.println("Verb: " + verb);
+                messages.put(verb, message);
 
-            if (verb.contains("[") && verb.contains("]")) {
-
-                if (verb.contains("(") && verb.contains(")")) {
-                   String[] verbSplit = verb.split("\\[");
-                   verb = verbSplit[0];
-
-                   String[] verb2Split = verbSplit[1].split("\\(");
-                   event = verb2Split[0];
-
-                   String[] verb3split = verb2Split[1].split("\\)");
-                   eventParameter = verb3split[0];
-
-                    ItemHolder itemEvent = new ItemHolder(event, eventParameter, message);
-                    itemHolder.put(verb, itemEvent);
+                //System.out.println(verbString);
+                boolean hasEvents = verbSplit.length > 1;
+                if (hasEvents) {
+                    String eventListString = verbSplit[1].replace("]", "");
+                    String[] eventStrings = eventListString.split(",");
+/*
+                    //Debugging loop
+                    for (String eventString : eventStrings) {
+                        System.out.println("\tEvent string: " + eventString);
+                    }
+*/
+                    eventStringListHolder.put(verb, eventStrings);
                 }
-                else {
-                    String[] verbSplit = verb.split("\\[");
-                    verb = verbSplit[0];
+                //System.out.println("Message: " + message);
+                line = s.nextLine();
+            }
+        }
+    }
 
-                    String[] verb2Split = verbSplit[1].split("\\]");
-                    event = verb2Split[0];
+    private static boolean hasCorrectSyntax(String itemCommandString) {
+        String verb = itemCommandString.split(":")[0];
+        //String message = itemCommandString.split(":")[1];
 
-                    if (event.contains(",")) {
-                        String[] eventToSplit = event.split(",");
-                        for (String event0 : eventToSplit) {
-                            ItemHolder itemEvent = new ItemHolder(event0, eventParameter, message);
-                            itemHolder.put(verb, itemEvent);
+        if (!containsBrackets(verb)) {
+            return true;
+        } else {
+            int leftBracketPos = verb.indexOf("[");
+            int rightBracketPos = verb.indexOf("]");
+            boolean containsClosedBrackets = leftBracketPos < rightBracketPos;
+            if (containsClosedBrackets) {
+                String eventListString = verb.substring(leftBracketPos + 1, rightBracketPos);
+                String[] eventStrings = eventListString.split(",");
+                for (String eventString : eventStrings) {
+                    if (containsParens(eventString)) {
+                        if (!containsClosedParens(eventString)) {
+                           return false;
                         }
                     }
-                    else {
-                        ItemHolder itemEvent = new ItemHolder(event, eventParameter, message);
-                        itemHolder.put(verb, itemEvent);
-                    }
                 }
+                return true;
+                    
+            } else {
+                return false;
             }
-            else {
-                ItemHolder itemEvent = new ItemHolder(event, eventParameter, message);
-                itemHolder.put(verb, itemEvent);
-            }
-            lastVerb = verb;
-            line = s.nextLine();
         }
+    }
+
+    static boolean containsBrackets(String s) {
+        return s.contains("[") && s.contains("]");
+    }
+    static boolean containsParens(String s) {
+        return s.contains("\\(") && s.contains(")");
+    }
+    static boolean containsClosedParens(String s) {
+        int leftParenPos = s.indexOf("\\(");
+        int rightParenPos = s.indexOf(")");
+        return leftParenPos < rightParenPos;
     }
 
 //    /**
@@ -146,7 +166,18 @@ public class Item {
      * @return a string, representing the message for the given verb.
      */
     String getMessageForVerb(String verb) {
-        return itemHolder.get(verb).getMessage();
+        return messages.get(verb);
+/*
+        if (itemHolder.get(verb) != null) {
+            return itemHolder.get(verb).getMessage();
+        } else {
+            return null;
+        }
+*/
+    }
+
+    String[] getEventStrings(String verb) {
+        return eventStringListHolder.get(verb);
     }
 
     /**
@@ -157,10 +188,15 @@ public class Item {
      * member variable.
      * @return a string, representing the event name for a given verb.
      */
-    String getEventForVerb(String verb) {
-        return itemHolder.get(verb).getEvent();
+/*
+    String getEventName(String verb) {
+        if (itemHolder.get(verb) != null) {
+            return itemHolder.get(verb).getEventName();
+        } else {
+            return null;
+        }
     }
-
+*/
     /**
      * Gets the event parameter for an Item that is associated with a given verb.
      *
@@ -168,10 +204,15 @@ public class Item {
      * member variable.
      * @return a string, representing the event parameter for a given verb.
      */
-    String getEventParamForVerb(String verb) {
-        return itemHolder.get(verb).getEventParameter();
+/*
+    String getEventParam(String verb) {
+        if (itemHolder.get(verb) != null) {
+            return itemHolder.get(verb).getEventParameter();
+        } else {
+            return null;
+        }
     }
-
+*/
     /**
      * This method replaces the default toString method, returning a string
      * of the item's {@link #primaryName primary name}.
@@ -234,6 +275,7 @@ public class Item {
 /**
  * Thrown when a method attempts to return an {@link Item} where none can be found.
  * @author John Thomas
+ * @version 1.0
  */
 class NoItemException extends Exception {
 
@@ -253,38 +295,41 @@ class NoItemException extends Exception {
 }
 
 class ItemHolder {
-    private String event;
+    private String eventName;
     private String eventParameter;
     private String message;
-
-    public String getEvent() {
-        return event;
+    
+    ItemHolder(String eventName, String eventParameter, String message) {
+        this.eventName = eventName;
+        this.eventParameter = eventParameter;
+        this.message = message;
     }
-
-    public void setEvent(String event) {
-        this.event = event;
+    
+    ItemHolder(String message) {
+        this.message = message;
     }
-
-    public String getEventParameter() {
+    
+    public String getEventName(String eventName) {
+        return eventName;
+    }
+    
+    public void setEventName(String eventName) {
+        this.eventName = eventName;
+    }
+    
+    public String getEventParameter(String verb) {
         return eventParameter;
     }
-
+    
     public void setEventParameter(String eventParameter) {
         this.eventParameter = eventParameter;
     }
-
+    
     public String getMessage() {
         return message;
     }
-
+    
     public void setMessage(String message) {
         this.message = message;
     }
-
-    ItemHolder(String event, String eventParameter, String message) {
-        this.event = event;
-        this.eventParameter = eventParameter;
-        this.message = message;
-    }
 }
-

@@ -120,10 +120,6 @@ class CommandFactory {
                     case "save":
                         String saveFilename = words[1];
                         return new SaveCommand(saveFilename);
-//                    case "unlock":
-//                        String roomName = words[1];
-//                        return new UnlockCommand(roomName);
-
                     default:
                         String verb = words[0];
                         String noun = words[1];

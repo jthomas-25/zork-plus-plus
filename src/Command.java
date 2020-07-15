@@ -17,7 +17,7 @@ abstract class Command {
      * execute - this is an abstract command, which will be implemented at the subclass level.
      * @return String command message
      */
-    abstract String execute() throws NoItemException, NoRoomException;
+    abstract String execute();
 }
 
 /**
@@ -255,17 +255,24 @@ class UnknownCommand extends Command {
  * game without saving user data
  * @author Object Oriented Optimists (OOO)
  * @author Richard Volynski
- * @version 1.0
- * 6 July 2020
+ * @version 1.1
+ * 15 July 2020
  */
 class QuitCommand extends Command {
+
+    /**
+     * Default constructor
+     */
+    QuitCommand() {
+    }
 
     /**
      * execute - this method executes the quit/q command and ends the program
      * @return null
      */
     String execute() {
-        return "Event will be implemented soon";    //TODO implement
+        System.exit(1);
+        return null;
     }
 }
 
@@ -309,8 +316,8 @@ class InventoryCommand extends Command {
  * and prints a message for certain items or an error message
  * @author Object Oriented Optimists (OOO)
  * @author Richard Volynski
- * @version 1.2
- * 14 July 2020
+ * @version 1.3
+ * 15 July 2020
  */
 class ItemSpecificCommand extends Command {
     private String verb;
@@ -322,8 +329,8 @@ class ItemSpecificCommand extends Command {
      * @param noun
      */
     ItemSpecificCommand(String verb, String noun) {
-        this.noun = noun;
         this.verb = verb;
+        this.noun = noun;
     }
 
     /**
@@ -331,28 +338,35 @@ class ItemSpecificCommand extends Command {
      * or prints an error message
      * @return String message
      */
-    String execute() throws NoItemException, NoRoomException {
-
-        String returnMessage = "";
-
+    String execute() {
         switch (this.noun) {
             case "":
-                return String.format("%s what? (usage: %s <what?>)", verb, noun);
+                return String.format("%s what? (usage: %s <noun>)", this.verb, this.noun);
             default:
-
-                if (GameState.instance().ifItemExistsInInventory(noun)) {
-                    Item item = GameState.instance().getItemFromInventoryNamed(noun);
-
-                    String eventName = item.getEventForVerb(verb);
-                    String eventParam = item.getEventParamForVerb(verb);
-
-                    if (!eventName.isEmpty()) {
-                        returnMessage = EventFactory.instance().triggerEvent(eventName, eventParam) + "\n";
+                String returnMessage = "";
+                try {
+                    Item item = GameState.instance().getItemInVicinityNamed(this.noun);
+                    String message = item.getMessageForVerb(this.verb);
+                    if (message != null) {
+                        returnMessage = (message + "\n");
+                    } else {
+                        returnMessage = String.format("You cannot '%s' the %s.", this.verb, this.noun);
                     }
-                    return returnMessage += item.getMessageForVerb(verb);
+
+                    String[] eventStrings = item.getEventStrings(this.verb);
+                    if (eventStrings != null) {
+                        for (String eventString : eventStrings) {
+                            System.out.println(eventString);
+                            ZorkEvent event = EventFactory.instance().parse(eventString);
+                            returnMessage += event.trigger();
+                            //returnMessage = EventFactory.instance().triggerEvent(eventName, eventParam) + "\n";
+                        }
+                    }
+                    return returnMessage;
+                } catch (NoItemException e) {
+                    return e.getMessage();
                 }
         }
-        return String.format("You cannot '%s' the %s.", verb,noun);
     }
 }
 
@@ -405,7 +419,7 @@ class ScoreCommand extends Command {
      */
     String execute() {
         GameState state = GameState.instance();
-        String scoreMsg = "You have accumulated " + state.getScore() + " points. ";
+        String scoreMsg = "You have accumulated " + state.getScore() + " point(s). ";
         if (state.rankAssigned()) {
             scoreMsg += "This gives you a rank of " + state.getRank() + ".";
         } else {
