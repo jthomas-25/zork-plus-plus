@@ -8,7 +8,7 @@ import java.util.*;
  * @author Object Oriented Optimists (OOO)
  * @author John Thomas
  * @author Richard Volynski
- * @version 3.2
+ * @version 3.3
  * 16 July 2020
  */
 class GameState {
@@ -352,7 +352,17 @@ class GameState {
      * @return String, the current rank of player, based on the current {@link #score score}.
      */
     String getRank() {
-        return ranks.get(this.score);
+        if (this.score < 10) {
+            return ranks.get(0);
+        } else if (this.score < 20) {
+            return ranks.get(10);
+        } else if (this.score < 30) {
+            return ranks.get(20);
+        } else if (this.score < 40) {
+            return ranks.get(30);
+        } else {
+            return ranks.get(40);
+        }
     }
 
     /**

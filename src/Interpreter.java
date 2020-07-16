@@ -1,3 +1,5 @@
+package com.company;
+
 import java.io.File;
 import java.io.IOException;
 //import java.util.Hashtable;
@@ -29,7 +31,7 @@ public class Interpreter {
     public static void main(String[] args) throws IllegalSaveFormatException, NoItemException, NoRoomException {
         Scanner stdin = new Scanner(System.in);
 
-        String defaultZorkFile = "sample.zork";
+        String defaultZorkFile = "westeros.zork";
         if (args.length > 0) {
             defaultZorkFile = args[0];
         } else {

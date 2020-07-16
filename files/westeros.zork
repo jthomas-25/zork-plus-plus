@@ -63,6 +63,7 @@ examine:This venomous snake is ready to break you into pieces.
 touch[Wound(3)]:OWWWW! The snake's venom leaks into your right hand as you
 attempt to fight it off.
 kill[Score(9)]:The snake suffocates in a split second.
+---
 ===
 Rooms:
 Winterfell
@@ -138,7 +139,7 @@ heart tree would take root in the stony soil. The garden, which is overlooked
 by overhead apartments, instead contains grass, shrubbery, and statuary.
 ---
 East River Road
-Contents: ViperSnake,snake
+Contents: ViperSnake
 The deafening sounds of the Red Fork of the Trident river overwhelm you as you
 make your way along this picturesque byway.
 ---

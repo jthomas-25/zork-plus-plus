@@ -3,7 +3,7 @@
  * and produce the appropriate Command objects.
  * CommandFactory is a Singleton class.
  * @author Object Oriented Optimists (OOO)
- * @version 3.4
+ * @version 3.6
  * 16 July 2020
  */
 class CommandFactory {
@@ -122,10 +122,13 @@ class CommandFactory {
                     case "save":
                         String saveFilename = words[1];
                         return new SaveCommand(saveFilename);
+                    case "kill":
+                        String noun = words[1];
+                        return new KillCommand(noun);
                     default:
                         String verb = words[0];
-                        String noun = words[1];
-                        return new ItemSpecificCommand(verb, noun);
+                        String word2 = words[1];
+                        return new ItemSpecificCommand(verb, word2);
                 }
         }
     }
