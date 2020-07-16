@@ -17,7 +17,7 @@ abstract class Command {
      * execute - this is an abstract command, which will be implemented at the subclass level.
      * @return String command message
      */
-    abstract String execute() throws NoItemException;
+    abstract String execute();
 }
 
 /**
@@ -62,11 +62,11 @@ class TakeCommand extends Command {
                         } else {
                             state.addToInventory(item);
                             currentRoom.remove(itr);
-                            result += String.format("Took %s from %s.\n", item, currentRoom.getName());
+                            result += String.format("Took %s from %s.\n", item, currentRoom);
                         }
                     }
                 } else {
-                    result = String.format("There are no items in %s.", currentRoom.getName());
+                    result = String.format("There are no items in %s.", currentRoom);
                 }
                 return result;
             default:
@@ -77,10 +77,10 @@ class TakeCommand extends Command {
                     } else {
                         state.addToInventory(item);
                         currentRoom.remove(item);
-                        return String.format("Took %s from %s.", item, currentRoom.getName());
+                        return String.format("Took %s from %s.", item, currentRoom);
                     }
                 } else {
-                    return String.format("%s not found in %s.", itemName, currentRoom.getName());
+                    return String.format("%s not found in %s.", itemName, currentRoom);
                 }
         }
     }
@@ -348,21 +348,29 @@ class ItemSpecificCommand extends Command {
                     Item item = GameState.instance().getItemInVicinityNamed(this.noun);
                     String message = item.getMessageForVerb(this.verb);
                     if (message != null) {
-                        returnMessage = (message + "\n");
+                        returnMessage = message;
+                        String[] eventStrings = item.getEventStrings(this.verb);
+                        boolean verbHasEvents = eventStrings != null;
+                        if (verbHasEvents) {
+                            for (String eventString : eventStrings) {
+                                //System.out.println("Event string: " + eventString);
+                                switch (eventString) {
+                                    case "Drop":
+                                    case "Disappear":
+                                        eventString = String.format("%s(%s)", eventString, item);
+                                    break;
+                                }
+                                ZorkEvent event = EventFactory.instance().parse(eventString);
+                                if (event != null) {
+                                    String eventMessage = event.trigger(noun);
+                                    if (eventMessage != null) {
+                                        returnMessage += String.format("\n%s", eventMessage);
+                                    }
+                                }
+                            }
+                        }
                     } else {
                         returnMessage = String.format("You cannot '%s' the %s.", this.verb, this.noun);
-                    }
-
-                    String[] eventStrings = item.getEventStrings(this.verb);
-                    if (eventStrings != null) {
-                        for (String eventString : eventStrings) {
-                            //System.out.println("Event string: " + eventString);
-                            ZorkEvent event = EventFactory.instance().parse(eventString);
-                            if (event != null) {
-                                returnMessage += event.trigger(noun);
-                            }
-                            //returnMessage = EventFactory.instance().triggerEvent(eventName, eventParam) + "\n";
-                        }
                     }
                     return returnMessage;
                 } catch (NoItemException e) {
@@ -518,7 +526,7 @@ class SwapCommand extends Command {
                     result += String.format("Swapped %s with %s.\n", userItemName, itemInRoomName);
                 }
                 else {
-                    result = String.format("There are no items in %s.", currentRoom.getName());
+                    result = String.format("There are no items in %s.", currentRoom);
                 }
                 return result;
             default:
@@ -587,7 +595,7 @@ class UnlockCommand extends Command {
         this.dir = dir;
     }
 
-    String execute() throws NoItemException {
+    String execute() {
         ZorkEvent event = EventFactory.instance().parse(String.format("Unlock(%s)", this.dir));
         return event.trigger("");
     }

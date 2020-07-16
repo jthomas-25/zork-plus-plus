@@ -128,7 +128,7 @@ class GameState {
             printWriter.write("Zork III save data\n");
             dungeon.storeState(printWriter);
             printWriter.write("Adventurer:\n");
-            printWriter.write("Current room: " + currentRoom.getName() + "\n");
+            printWriter.write("Current room: " + currentRoom + "\n");
             if (!inventory.isEmpty()) {
                 printWriter.write("Inventory: ");
                 for (int i = 0; i < inventory.size(); i++) {
@@ -245,8 +245,7 @@ class GameState {
         try {
             Item item = getItemFromInventoryNamed(itemName);
             removeFromInventory(item);
-        }
-        catch (NoItemException e) {
+        } catch (NoItemException e) {
         }
     }
 
@@ -291,12 +290,12 @@ class GameState {
      * @param name a string, containing the name of the desired item in player's inventory.
      */
     boolean itemExistsInInventory(String name) {
-        for (Item item : inventory) {
-            if (item.goesBy(name)) {
-                return true;
-            }
+        Item item = null;
+        try {
+            item = getItemFromInventoryNamed(name);
+        } catch (NoItemException e) {
         }
-        return false;
+        return item != null;
     }
 
     /**

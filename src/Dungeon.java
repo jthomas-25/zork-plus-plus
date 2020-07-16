@@ -242,7 +242,7 @@ public class Dungeon {
     void removeItem(String itemName) {
         Item item = getItem(itemName);
         if (item != null) {
-            removeItem(item);
+            this.removeItem(item);
         }
     }
 }

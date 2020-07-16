@@ -13,11 +13,9 @@ import java.util.Scanner;
 public class Item {
     private String primaryName;
     private int weight;
-//    private Hashtable<String, ItemHolder> itemHolder = new Hashtable<>();
     private Hashtable<String, String[]> eventStringListHolder = new Hashtable<>();
     private ArrayList<String> aliases = new ArrayList<String>();
     private Hashtable<String, String> messages = new Hashtable<>();
-//    private ArrayList<Item> contents = new ArrayList<>();
 
     /**
      * Default constructor, takes a Scanner object in order to hydrate the item.
@@ -126,156 +124,60 @@ public class Item {
         return leftParenPos < rightParenPos;
     }
 
-//    /**
-//     * This method stores ess
-//     * @param w a PrintWriter
-//     */
-//    void storeState(PrintWriter w) {
-//        String primaryNameAndAliases = getPrimaryName();
-//
-//        for (int i = 0; i < aliases.size(); i++) {
-//            primaryNameAndAliases+= "," + aliases.get(i);
-//        }
-//        w.write(primaryNameAndAliases + "\n");
-//        w.write(Integer.toString(weight) + "\n");
-//        Iterator keys = itemHolder.keySet().iterator();
-//        while (keys.hasNext()) {
-//            String key = (String) keys.next();
-//            String value = (String) itemHolder.get(key);
-//            w.write(key + ":" + value + "\n");
-//        }
-//        w.write("---" + "\n");
-//    }
-
-
     /**
-     * Checks to see if the Item goes by a given alias. It achieves this by checking if the {@link #aliases aliases}
-     * ArrayList member variable contains a string equaling the given name.
+     * Checks to see if the Item goes by a given alias.
      *
-     * @param name a string, representing the alias one wishes to check.
+     * @param name the alias one wishes to check
      */
     boolean goesBy(String name) {
         return primaryName.equals(name) || aliases.contains(name);
     }
 
     /**
-     * Gets the primary name of an Item.  The primary name is a string, member variable, called {@link #primaryName primaryName}.
+     * Gets the primary name of this item.
      *
-     * @return {@link #primaryName primaryName} member variable.
+     * @return the item's primary name that the game prints
      */
     String getPrimaryName() {
         return primaryName;
     }
 
     /**
-     * Gets the message for an Item that is associated with a given verb. The message indicates what happens
-     * to the Item after being acted upon by the given verb.
+     * Gets the message for this item that is associated with a given verb. The message indicates what happens
+     * to the item after being acted upon by the given verb.
      *
-     * @param verb a verb that has an associated message within the Item's {@link #itemHolder itemHolder}
-     * member variable.
-     * @return a string, representing the message for the given verb.
+     * @param verb a verb that has an associated message
+     * @return the message for the given verb
      */
     String getMessageForVerb(String verb) {
         return messages.get(verb);
-/*
-        if (itemHolder.get(verb) != null) {
-            return itemHolder.get(verb).getMessage();
-        } else {
-            return null;
-        }
-*/
     }
 
     String[] getEventStrings(String verb) {
         return eventStringListHolder.get(verb);
     }
 
-    /**
-     * Gets the event for an Item that is associated with a given verb. The events indicates what happens
-     * to the Item after being acted upon by the given verb.
-     *
-     * @param verb a verb that has an associated event within the Item's {@link #itemHolder itemHolder}
-     * member variable.
-     * @return a string, representing the event name for a given verb.
-     */
-/*
-    String getEventName(String verb) {
-        if (itemHolder.get(verb) != null) {
-            return itemHolder.get(verb).getEventName();
-        } else {
-            return null;
-        }
+    boolean hasEvents(String verb) {
+        return getEventStrings(verb) != null;
     }
-*/
+
     /**
-     * Gets the event parameter for an Item that is associated with a given verb.
+     * Returns a string representation of this item.
      *
-     * @param verb a verb that has an associated event within the Item's {@link #itemHolder itemHolder}
-     * member variable.
-     * @return a string, representing the event parameter for a given verb.
-     */
-/*
-    String getEventParam(String verb) {
-        if (itemHolder.get(verb) != null) {
-            return itemHolder.get(verb).getEventParameter();
-        } else {
-            return null;
-        }
-    }
-*/
-    /**
-     * This method replaces the default toString method, returning a string
-     * of the item's {@link #primaryName primary name}.
-     *
-     * @return a string, representing the {@link #primaryName primary name} of an Item.
+     * @return a string representation of this item consisting of its primary name
      */
     public String toString() {
         return primaryName;
     }
 
     /**
-     * This method returns the weight of an Item.  The weight is represented by the
-     * {@link #weight weight} member variable of an Item.
+     * Returns the weight of this item.
      *
      * @return an int, representing the {@link #weight weight} of an Item.
      */
     int getWeight() {
         return weight;
     }
-
-//    /**
-//     * This method returns the contents of an Item.  The contents of the Item are other Items.
-//     * This can be useful for items such as "chests" or "swords" where they may be comprised of things such as:
-//     * a blade, hilt, diamond, etc.
-//     *
-//     * @return an arraylist, representing the {@link #contents contents} of an Item.
-//     */
-//    ArrayList<Item> getContents() {
-//        return this.contents;
-//    }
-//    TODO: hydrate item contents
-
-//    /**
-//     * Adds given Item to the {@link #contents contents} of this Item.
-//     * @param item an Item to be added to {@link #contents contents}.
-//     */
-//    void addToContents(Item item) {
-//        this.contents.add(item);
-//    }
-
-//    /**
-//     * Removes given Item from the {@link #contents contents} of this Item.
-//     * @param itemName name of item to remove from {@link #contents contents}.
-//     */
-//    void removeFromContents(String itemName) {
-//
-//        for (Item item : this.contents) {
-//            if (item.getPrimaryName().equals(itemName) || item.goesBy(itemName)) {
-//                this.contents.remove(item);
-//            }
-//        }
-//
-//    }
 
     boolean hasItemSpecificCommand (String itemSpecificCommand) {
         return eventStringListHolder.containsKey(itemSpecificCommand);
@@ -304,43 +206,52 @@ class NoItemException extends Exception {
     }
 }
 
-//class ItemHolder {
-//    private String eventName;
-//    private String eventParameter;
-//    private String message;
-//
-//    ItemHolder(String eventName, String eventParameter, String message) {
-//        this.eventName = eventName;
-//        this.eventParameter = eventParameter;
-//        this.message = message;
-//    }
-//
-//    ItemHolder(String message) {
-//        this.message = message;
-//    }
-//
-//    public String getEventName(String eventName) {
-//        return eventName;
-//    }
-//
-//    public void setEventName(String eventName) {
-//        this.eventName = eventName;
-//    }
-//
-//    public String getEventParameter(String verb) {
-//        return eventParameter;
-//    }
-//
-//    public void setEventParameter(String eventParameter) {
-//        this.eventParameter = eventParameter;
-//    }
-//
-//    public String getMessage() {
-//        return message;
-//    }
-//
-//    public void setMessage(String message) {
-//        this.message = message;
-//    }
-//}
+/**
+ * Represents an {@link Item} that can hold other {@link Item}s. This class is useful for items
+ * such as "chests" or "swords" which may be comprised of things such as:
+ * a blade, hilt, diamond, etc.
+ */
+class ItemContainer extends Item {
+    private ArrayList<Item> contents;
+    
+    /**
+     * Constructs a new ItemContainer, using the given Scanner for hydration.
+     * @param s the Scanner object that will hydrate this container's contents
+     * @throws NoItemException 
+     */
+    ItemContainer(Scanner s) throws NoItemException {
+        super(s);
+        contents = new ArrayList<>();
+        //TODO: hydrate item contents
+    }
+    
+    /**
+     * Returns the contents of this container.
+     * @return an arraylist, representing the items this container holds
+     */
+    ArrayList<Item> getContents() {
+        return this.contents;
+    }
 
+    /**
+     * Adds given {@link Item} to the {@link #contents contents} of this container.
+     * @param item an {@link Item} to be added to {@link #contents contents}.
+     */
+    void addToContents(Item item) {
+        this.contents.add(item);
+    }
+
+    /**
+     * Removes given {@link Item} from the {@link #contents contents} of this container.
+     * @param itemName name of item to remove from {@link #contents contents}
+     */
+    void removeFromContents(String itemName) {
+        for (Item item : this.contents) {
+            if (item.goesBy(itemName)) {
+                this.contents.remove(item);
+                break;
+            }
+        }
+
+    }
+}

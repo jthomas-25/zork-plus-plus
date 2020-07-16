@@ -53,14 +53,6 @@ class EventFactory {
                         case "Die":
                             event = new DieEvent();
                             break;
-
-                        case "Disappear":
-                            event = new DisappearEvent(""); //TODO
-                            break;
-    /*                    case "Drop":
-                            event = new DropEvent();
-                            break;
-    */
                         case "Teleport":
                             event = new TeleportEvent();
                             break;
@@ -68,35 +60,42 @@ class EventFactory {
                             event = new WinEvent();
                             break;
                     }
-                    break;
-
+                break;
                 default:
-                    int points;
+                    //now use reflection?
                     String message;
+                    String itemName;
+                    int points;
                     switch (eventName) {
-                        case "Die":
+                        case "Die":     //hardcoded dungeon only
                             message = sa[1];
                             event = new DieEvent(message);
+                            break;
+                        case "Disappear":
+                            itemName = sa[1];
+                            event = new DisappearEvent(itemName);
+                            break;
+                        case "Drop":
+                            itemName = sa[1];
+                            event = new DropEvent(itemName);
                             break;
                         case "Score":
                             points = Integer.parseInt(sa[1]);
                             event = new ScoreEvent(points);
                             break;
-
-    /*
-                        case "Teleport":
+                        case "Teleport":    //hardcoded dungeon only
                             String roomName = sa[1];
                             event = new TeleportEvent(roomName);
                             break;
-    */                    case "Transform":
-                            event = new TransformEvent(sa[1]);
+                        case "Transform":
+                            String newItemName = sa[1];
+                            event = new TransformEvent(newItemName);
                             break;
-
                         case "Unlock":
                             String exitDir = sa[1];
                             event = new UnlockEvent(exitDir);
                             break;
-                        case "Win":
+                        case "Win":     //hardcoded dungeon only
                             message = sa[1];
                             event = new WinEvent(message);
                             break;
@@ -104,61 +103,13 @@ class EventFactory {
                             points = Integer.parseInt(sa[1]);
                             event = new WoundEvent(points);
                             break;
-                        case "Drop":
-                            event = new DropEvent(sa[1]);
-                            break;
-
                     }
+                break;
             }
             return event;
         }
         catch (Exception e) {
             return null;    //TODO implement
         }
-/*
-        //Reflection technique
-        try {
-            Class clazz = Class.forName(eventName + "Event");
-            event = (ZorkEvent) clazz.newInstance();
-        } catch (Exception e) {
-        }
-*/
-    }
-
-    String triggerEvent(String eventName, String eventParam) throws IllegalArgumentException, NoItemException, NoRoomException {
-        ZorkEvent event;
-        switch (eventName.toLowerCase()) {
-            case "score":
-                int points = Integer.parseInt(eventParam);
-                event = new ScoreEvent(points);
-                break;
-            case "wound":
-                int hp = Integer.parseInt(eventParam);
-                event = new WoundEvent(hp);
-                break;
-            case "die":
-                event = new DieEvent(eventParam);
-                break;
-            case "win":
-                event = new WinEvent(eventParam);
-                break;
-            case "drop":
-                event = new DropEvent(eventParam);
-                break;
-            case "disappear":
-                event = new DisappearEvent(eventParam);
-                break;
-            case "transform":
-                event = new TransformEvent(eventParam);
-                break;
-/*
-            case "teleport":
-                event = new TeleportEvent(eventParam);
-                break;
-*/
-            default:
-                throw new IllegalArgumentException("Event not found: " + eventName);
-        }
-        return event.trigger("");
     }
 }

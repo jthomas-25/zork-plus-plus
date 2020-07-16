@@ -70,12 +70,12 @@ public class Interpreter {
                     System.out.print("Enter the name of your save file: ");
                     String saveFilename = stdin.nextLine();
                     command = CommandFactory.instance().parse(commandEntered + " " + saveFilename);
-                break;
+                    break;
                 case "unlock exit":
                     System.out.print("Which exit? Enter a direction: ");
                     String exitDir = stdin.nextLine();
                     command = CommandFactory.instance().parse(String.join(" ", "unlock", exitDir, "exit"));
-                break;
+                    break;
                 default:
                     command = CommandFactory.instance().parse(commandEntered);
                     break;

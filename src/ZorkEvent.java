@@ -9,7 +9,7 @@ import java.util.Random;
  * they will be triggered when the player uses an item in a way that is recognizable to the game.</p>
  *
  * <ul>
- *   <li>When using {@link EventFactory#triggerEvent} to instantiate a ZorkEvent object, the proper syntax
+ *   <li>When using {@link EventFactory#parse} to instantiate a ZorkEvent object, the proper syntax
  * for the event string is as follows: eventName or eventName(optional parameters).</li>
  *
  *   <li>If attached to an item-specific command in a .zork file, an event must be written in
@@ -33,14 +33,14 @@ import java.util.Random;
  * @version 1.5
  * 13 July 2020
  */
-abstract class ZorkEvent {
+public abstract class ZorkEvent {
     protected String message;
 
     /**
      * Activates this event, which modifies the game state.
      * @return this event's message
      */
-    abstract String trigger(String noun) throws NoItemException;
+    abstract String trigger(String noun);
 }
 
 /**
@@ -78,7 +78,7 @@ class ScoreEvent extends ZorkEvent {
         currentScore += points;
         GameState.instance().setScore(currentScore);
         this.message = String.format("Score: %d", currentScore);
-        return this.message + "\n";
+        return this.message;
     }
 }
 
@@ -116,7 +116,7 @@ class WoundEvent extends ZorkEvent {
         playersHealth -= damagePoints;
         GameState.instance().setHealth(playersHealth);
         this.message = String.format("Health: %s", playersHealth);
-        return this.message + "\n";
+        return this.message;
     }
 }
 
@@ -202,15 +202,15 @@ class WinEvent extends ZorkEvent {
  * 14 July 2020
  */
 class DropEvent extends ZorkEvent {
-    private Item item;
+    private String itemName;
 
     /**
-     * Constructs a new DropEvent with the given item.
+     * Constructs a new DropEvent with the given item name.
      * @param itemName the name of the item to be dropped into the current room
      * @throws NoItemException if the item does not exist in the current room or the player's inventory
      */
     DropEvent(String itemName) throws NoItemException {
-        this.item = GameState.instance().getItemFromInventoryNamed(itemName);
+        this.itemName = itemName;
     }
 
     /**
@@ -220,14 +220,21 @@ class DropEvent extends ZorkEvent {
      * @return this event's message
      */
     String trigger(String noun) {
-        if (this.item != null) {
-            GameState.instance().removeFromInventory(this.item);
-            GameState.instance().getAdventurersCurrentRoom().add(this.item);
-            return String.format("Item %s was dropped from inventory and placed in %s", this.item, GameState.instance().getAdventurersCurrentRoom().getName());
+        Item item = null;
+        Room currentRoom = GameState.instance().getAdventurersCurrentRoom();
+        try {
+            item = GameState.instance().getItemFromInventoryNamed(this.itemName);
+            GameState.instance().removeFromInventory(item);
+            currentRoom.add(item);
+            this.message = String.format("\"%s\" was dropped from inventory and placed in %s",
+                    item, currentRoom);
+        } catch (NoItemException e) {
+            item = currentRoom.getItemNamed(this.itemName);
+            if (item == null) {
+                this.message = String.format("%s not found", this.itemName);
+            }
         }
-        else {
-            return String.format("%s not found", item.getPrimaryName());
-        }
+        return this.message;
     }
 }
 
@@ -250,7 +257,7 @@ class DisappearEvent extends ZorkEvent {
      * the player's inventory, or the dungeon
      */
     DisappearEvent(String itemName) throws NoItemException {
-        //this.itemName = itemName;   itemName is passed to trigger event
+        this.itemName = itemName;
     }
 
     /**
@@ -261,15 +268,16 @@ class DisappearEvent extends ZorkEvent {
      * @return this event's message
      */
     String trigger(String noun) {
-        this.itemName = noun;
-        GameState.instance().getAdventurersCurrentRoom().removeItem(itemName);
+        Room currentRoom = GameState.instance().getAdventurersCurrentRoom();
+        currentRoom.removeItem(this.itemName);
         try {
-            GameState.instance().removeFromInventory(itemName);
+            GameState.instance().removeFromInventory(this.itemName);
+        } catch (Exception e) {
         }
-        catch (Exception e) {
-        }
-        GameState.instance().getDungeon().removeItem(itemName);
-        return String.format("\"%s\" was removed from user's inventory, %s, and %s", itemName, GameState.instance().getAdventurersCurrentRoom().getName(), GameState.instance().getDungeon().getTitle());
+        GameState.instance().getDungeon().removeItem(this.itemName);
+        this.message = String.format("\"%s\" was removed from user's inventory, %s, and %s",
+                this.itemName, currentRoom, GameState.instance().getDungeon().getTitle());
+        return this.message;
     }
 }
 
@@ -301,22 +309,31 @@ class TransformEvent extends ZorkEvent {
      */
     String trigger(String noun) {
         this.nameOfItemToReplace = noun;
-
-        //removed item from everywhere
-//        GameState.instance().getAdventurersCurrentRoom().removeItem(nameOfItemToReplace);
-        try {
-            GameState.instance().removeFromInventory(nameOfItemToReplace);
-            Item item = GameState.instance().getDungeon().getItem(primaryNameOfNewItem);
-            if (item != null) {
-                GameState.instance().addToInventory(item);
+        Item itemToReplace = null;
+        Dungeon dungeon = GameState.instance().getDungeon();
+        Room currentRoom = GameState.instance().getAdventurersCurrentRoom();
+        if (GameState.instance().itemExistsInInventory(this.nameOfItemToReplace)) {
+            try {
+                itemToReplace = GameState.instance().getItemFromInventoryNamed(this.nameOfItemToReplace);
+            } catch (NoItemException e) {
             }
-        }
-        catch (Exception e) {
+            GameState.instance().removeFromInventory(itemToReplace);
+            Item newItem = dungeon.getItem(primaryNameOfNewItem);
+            if (newItem != null) {
+                GameState.instance().addToInventory(newItem);
+            }
+            this.message = String.format("\"%s\" was removed from user's inventory and replaced by %s",
+                    itemToReplace, newItem);
+        } else if (currentRoom.hasItemNamed(this.nameOfItemToReplace)) {
+            itemToReplace = currentRoom.getItemNamed(this.nameOfItemToReplace);
+            currentRoom.removeItem(this.nameOfItemToReplace);
+            currentRoom.addItem(primaryNameOfNewItem);
+            this.message = String.format("\"%s\" was removed from %s and replaced by %s",
+                    itemToReplace, currentRoom, this.primaryNameOfNewItem);
         }
 //        GameState.instance().getDungeon().removeItem(nameOfItemToReplace);
 
-        return String.format("\n\"%s\" was removed from user's inventory and replaced by %s", nameOfItemToReplace,
-                primaryNameOfNewItem);
+        return this.message;
     }
 }
 
@@ -343,7 +360,7 @@ class TeleportEvent extends ZorkEvent {
     /**
      * Constructs a new TeleportEvent with the given room name (hardcoded).
      * @param roomName the name of the room to teleport the player to
-     * @throws NoRoomException if no room by this name exists in the dungeon
+     * @throws Exception if no room by this name exists in the dungeon
      */
     TeleportEvent(String roomName) throws Exception {
         this.newRoom = GameState.instance().getDungeon().getRoom(roomName);
@@ -369,7 +386,7 @@ class TeleportEvent extends ZorkEvent {
         } while (sameRoom);
             
         GameState.instance().setAdventurersCurrentRoom(this.newRoom);
-        this.message = "\n" + this.newRoom.describe();
+        this.message = String.format("\n%s", this.newRoom.describe());
         return this.message;
     }
 }

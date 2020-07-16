@@ -111,6 +111,10 @@ public class Room {
         init();
         this.name = name;
     }
+    
+    public String toString() {
+        return this.name;
+    }
 
     /**
      * init - private method to initalize instance variables for the room, including exits, roomDescriptionNeeded
@@ -189,7 +193,7 @@ public class Room {
         } else {
             Room newRoom = exit.getDest();
             if (exit.isLocked()) {
-                throw new Exit.ExitLockedException("The exit to " + newRoom.getName() + " is locked.");
+                throw new Exit.ExitLockedException("The exit to " + newRoom + " is locked.");
             } else {
                 return newRoom;
             }
@@ -252,7 +256,7 @@ public class Room {
      * @param w - PrintWriter to write to .sav file
      */
     void storeState(PrintWriter w) {
-        w.write(getName() + ":\n");
+        w.write(this + ":\n");
         w.write("beenHere=" + beenHere + "\n");
         if (!contents.isEmpty()) {
             w.write("Contents: ");
@@ -332,6 +336,13 @@ public class Room {
         this.contents.add(item);
     }
 
+    void addItem(String itemName) {
+        Item item = GameState.instance().getDungeon().getItem(itemName);
+        if (item != null) {
+            this.add(item);
+        }
+    }
+
     /**
      * remove - this method removes an item from the Room's list of items
      * @param item - item to remove
@@ -347,7 +358,7 @@ public class Room {
     void removeItem(String itemName) {
         Item item = getItemNamed(itemName);
         if (item != null) {
-            this.contents.remove(item);
+            this.remove(item);
         }
     }
 
@@ -383,12 +394,8 @@ public class Room {
      * @return true or false
      */
     boolean hasItemNamed(String name) {
-        for (Item item : contents) {
-            if (item.goesBy(name)) {
-                return true;
-            }
-        }
-        return false;
+        Item item = getItemNamed(name);
+        return item != null;
     }
 
     /**
