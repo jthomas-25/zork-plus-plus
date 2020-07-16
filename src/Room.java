@@ -1,3 +1,5 @@
+package com.company;
+
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -12,8 +14,8 @@ import java.util.Scanner;
  * Also, the Room Class contains lists of Exits.
  * @author Object Oriented Optimists (OOO)
  * @author Richard Volynski
- * @version 3.0
- * 15 July 2020
+ * @version 3.1
+ * 16 July 2020
  */
 public class Room {
     private Hashtable<String, Exit> exits;

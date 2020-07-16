@@ -10,8 +10,8 @@ import com.sun.jdi.event.BreakpointEvent;
  * {@link ZorkEvent} objects.
  * @author John Thomas
  * @author Richard Volynski
- * @version 3.0
- * 15 July 2020
+ * @version 3.1
+ * 16 July 2020
  */
 class EventFactory {
     private static EventFactory singleInstance = null;

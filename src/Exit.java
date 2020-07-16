@@ -11,8 +11,8 @@ import java.util.Scanner;
  * which direction they can go and the name of the surrounding room(s). Also, Exit class initializes itself by
  * reading from the .zork file.
  * @author Richard Volynski (OOO)
- * @version 2.8
- * 13 July 2020
+ * @version 2.9
+ * 16 July 2020
  */
 class Exit {
     private String dir;

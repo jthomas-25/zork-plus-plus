@@ -1,4 +1,5 @@
 import javax.xml.namespace.QName;
+import java.lang.reflect.GenericArrayType;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -17,7 +18,7 @@ abstract class Command {
      * execute - this is an abstract command, which will be implemented at the subclass level.
      * @return String command message
      */
-    abstract String execute();
+    abstract String execute() throws NoItemException;
 }
 
 /**
@@ -341,7 +342,7 @@ class ItemSpecificCommand extends Command {
     String execute() {
         switch (this.noun) {
             case "":
-                return String.format("%s what? (usage: %s <noun>)", this.verb, this.noun);
+                return String.format("%s what? (usage: <verb> <noun>)", this.verb, this.noun);
             default:
                 String returnMessage = "";
                 try {
@@ -556,25 +557,38 @@ class SwapCommand extends Command {
  * the snake will be removed from the room.
  * @author Object Oriented Optimists (OOO)
  * @author Richard Volynski
- * @version 1.0
- * 6 July 2020
+ * @version 1.1
+ * 16 July 2020
  */
 class KillCommand extends Command {
-
+    private String itemName;
     /**
-     * KillCommand - default constructor
+     * KillCommand - constructor
      */
-    KillCommand() {
-        //TODO implement
+    KillCommand(String itemName) {
+        this.itemName = itemName;
     }
 
     /**
      * execute() - this method will check if user has a dagger or sword (whatever was supplied). If yes,
      * remove the snake from the current room.
-     * @return //TODO implement
+     * @return string
      */
     String execute() {
-        return "Event will be implemented soon";    //TODO implement
+        if (GameState.instance().getAdventurersCurrentRoom().hasItemNamed("snake")) {
+            if (GameState.instance().itemExistsInInventory("dagger") ||
+            GameState.instance().itemExistsInInventory("sword")) {
+                GameState.instance().getAdventurersCurrentRoom().removeItem("snake");
+                return String.format("%s killed in %s and removed from %s",
+                        itemName,GameState.instance().getAdventurersCurrentRoom(),GameState.instance().getAdventurersCurrentRoom());
+            }
+            else {
+                return "You don't have a dagger or sword to kill the snake.";
+            }
+        }
+        else {
+           return "There is nothing to kill in this room.";
+        }
     }
 }
 
@@ -600,3 +614,4 @@ class UnlockCommand extends Command {
         return event.trigger("");
     }
 }
+

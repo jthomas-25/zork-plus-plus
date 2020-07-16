@@ -30,8 +30,8 @@ import java.util.Random;
  * player when the player enters a room). This is so the users of this API have greater
  * flexibility in adding their own features.</p>
  * @author John Thomas
- * @version 1.5
- * 13 July 2020
+ * @version 1.6
+ * 16 July 2020
  */
 public abstract class ZorkEvent {
     protected String message;
@@ -88,8 +88,8 @@ class ScoreEvent extends ZorkEvent {
  * Note that a negative number of points will effectively heal the player.
  * @author John Thomas
  * @author Richard Volynski
- * @version 1.5
- * 14 July 2020
+ * @version 1.6
+ * 16 July 2020
  */
 class WoundEvent extends ZorkEvent {
     private int damagePoints;
@@ -115,7 +115,8 @@ class WoundEvent extends ZorkEvent {
         int playersHealth = GameState.instance().getHealth();
         playersHealth -= damagePoints;
         GameState.instance().setHealth(playersHealth);
-        this.message = String.format("Health: %s", playersHealth);
+        String healthMsg = GameState.instance().getHealthMsg();
+        this.message = String.format("Damage: -%s"+ "\nHealth: %s", damagePoints, healthMsg);
         return this.message;
     }
 }
@@ -134,7 +135,7 @@ class DieEvent extends ZorkEvent {
      * Constructs a new DieEvent with the default message.
      */
     DieEvent() {
-        this.message = "You have died.";
+        this.message = GameState.instance().getHealthMsg();
     }
 
     /**
@@ -161,8 +162,9 @@ class DieEvent extends ZorkEvent {
  * Note that if the player wins the game, the {@link Interpreter} will stop processing typed commands;
  * it will instead prompt the player with a yes/no question asking them if they want to start over.
  * @author John Thomas
- * @version 1.4
- * 14 July 2020
+ * @author Richard Volynski
+ * @version 1.5
+ * 16 July 2020
  */
 class WinEvent extends ZorkEvent {
 
@@ -170,7 +172,8 @@ class WinEvent extends ZorkEvent {
      * Constructs a new WinEvent with the default message.
      */
     WinEvent() {
-        this.message = "You have won!";
+        this.message = "You have won! \nFinal score: " + GameState.instance().getScore()
+                + "\nRank: " + GameState.instance().getRank();
     }
 
     /**
@@ -275,7 +278,7 @@ class DisappearEvent extends ZorkEvent {
         } catch (Exception e) {
         }
         GameState.instance().getDungeon().removeItem(this.itemName);
-        this.message = String.format("\"%s\" was removed from user's inventory, %s, and %s",
+        this.message = String.format("%s was removed from user's inventory, %s, and %s",
                 this.itemName, currentRoom, GameState.instance().getDungeon().getTitle());
         return this.message;
     }
@@ -286,7 +289,7 @@ class DisappearEvent extends ZorkEvent {
  * from the game entirely and replaces it with a previously nonexistent item.
  * @author Richard Volynski
  * @version 1.6
- * 15 July 2020
+ * 16 July 2020
  */
 class TransformEvent extends ZorkEvent {
     private String nameOfItemToReplace;
@@ -322,13 +325,13 @@ class TransformEvent extends ZorkEvent {
             if (newItem != null) {
                 GameState.instance().addToInventory(newItem);
             }
-            this.message = String.format("\"%s\" was removed from user's inventory and replaced by %s",
+            this.message = String.format("%s was removed from user's inventory and replaced by %s",
                     itemToReplace, newItem);
         } else if (currentRoom.hasItemNamed(this.nameOfItemToReplace)) {
             itemToReplace = currentRoom.getItemNamed(this.nameOfItemToReplace);
             currentRoom.removeItem(this.nameOfItemToReplace);
             currentRoom.addItem(primaryNameOfNewItem);
-            this.message = String.format("\"%s\" was removed from %s and replaced by %s",
+            this.message = String.format("%s was removed from %s and replaced by %s",
                     itemToReplace, currentRoom, this.primaryNameOfNewItem);
         }
 //        GameState.instance().getDungeon().removeItem(nameOfItemToReplace);

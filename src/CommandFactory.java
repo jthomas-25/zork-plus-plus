@@ -3,8 +3,8 @@
  * and produce the appropriate Command objects.
  * CommandFactory is a Singleton class.
  * @author Object Oriented Optimists (OOO)
- * @version 3.3
- * 15 July 2020
+ * @version 3.4
+ * 16 July 2020
  */
 class CommandFactory {
     private static CommandFactory single_instance = null;
@@ -58,6 +58,8 @@ class CommandFactory {
                         return new HealthCommand();
                     case "swap":
                         return new SwapCommand("", "");
+                    case "kill":
+                        return new KillCommand("");
                     default:
                         if (GameState.instance().hasItemSpecificCommand(words[0])) {
                             return new ItemSpecificCommand(words[0], "");

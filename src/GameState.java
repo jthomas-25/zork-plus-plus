@@ -1,8 +1,5 @@
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Scanner;
+import java.util.*;
 
 
 /**
@@ -11,8 +8,8 @@ import java.util.Scanner;
  * @author Object Oriented Optimists (OOO)
  * @author John Thomas
  * @author Richard Volynski
- * @version 3.1
- * 15 July 2020
+ * @version 3.2
+ * 16 July 2020
  */
 class GameState {
     private final String VERSION = "Zork++";
@@ -50,21 +47,22 @@ class GameState {
         inventory = new ArrayList<>();
         inventoryWeight = 0;
         score = 0;
-        health = 100;   //initial health
+        health = 5;   //initial health
         ranks = new Hashtable<>();
         healthMsgs = new Hashtable<>();
 
         setRank(0, "Amateur Scout");
-        setRank(25, "Expert");
-        setRank(50, "Treasure Ranger");
-        setRank(75, "\"How did you get this far\" Adventurer");
-        setRank(100, "Dungeon Tour Guide");
+        setRank(10, "Future Hunter");
+        setRank(20, "Treasure Expert");
+        setRank(30, "\"How did you get this far\" Adventurer");
+        setRank(40, "Dungeon Tour Guide");
 
-        setHealthMsg(100,  health + " (number for testing purposes) - Health Message 1");
-        setHealthMsg(75, health + " (number for testing purposes) - Health Message 2");
-        setHealthMsg(50, health + " (number for testing purposes) - Health Message 3");
-        setHealthMsg(25, health + " (number for testing purposes) - Health Message 4");
-        setHealthMsg(0, health + " (number for testing purposes) - You are dead");
+        setHealthMsg(5,   "You are perfectly healthy! Keep it up!");
+        setHealthMsg(4,   "You are almost at perfect health. Do something!!");
+        setHealthMsg(3,  "You are still capable of doing everyday activities.");
+        setHealthMsg(2, "You still have chances to survive.");
+        setHealthMsg(1,   "You are mortally wounded and need to find medicine.");
+        setHealthMsg(0,  "You are dead!");
 
         gameOver = false;
         playerDead = false;
@@ -125,7 +123,7 @@ class GameState {
         try {
             File saveFile = new File(saveName + ".sav");
             PrintWriter printWriter = new PrintWriter(saveFile);
-            printWriter.write("Zork III save data\n");
+            printWriter.write("Zork++ save data\n");
             dungeon.storeState(printWriter);
             printWriter.write("Adventurer:\n");
             printWriter.write("Current room: " + currentRoom + "\n");
@@ -342,6 +340,9 @@ class GameState {
      * @param health integer intended to be the new health of player.
      */
     void setHealth(int health) {
+        if (health < 0) {
+            health = 0;
+        }
         this.health = health;
     }
 
@@ -384,6 +385,10 @@ class GameState {
      * @return String, representing the player's {@link #health health} as a message.
      */
     String getHealthMsg() {
+
+//        Enumeration<Integer>
+//        for (Integer healthBound : healthMsgs.keys())
+//        }
         return healthMsgs.get(this.health);
     }
 

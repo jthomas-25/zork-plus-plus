@@ -7,8 +7,8 @@ import java.util.Scanner;
  * they include {@link #primaryName primary name}, and {@link #aliases aliases}.
  * @author Robert Carroll
  * @author Richard Volynski
- * @version 3.3
- * 15 July 2020
+ * @version 3.4
+ * 16 July 2020
  */
 public class Item {
     private String primaryName;
@@ -180,7 +180,8 @@ public class Item {
     }
 
     boolean hasItemSpecificCommand (String itemSpecificCommand) {
-        return eventStringListHolder.containsKey(itemSpecificCommand);
+//        return eventStringListHolder.containsKey(itemSpecificCommand);
+        return messages.containsKey(itemSpecificCommand);
     }
 }
 
