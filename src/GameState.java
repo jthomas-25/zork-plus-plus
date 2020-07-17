@@ -19,7 +19,7 @@ class GameState {
     private Room currentRoom = null;
     private String dungeonDesc = "Welcome to the Dungeon. Enjoy but you won't come out how you came in!";
     private ArrayList<Item> inventory;
-    private final int MAX_INVENTORY_WEIGHT = 500000;
+    private final int MAX_INVENTORY_WEIGHT = 100;
     private int inventoryWeight;
     private int score;
     private int health;
