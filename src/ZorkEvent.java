@@ -1,3 +1,5 @@
+//package com.company;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -51,7 +53,7 @@ public abstract class ZorkEvent {
  * @author John Thomas
  * @author Richard Volynski
  * @version 1.5
- * 14 July 2020
+ * 16 July 2020
  */
 class ScoreEvent extends ZorkEvent {
     private int points;
@@ -116,7 +118,7 @@ class WoundEvent extends ZorkEvent {
         playersHealth -= damagePoints;
         GameState.instance().setHealth(playersHealth);
         String healthMsg = GameState.instance().getHealthMsg();
-        this.message = String.format("Damage: -%s"+ "\nHealth: %s", damagePoints, healthMsg);
+        this.message = String.format("Damage: %s"+ "\nHealth: %s", damagePoints, playersHealth);
         return this.message;
     }
 }
@@ -127,7 +129,7 @@ class WoundEvent extends ZorkEvent {
  * it will instead prompt the player with a question asking them if they want to continue or start over.
  * @author John Thomas
  * @version 1.4
- * 14 July 2020
+ * 16 July 2020
  */
 class DieEvent extends ZorkEvent {
 
@@ -201,8 +203,8 @@ class WinEvent extends ZorkEvent {
  * A DropEvent represents a {@link ZorkEvent} that, when triggered, places an item in the current room,
  * mimicking the effect of the player typing a drop command.
  * @author John Thomas
- * @version 1.4
- * 14 July 2020
+ * @version 1.5
+ * 16 July 2020
  */
 class DropEvent extends ZorkEvent {
     private String itemName;
@@ -247,8 +249,8 @@ class DropEvent extends ZorkEvent {
  * the player's inventory, or the dungeon.
  * @author John Thomas
  * @author Richard Volynski
- * @version 1.5
- * 15 July 2020
+ * @version 1.6
+ * 16 July 2020
  */
 class DisappearEvent extends ZorkEvent {
     private String itemName;
@@ -346,8 +348,8 @@ class TransformEvent extends ZorkEvent {
  * Note that this room may be one the player has already visited, or even one
  * that is not otherwise reachable (e.g. a room with no exits).
  * @author John Thomas
- * @version 1.5
- * 15 July 2020
+ * @version 1.6
+ * 16 July 2020
  */
 class TeleportEvent extends ZorkEvent {
     private Room newRoom;
@@ -378,18 +380,26 @@ class TeleportEvent extends ZorkEvent {
      */
     String trigger(String noun) {
         ArrayList<Room> rooms = GameState.instance().getDungeon().getRooms();
-        String currentRoomName = GameState.instance().getAdventurersCurrentRoom().getName();
+        Room currentRoom = GameState.instance().getAdventurersCurrentRoom();
 
-        boolean sameRoom = false;
-        do {
-            int randomNumber = rng.nextInt(rooms.size());
-            this.newRoom = rooms.get(randomNumber);
-            String newRoomName = this.newRoom.getName();
-            sameRoom = newRoomName.equals(currentRoomName);
-        } while (sameRoom);
-            
-        GameState.instance().setAdventurersCurrentRoom(this.newRoom);
-        this.message = String.format("\n%s", this.newRoom.describe());
+        switch (rooms.size()) {
+            case 1:
+                this.message = String.format("\n%s", currentRoom.describe());
+                break;
+            default:
+                boolean sameRoom = false;
+                do {
+                    int randomNumber = rng.nextInt(rooms.size());
+                    this.newRoom = rooms.get(randomNumber);
+                    String newRoomName = this.newRoom.getName();
+                    String currentRoomName = currentRoom.getName();
+                    sameRoom = newRoomName.equals(currentRoomName);
+                } while (sameRoom);
+                    
+                GameState.instance().setAdventurersCurrentRoom(this.newRoom);
+                this.message = String.format("\n%s", this.newRoom.describe());
+                break;
+        }
         return this.message;
     }
 }

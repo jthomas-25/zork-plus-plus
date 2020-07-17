@@ -1,9 +1,10 @@
-package com.company;
+//package com.company;
 
 import java.io.File;
 import java.io.IOException;
 //import java.util.Hashtable;
 import java.util.Scanner;
+
 
 /**
  * CPSC 240
@@ -28,10 +29,10 @@ public class Interpreter {
      * If a dungeon file format is Illegal, the method exits while throwing an IllegalSaveFormatException exception.
      *
      */
-    public static void main(String[] args) throws IllegalSaveFormatException, NoItemException, NoRoomException {
+    public static void main(String[] args) throws Exception {
         Scanner stdin = new Scanner(System.in);
 
-        String defaultZorkFile = "westeros.zork";
+        String defaultZorkFile = "../files/westeros.zork";
         if (args.length > 0) {
             defaultZorkFile = args[0];
         } else {
@@ -71,7 +72,7 @@ public class Interpreter {
                 case "save":
                     System.out.print("Enter the name of your save file: ");
                     String saveFilename = stdin.nextLine();
-                    command = CommandFactory.instance().parse(commandEntered + " " + saveFilename);
+                    command = CommandFactory.instance().parse(String.join(" ", commandEntered, saveFilename));
                     break;
                 case "unlock exit":
                     System.out.print("Which exit? Enter a direction: ");

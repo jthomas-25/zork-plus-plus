@@ -1,3 +1,5 @@
+//package com.company;
+
 import javax.xml.namespace.QName;
 import java.lang.reflect.GenericArrayType;
 import java.util.ArrayList;
@@ -18,7 +20,7 @@ abstract class Command {
      * execute - this is an abstract command, which will be implemented at the subclass level.
      * @return String command message
      */
-    abstract String execute() throws NoItemException;
+    abstract String execute();
 }
 
 /**
