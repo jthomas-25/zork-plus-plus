@@ -137,6 +137,7 @@ class DieEvent extends ZorkEvent {
      * Constructs a new DieEvent with the default message.
      */
     DieEvent() {
+        GameState.instance().setHealth(0);
         this.message = GameState.instance().getHealthMsg();
     }
 
