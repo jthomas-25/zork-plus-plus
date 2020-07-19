@@ -1,10 +1,8 @@
 # Object Oriented Optimists (OOO)
-### Team design assignment #4 — Zork++ implementation part 1
+### Team design assignment #4 — Zork++ implementation part 2
 
-For Zork++ phase 3a, your team will fully implement (code) and debug your game engine's standard features.
+For phase 3b, your team will fully complete your Zork++ game engine, including all the supplemental features you previously designed. Yay!
 
-Recall that the standard features were described in detail in the Zork++ phase 1 description, and that your code must work exactly as described, with .zork files in exactly the format described. This is so that every team's engine works (in part) in the same way and I can therefore reliably and efficiently test everybody's functionality.
+I will obviously not post a test .zork file that is compatible with your supplementary features, because this is the point where every team's project is going to diverge from the others — different features will often result in different syntactic elements in the dungeon file.
 
-You may use this sample .zork file that includes instances of all the standard events (Score, Wound, Die, Win, Drop, Disappear, Transform, and Teleport) to help test that your game engine works properly. All the events, when triggered, should work exactly as described.
-
-Additionally, I will expect to be able to type "health" and "score" at the interpreter prompt and see proper and meaningful output.
+Quite the contrary, each team member will be turning in their own .zork file for this submission, each of which illustrates all of your supplemental features. I'll be able to run your team's game engine on any of your team's super creative dungeons, providing me with hours of fun.
