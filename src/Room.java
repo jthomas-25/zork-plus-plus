@@ -14,8 +14,8 @@ import java.util.Scanner;
  * Also, the Room Class contains lists of Exits.
  * @author Object Oriented Optimists (OOO)
  * @author Richard Volynski
- * @version 3.1
- * 16 July 2020
+ * @version 3.2
+ * 19 July 2020
  */
 public class Room {
     private Hashtable<String, Exit> exits;
@@ -66,7 +66,7 @@ public class Room {
         if (splitLine[0].equals("Contents")) {
             //Decide whether to reset room state (i.e. contents)
             if (initState) {
-                String[] itemNames = splitLine[1].split(",");
+                String[] itemNames = splitLine[1].split(", ");
                 for (String itemName : itemNames) {
                     Item item = d.getItem(itemName);
                     this.add(item);
@@ -85,7 +85,6 @@ public class Room {
     }
 
     /**
-     * Currently obsolete
      * Room - this constructor initializes itself, reading lines from .zork file using a scanner, which is provided
      * as a parameter.
      * This constructor throws an exception (NoRoomException) if a line

@@ -17,8 +17,8 @@ import java.util.Scanner;
  * @author John Thomas
  * @author Robert Carroll
  * @author Richard Volynski
- * @version 3.2
- * 17 July 2020
+ * @version 3.3
+ * 19 July 2020
  */
 public class Interpreter {
     private String commandEntered;
@@ -51,6 +51,7 @@ public class Interpreter {
             } else {
                 dungeon = new Dungeon(defaultZorkFile, true);
                 if (dungeon.getEntry() == null) {
+                    System.out.println(String.format("Dungeon (" + GameState.instance().getDungeon()) + ") is null");;
                     return;
                 }
                 state.initialize(dungeon);

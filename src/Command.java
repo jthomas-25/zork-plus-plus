@@ -1,7 +1,5 @@
 //package com.company;
 
-import javax.xml.namespace.QName;
-import java.lang.reflect.GenericArrayType;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -11,8 +9,8 @@ import java.util.Iterator;
  * this abstract Command class.
  * @author Object Oriented Optimists (OOO)
  * @author Richard Volynski
- * @version 3.2
- * 15 July 2020
+ * @version 3.3
+ * 19 July 2020
  */
 abstract class Command {
     
@@ -154,8 +152,8 @@ class DropCommand extends Command {
  * into/towards the direction they entered, if a valid command was entered
  * @author Object Oriented Optimists (OOO)
  * @author Richard Volynski
- * @version 1.0
- * 12 July 2020
+ * @version 1.1
+ * 19 July 2020
  */
 class MovementCommand extends Command {
     private String dir;
@@ -177,11 +175,21 @@ class MovementCommand extends Command {
      */
     String execute() {
         try {
+            boolean daggerDropped = false;
             Room room = GameState.instance().getAdventurersCurrentRoom().leaveBy(dir);
             GameState.instance().setAdventurersCurrentRoom(room);
             String execute = GameState.instance().getAdventurersCurrentRoom().describe();
+            if (GameState.instance().itemExistsInInventory("dagger") && GameState.instance().toDropOrNot()) {
+                DropCommand dropCommand = new DropCommand("dagger");
+                dropCommand.execute();
+                daggerDropped = true;
+            }
+            if (daggerDropped) {
+                execute+= "\n Oops, you dropped something!";
+            }
             return execute;
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             return e.getMessage();
         }
     }
@@ -372,7 +380,12 @@ class ItemSpecificCommand extends Command {
                                 }
                             }
                         }
-                    } else {
+                        else if (this.verb.equals("take") || this.verb.equals("drop") && (this.noun.equals("guard"))) {
+                            returnMessage = String.format("You cannot '%s' the %s. That would be " +
+                                    "stupid.",this.verb, this.noun);
+                        }
+                    }
+                    else {
                         returnMessage = String.format("You cannot '%s' the %s.", this.verb, this.noun);
                     }
                     return returnMessage;

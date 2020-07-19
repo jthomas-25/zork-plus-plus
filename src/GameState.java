@@ -10,8 +10,8 @@ import java.util.*;
  * @author Object Oriented Optimists (OOO)
  * @author John Thomas
  * @author Richard Volynski
- * @version 3.3
- * 16 July 2020
+ * @version 3.4
+ * 19 July 2020
  */
 class GameState {
     private final String VERSION = "Zork++";
@@ -27,6 +27,7 @@ class GameState {
     private Hashtable<Integer, String> healthMsgs;
     private boolean gameOver;
     private boolean playerDead;
+    private Random random;
 
 
     //Singleton instance of GameState class
@@ -53,11 +54,11 @@ class GameState {
         ranks = new Hashtable<>();
         healthMsgs = new Hashtable<>();
 
-        setRank(0, "Amateur Scout");
-        setRank(10, "Future Hunter");
-        setRank(20, "Treasure Expert");
-        setRank(30, "\"How did you get this far\" Adventurer");
-        setRank(40, "Dungeon Tour Guide");
+        setRank(0, "Amateur Guest");
+        setRank(10, "Bronze Status Member");
+        setRank(20, "Silver Status Member");
+        setRank(30, "Gold Member");
+        setRank(40, "Platinum Member");
 
         setHealthMsg(5,   "You are perfectly healthy! Keep it up!");
         setHealthMsg(4,   "You are almost at perfect health. Do something!!");
@@ -68,6 +69,8 @@ class GameState {
 
         gameOver = false;
         playerDead = false;
+
+        random = new Random(4);
     }
     
     String getVersion() {
@@ -455,6 +458,10 @@ class GameState {
         if (!gameOver) {
             gameOver = true;
         }
+    }
+    boolean toDropOrNot() {
+        int x = random.nextInt(4);
+        return x == 3;
     }
 }
 

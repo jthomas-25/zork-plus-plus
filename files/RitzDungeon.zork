@@ -1,0 +1,294 @@
+Ritz-Carlton Hotel
+Zork++
+===
+Items:
+GoldSpoon,spoon
+3
+examine:It's rough-hewn obsidian sliver, sharp as a needle.
+take:Taken
+break:Ouch! The glass cuts your hand.
+wield:There's no one here to wield it against.
+---
+CopperSword,sword
+10
+examine:This sword has been here for the past 200 years.
+take:Taken
+drop:This sword is definitely worth more than a penny (drops sword).
+---
+SableDagger,dagger
+12
+examine:This dagger was donated to the hotel by the UK 20 years ago.
+take:You soak yourself in the Lobby but manage to take the dagger.
+throw:The dagger hits someone in the neck, severely wounding them. Hotel management calls police.
+drop:Dagger dropped.
+---
+LaserNecklace,necklace
+3
+examine:This is a laser necklace that senses if you could have food poisoning.
+take:Necklace taken.
+wear[score(1)]:You should only wear this necklace here.
+drop:Necklace dropped.
+---
+GreenKnife,knife
+4
+examine:This sharp knife is a green toxic knife if used on animals.
+take:Knife taken.
+drop:Knife dropped.
+---
+YellowPowder,powder
+2
+examine:Yellow box with yellow powder and strong smell.
+take:Powder taken.
+drop:Powder dropped.
+---
+BlackGodzillaEgg,BlackEgg
+8
+examine:This egg is as black as midnight sea, yet alive with scarlet ripples and swirls. 
+---
+GasMask,ProtectiveMask
+5
+examine:This mask protect you against dangerous chemicals.
+take:Gas mask taken.
+drop:Gas mask dropped.
+---
+Antidote,antidote
+1
+examine:This medicine is taken to counteract poison.
+take:Antidote taken.
+drop:Antidote dropped.
+---
+RolexWatch,watch
+2
+examine:This watch is worth a lot of money!!
+wear[Score(2)]:Nice swag you've got!
+take:Watch taken.
+stompon[Drop,Disappear]:Wow, you just broke a $10k watch! It's impressive how you did this 
+right under a surveillance camera.
+drop:The watch breaks into pieces.
+---
+YoMamaShirt,shirt
+2
+examine:This one-size fits all shirt automatically adjusts to fit you. This is how we do it 
+at the Ritz!
+take:Shirt taken.
+wear[Score(3)]:OMG, you look so awesome!
+---
+HavanaCigar,cigar
+2
+examine:You don't even need to know what this is. Just smell it.
+smell: Ahhhh!
+take:Cigar taken.
+smoke:[Score(6)]:The cigar lights up and you start flashing your money!
+drop:Cigar dropped.
+---
+RitzLighter,lighter
+1
+examine:This lighter is on an 80% sale.
+take:lighter taken.
+light:The lighter lights up. Stop burning kerosene!
+turnoff:The lighter stops lighting.
+drop:Lighter dropped.
+---
+PoolSlide(what an item!!),slide
+0
+examine:Apparently the user has to take this so that they could use the slide, thus
+becoming a robbery suspect.
+take:Slide taken. Hotel management is going to be hyped tonight!
+slide:swim[Teleport]: You slide to the bottom of the hotel.
+---
+StaffWallet,wallet
+examine:This wallet belongs to a hotel personnel. However, you can try to take it.
+take:[Score(-2)]:As you try to take the wallet, hotel security pull you from behind.
+---
+SecurityGuard,guard
+examine:These are armed officers guarding the hotel safe.
+---
+===
+Rooms:
+Lobby
+Contents: SableDagger
+You are standing in the hotel lobby, facing a waterfall.
+---
+The Royal Suite
+Contents: CopperSword
+You are facing a suite where everything from the blanket to the TV is made from gold. It is 
+huge and overlooks the ocean. But, be careful here...
+---
+Hotel Kitchen
+Contents: GoldSpoon
+You are in the hotel kitchen. Here, food from Michellin star restaurants is being cooked.
+---
+Casino
+Contents: HavanaCigar
+This is the hotel Casino. Gamble as if you rule the world!!
+---
+Hotel Safe
+This is a special room protected by hotel security to store your valuables.
+Contents: SecurityGuard, StaffWallet
+---
+North Wing
+You are in the North Wing of the hotel. This wing contains security offices and personnel 
+to keep guests safe. 
+---
+Seven Corner Buffet
+Contents: Antidote, LaserNecklace
+This buffet features seven different food categories to choose from. You can even order
+room service from the buffet 24/7.
+---
+South Wing
+The South Wing, also known as the fitness room, consists of free weights and a basketball court, 
+but it is closed for renovation. Go on!
+---
+The Blue Bar
+This bar contains 10,000 bottles of different kinds of blue beverages. Don't drink more 
+than three blue beverages, otherwise, your blood will turn blue. 
+---
+Maid Chapters
+This is where hotel personnel live.
+---
+The Grand Ballroom
+Every year, on the full moon, at 1 AM, guests gather here for the annual Mystic Ball.
+---
+Diamond Pool
+This is a diamond pool with a lazy river that goes around the entire hotel.
+---
+The Royal Jacuzzi
+This is a 100 foot jacuzzi with musical fountain and light performances.
+---
+Dark Sauna
+This sauna is a 200F sauna to relax and rejuvenate.
+---
+Climbing Wall
+Hotel guests enjoy and improve their climbing skills using the climbing wall.
+---
+Manager's Office
+Contents: YellowPowder
+This is office where Mr. Jabel Gibbon controls the hotel from.
+---
+Gift Shop
+Contents: RolexWatch, GreenKnife, GoldSpoon, YoMamaShirt, RitzLighter
+This is the hotel gift shop. 
+---
+===
+Exits:
+Lobby
+s
+North Wing
+---
+North Wing
+n
+Lobby
+---
+North Wing
+s
+Seven Corner Buffet
+---
+Seven Corner Buffet
+n
+North Wing
+---
+South Wing
+n
+Seven Corner Buffet
+---
+Seven Corner Buffet
+s
+South Wing
+---
+Casino
+w
+Seven Corner Buffet
+---
+Seven Corner Buffet
+e
+Casino
+---
+Casino
+e
+Maid Chapters
+---
+Maid Chapters
+w
+Casino
+---
+The Grand Ballroom
+s
+Maid Chapters
+---
+Maid Chapters
+n
+The Grand Ballroom
+---
+Seven Corner Buffet
+w
+Diamond Pool
+---
+Diamond Pool
+e
+Seven Corner Buffet
+---
+Diamond Pool
+w
+Dark Sauna
+---
+Dark Sauna
+e
+Diamond Pool
+---
+The Royal Jacuzzi
+e
+Dark Sauna
+---
+Dark Sauna
+w
+The Royal Jacuzzi
+---
+The Royal Jacuzzi
+w
+Climbing Wall
+---
+Climbing Wall
+e
+The Royal Jacuzzi
+---
+Gift Shop
+n
+South Wing
+---
+South Wing
+s
+Gift Shop
+---
+Manager's Office
+n
+Gift Shop
+---
+Gift Shop
+s
+Manager's Office
+---
+Lobby
+n
+The Royal Suite
+---
+The Royal Suite
+s
+Lobby
+---
+Manager's Office
+e
+The Blue Bar
+---
+The Blue Bar
+w
+Manager's Office
+---
+The Blue Bar
+e
+Hotel Safe
+---
+Hotel Safe
+w
+The Blue Bar
+---
+===
