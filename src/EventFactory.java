@@ -11,10 +11,10 @@ import java.lang.reflect.Constructor;
  * {@link EventFactory#instance()} method.
  * Note that the EventFactory class is the only class that should instantiate
  * {@link ZorkEvent} objects.
- * @author John Thomas
+ * @author John Thomas (for phase 1)
  * @author Richard Volynski
- * @version 3.2
- * 17 July 2020
+ * @version 3.3
+ * 21 July 2020
  */
 public class EventFactory {
     private static EventFactory singleInstance = null;
@@ -58,7 +58,7 @@ public class EventFactory {
                         case "Die":
                         case "Teleport":
                         case "Win":
-                            clazz = Class.forName(eventName + "Event");
+                            clazz = Class.forName("com.company." + eventName + "Event");
                             break;
                         default:    //for nonstandard events
                             clazz = Class.forName(eventName);
@@ -92,7 +92,7 @@ public class EventFactory {
                         case "Unlock":
                         case "Win":
                         case "Wound":
-                            clazz = Class.forName(eventName + "Event");
+                            clazz = Class.forName("com.company." + eventName + "Event");
                             break;
                         default:    //for nonstandard events
                             clazz = Class.forName(eventName);
@@ -118,8 +118,11 @@ public class EventFactory {
                         if (event != null) {
                             break;
                         }
+                        ScoreEvent event1 = new ScoreEvent(1);
                     }
-                } catch (Exception e) {
+                }
+                catch (Exception e) {
+                    e = e;
                 }
 /*
                 String message;

@@ -8,10 +8,10 @@ import java.util.*;
  * GameState Class - represents the current state of the game: which dungeon is being played
  * and what room the adventurer is currently in.
  * @author Object Oriented Optimists (OOO)
- * @author John Thomas
+ * @author John Thomas (for phase 1)
  * @author Richard Volynski
- * @version 3.4
- * 19 July 2020
+ * @version 3.5
+ * 21 July 2020
  */
 class GameState {
     private final String VERSION = "Zork++";
@@ -19,7 +19,7 @@ class GameState {
     private Room currentRoom = null;
     private String dungeonDesc = "Welcome to the Dungeon. Enjoy but you won't come out how you came in!";
     private ArrayList<Item> inventory;
-    private final int MAX_INVENTORY_WEIGHT = 100;
+    private final int MAX_INVENTORY_WEIGHT = 50;
     private int inventoryWeight;
     private int score;
     private int health;
@@ -28,6 +28,8 @@ class GameState {
     private boolean gameOver;
     private boolean playerDead;
     private Random random;
+    private boolean guardAlive;
+
 
 
     //Singleton instance of GameState class
@@ -248,7 +250,8 @@ class GameState {
         try {
             Item item = getItemFromInventoryNamed(itemName);
             removeFromInventory(item);
-        } catch (NoItemException e) {
+        }
+        catch (NoItemException e) {
         }
     }
 
@@ -460,8 +463,16 @@ class GameState {
         }
     }
     boolean toDropOrNot() {
-        int x = random.nextInt(4);
-        return x == 3;
+        int x = random.nextInt(9);
+        return x == 7;
+    }
+
+    public boolean isGuardAlive() {
+        return guardAlive;
+    }
+
+    public void setGuardAlive(boolean guardAlive) {
+        this.guardAlive = guardAlive;
     }
 }
 

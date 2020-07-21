@@ -79,7 +79,7 @@ class ScoreEvent extends ZorkEvent {
         int currentScore = GameState.instance().getScore();
         currentScore += points;
         GameState.instance().setScore(currentScore);
-        this.message = String.format("Score: %d", currentScore);
+        this.message = String.format("Score +%s", points);
         return this.message;
     }
 }
@@ -88,10 +88,10 @@ class ScoreEvent extends ZorkEvent {
  * A WoundEvent represents a {@link ZorkEvent} that, when triggered, changes the player's health
  * by a nonzero number of points.
  * Note that a negative number of points will effectively heal the player.
- * @author John Thomas
+ * @author John Thomas (for phase 1)
  * @author Richard Volynski
- * @version 1.6
- * 16 July 2020
+ * @version 1.7
+ * 21 July 2020
  */
 class WoundEvent extends ZorkEvent {
     private int damagePoints;
@@ -118,7 +118,7 @@ class WoundEvent extends ZorkEvent {
         playersHealth -= damagePoints;
         GameState.instance().setHealth(playersHealth);
         String healthMsg = GameState.instance().getHealthMsg();
-        this.message = String.format("Damage: %s"+ "\nHealth: %s", damagePoints, playersHealth);
+        this.message = String.format("Damage -%s"+ "\nHealth: %s", damagePoints, playersHealth);
         return this.message;
     }
 }
@@ -281,7 +281,7 @@ class DisappearEvent extends ZorkEvent {
         } catch (Exception e) {
         }
         GameState.instance().getDungeon().removeItem(this.itemName);
-        this.message = String.format("%s was removed from user's inventory, %s, and %s",
+        this.message = String.format("\n%s was removed from user's inventory, %s, and %s.",
                 this.itemName, currentRoom, GameState.instance().getDungeon().getTitle());
         return this.message;
     }
@@ -330,7 +330,8 @@ class TransformEvent extends ZorkEvent {
             }
             this.message = String.format("%s was removed from user's inventory and replaced by %s",
                     itemToReplace, newItem);
-        } else if (currentRoom.hasItemNamed(this.nameOfItemToReplace)) {
+        }
+        else if (currentRoom.hasItemNamed(this.nameOfItemToReplace)) {
             itemToReplace = currentRoom.getItemNamed(this.nameOfItemToReplace);
             currentRoom.removeItem(this.nameOfItemToReplace);
             currentRoom.addItem(primaryNameOfNewItem);
