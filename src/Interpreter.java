@@ -17,8 +17,8 @@ import java.util.Scanner;
  * @author John Thomas
  * @author Robert Carroll
  * @author Richard Volynski
- * @version 3.3
- * 19 July 2020
+ * @version 3.4
+ * 21 July 2020
  */
 public class Interpreter {
     private String commandEntered;

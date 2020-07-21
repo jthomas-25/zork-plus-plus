@@ -1,5 +1,7 @@
 //package com.company;
 
+import org.ietf.jgss.GSSContext;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -32,8 +34,8 @@ import java.util.Random;
  * player when the player enters a room). This is so the users of this API have greater
  * flexibility in adding their own features.</p>
  * @author John Thomas
- * @version 1.6
- * 16 July 2020
+ * @version 1.7
+ * 21 July 2020
  */
 public abstract class ZorkEvent {
     protected String message;
@@ -195,8 +197,13 @@ class WinEvent extends ZorkEvent {
      * @return this event's "win" message
      */
     String trigger(String noun) {
-        GameState.instance().endGame();
-        return this.message;
+        if (GameState.instance().isGuardAlive() && GameState.instance().itemExistsInInventory("wallet")) {
+            return "You cannot steal the wallet because a guard is protecting it!";
+        }
+        else {
+            GameState.instance().endGame();
+            return this.message;
+        }
     }
 }
 
@@ -232,7 +239,7 @@ class DropEvent extends ZorkEvent {
             item = GameState.instance().getItemFromInventoryNamed(this.itemName);
             GameState.instance().removeFromInventory(item);
             currentRoom.add(item);
-            this.message = String.format("\"%s\" was dropped from inventory and placed in %s",
+            this.message = String.format("%s was dropped from inventory and placed in %s",
                     item, currentRoom);
         } catch (NoItemException e) {
             item = currentRoom.getItemNamed(this.itemName);

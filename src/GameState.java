@@ -28,7 +28,7 @@ class GameState {
     private boolean gameOver;
     private boolean playerDead;
     private Random random;
-    private boolean guardAlive;
+    private boolean guardAlive = true;
 
 
 

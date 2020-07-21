@@ -9,7 +9,7 @@ import java.util.Iterator;
  * this abstract Command class.
  * @author Object Oriented Optimists (OOO)
  * @author Richard Volynski
- * @version 3.3
+ * @version 3.4
  * 21 July 2020
  */
 abstract class Command {
