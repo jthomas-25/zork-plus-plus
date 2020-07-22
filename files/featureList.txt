@@ -1,0 +1,178 @@
+7.22.20
+
+OOO Supplemental Features
+
+Richard Volynski
+
+Swap -- this command allows to exchange items in the user's inventory 
+with items in the user's current room. Swap can exchange one item 
+at a time or all items simultaneously. 
+
+Examples:
+
+> swap shirt with powder
+Swapped shirt (from user's inventory) with powder (in user's current room).
+
+> swap all
+Swapped all items 
+
+All items in the user's current room will appear in the user's inventory and 
+item(s) in the user's inventory will appear in the user's current room. 
+This command is handy when you need to exchange many items at once.
+
+
+To test swap, you will need to:
+
+1. Take dagger from Lobby (entry room)
+2. Use "s" to go to North Wing
+2a. If your dagger was stolen, take it from your current room
+or remember where it was stolen so that you have it when you 
+go kill the security guard
+3. Use "swap dagger with necklace"
+4. Use "i" to check that you're carrying a necklace
+
+
+To test swap all, you will need to:
+
+1. Take dagger from Lobby (entry room)
+2. Use "s" to go to North Wing
+2a. If your dagger was stolen, take it from your current room
+or remember where it was stolen so that you have it when you 
+go kill the security guard
+3. Use "s" to go to Seven Corner Buffet
+3a. If your dagger was stolen, take it from your current room
+or remember where it was stolen so that you have it when you 
+go kill the security guard
+4. Use "S" to go to South Wing
+4a. If your dagger was stolen, take it from your current room
+or remember where it was stolen so that you have it when you 
+go kill the security guard
+5. Use "s" to go to Gift Shop
+5a. If your dagger was stolen, take it from your current room
+or remember where it was stolen so that you have it when you 
+go kill the security guard
+6. Use "swap all"
+7. Use "i" to check that you swapped all items
+
+
+Kill -- this important commands allows you to clear the way to 
+the Hotel Safe. The Hotel Safe is where you will find a hotel 
+personnel's wallet (you will need to steal this to win the game)
+
+To test kill, you will need to:
+1. Possess a dagger or sword
+1a. Take dagger from Lobby (entry room)
+2. Use "s" to go to North Wing
+2a. If your dagger was stolen, take it from your current room
+or remember where it was stolen so that you have it when you 
+go kill the security guard
+3. Use "s" to go to Seven Corner Buffet
+3a. IIf your dagger was stolen, take it from your current room
+or remember where it was stolen so that you have it when you 
+go kill the security guard
+4. Use "s" to go to Gift Shop
+4a. If your dagger was stolen, take it from your current room
+or remember where it was stolen so that you have it when you 
+go kill the security guard
+5. Use "s" to go to Manager's Office
+5a. If your dagger was stolen, take it from your current room
+or remember where it was stolen so that you have it when you 
+go kill the security guard
+6. Use "e" to go to Hotel Security Headquarters
+6a. If your dagger was stolen, take it from your current room
+or remember where it was stolen so that you have it when you 
+go kill the security guard
+7. Use "kill guard" Use "kill guard" to Kill security guard
+
+
+Item-Specific Commands:
+GoldSpoon,spoon
+examine - this command gives you the item's description
+take - this command lets you take this item
+break[Wound(1)] - this command "breaks the spoon", causing injury to you.
+If you possess a spoon and type this command five times, you will die.
+drop - this command removes this item from your inventory
+---
+CopperSword,sword
+examine - this command gives you the item's description
+take - this command lets you take this item
+drop - this command removes this item from your inventory
+---
+SableDagger,dagger
+examine - this command gives you the item's description
+take - this command lets you take this item
+throw[Disappear] - this command removes of this item from your inventory,
+current room, and the Ritz-Carlton Hotel, prompting a police search
+drop - this command removes this item from your inventory
+---
+LaserNecklace,necklace
+examine - this command gives you the item's description
+take - this command lets you take this item
+wear[Score(2)] - this command lets you wear this item and rewards you points 
+for doing so.
+drop - this command removes this item from your inventory
+---
+GreenKnife,knife
+examine - this command gives you the item's description
+take - this command lets you take this item
+drop - this command removes this item from your inventory 
+touch[Wound(1)] - 
+---
+YellowPowder,powder
+examine - this command gives you the item's description
+take - this command lets you take this item
+drop - this command removes this item from your inventory 
+---
+GasMask,mask
+examine - this command gives you the item's description
+take - this command lets you take this item
+drop - this command removes this item from your inventory
+wear - This command lets you wear this item
+---
+Antidote,antidote
+examine - this command gives you the item's description
+take - this command lets you take this item
+drop - this command removes this item from your inventory
+drink[Health(2),Score(1)] - this command lets you drink this item and rewards
+you points for doing so
+---
+RolexWatch,watch
+examine - this command gives you the item's description
+wear[Score(3)] - this command lets you wear this item and rewards you points
+for doing so
+take - this command lets you take this item
+stompon[Drop,Disappear] - this commands removes the item from your current room 
+and inventory
+drop - this command removes this item from your inventory
+---
+YoMamaShirt,shirt
+examine - this command gives you the item's description
+take - this command lets you take this item
+wear[Score(3)] - this command lets you wear this item and rewards you points for
+doing so
+drop - this command removes this item from your inventory
+---
+HavanaCigar,cigar
+examine - this command gives you the item's description
+smell - this command is here to distract you from playing
+take - this command lets you take this item
+smoke[Score(4)] - this command lets you smoke this item and rewards you points
+for doing so
+drop - this command lets you drop this item
+---
+PoolSlide,slide
+examine - this command gives you the item's description
+take[Score(6)] - this command lets you take this item, and because you it to teleport,
+you will be rewarded points
+ride[Drop,Teleport] - this command lets you ride the slide, causing you to teleport into
+a random room in the hotel
+drop - this command lets you drop this item
+---
+StaffWallet,wallet
+examine - this command gives you the item's description
+steal[Score(13),Win] - this command lets you steal this item and win the game
+---
+SecurityGuard,guard
+examine - this command gives you the person's (item's) description
+kill[Wound(3),Score(8)] - this command lets you kill this item and proceed one step
+closer towards winning the game

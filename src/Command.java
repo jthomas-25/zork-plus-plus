@@ -546,14 +546,25 @@ class SwapCommand extends Command {
                     while (itr.hasNext()) {
                         Item roomItem = itr.next();
                         state.addToInventory(roomItem);
+                    }
+                    while (itr.hasNext()) {
+                        Item roomItem = itr.next();
                         currentRoom.remove(roomItem);
                     }
                     for (int i = 0; i < numItemsInUserInventory; i++) {
                         Item itemInInventory = GameState.instance().getInventory().get(i);
-                        GameState.instance().removeFromInventory(itemInInventory);
                         currentRoom.add(itemInInventory);
                     }
-                    result += String.format("Swapped %s with %s.\n", userItemName, itemInRoomName);
+                    for (int i = numItemsInUserInventory-1; i >= 0; i--) {
+                        Item itemInInventory = GameState.instance().getInventory().get(i);
+                        GameState.instance().removeFromInventory(itemInInventory);
+                    }
+                    if (userItemName.equalsIgnoreCase("all")) {
+                        result += String.format("Swapped all items");
+                    }
+                    else {
+                        result += String.format("Swapped %s with %s", userItemName, itemInRoomName);
+                    }
                 }
                 else {
                     result = String.format("There are no items in %s.", currentRoom);
@@ -574,7 +585,12 @@ class SwapCommand extends Command {
                 state.addToInventory(itemInRoom);
                 currentRoom.remove(itemInRoom);
                 currentRoom.add(userItem);
-                return String.format("Swapped %s with %s.\n", userItemName, itemInRoomName);
+                if (userItemName.equalsIgnoreCase("all")) {
+                    return String.format("Swapped all items");
+                }
+                else {
+                    return String.format("Swapped %s with %s.", userItemName, itemInRoomName);
+                }
         }
     }
 }

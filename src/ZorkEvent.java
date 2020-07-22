@@ -122,7 +122,7 @@ class WoundEvent extends ZorkEvent {
         if (playersHealth <= 0) {
             ZorkEvent event = EventFactory.instance().parse("Die");
             String dieMsg = event.trigger(noun);
-            this.message = String.format("\n%s", dieMsg);
+            this.message = String.format("\n%s", dieMsg + "\nFinal Score: %s", GameState.instance().getScore());
         } else {
             //String healthMsg = GameState.instance().getHealthMsg();
             //this.message = healthMsg;
