@@ -2,6 +2,7 @@
 
 import java.io.File;
 import java.io.IOException;
+//import java.util.Hashtable;
 import java.util.Scanner;
 
 
@@ -16,11 +17,12 @@ import java.util.Scanner;
  * @author John Thomas
  * @author Robert Carroll
  * @author Richard Volynski
- * @version 3.4
- * 21 July 2020
+ * @version 3.5
+ * 22 July 2020
  */
 public class Interpreter {
     private String commandEntered;
+    //private Hashtable<String, String> specialCommands = new Hashtable<>();;
 
     /**
      * The main method, argument(s) should be the file path of the dungeon or save (dot sav file) to be played/restored.
@@ -39,101 +41,63 @@ public class Interpreter {
         } else {
             assert true; // essentially do nothing
         }
-        
-        String lastSave = null;
-        boolean done = false;
-        while (!done) {
-            GameState state = GameState.instance();
-            Dungeon dungeon = null;
-            try {
-                if (defaultZorkFile.endsWith(".sav")) {
-                    lastSave = defaultZorkFile;
-                    state.restore(defaultZorkFile);
-                    dungeon = state.getDungeon();
-                } else {
-                    dungeon = new Dungeon(defaultZorkFile, true);
-                    if (dungeon.getEntry() == null) {
-                        System.out.println(String.format("Dungeon (" + GameState.instance().getDungeon()) + ") is null");
-                        return;
-                    }
-                    state.initialize(dungeon);
-                }
-            } catch (Exception e) {
-                System.out.println("Exception happened: " + e);
-                e.printStackTrace();
-                System.exit(1);
-            }
 
-            System.out.println(dungeon.getTitle());
-            System.out.println();
-            System.out.println(dungeon.getEntry().describe());
-
-            String commandEntered = "";
-            while (!state.gameIsOver()) {
-                System.out.print("> ");
-                commandEntered = stdin.nextLine();
-                Command command;
-
-                switch (commandEntered) {
-                    case "save":
-                        System.out.print("Enter the name of your save file: ");
-                        String saveFilename = stdin.nextLine();
-                        lastSave = saveFilename + ".sav";
-                        command = CommandFactory.instance().parse(String.join(" ", commandEntered, saveFilename));
-                        break;
-                    default:
-                        command = CommandFactory.instance().parse(commandEntered);
-                        break;
-                }
-                if (command != null) {
-                    String output = command.execute();
-                    System.out.println(output);
-                }
-            }
-            
-            //occurs if player wins or dies (WinEvent or DieEvent triggered)
-            String answer;
-            if (state.playerHasWon()) {
-                do {
-                    System.out.print("Would you like to start over (y/n)? ");
-                    answer = stdin.nextLine();
-                } while (!answer.equals("y") && !answer.equals("n"));
-                if (answer.equals("y")) {
-                    defaultZorkFile = dungeon.getFileName();
-                    state.resetGame();
-                } else if (answer.equals("n")) {
-                    done = true;
-                    System.out.println("See you next time!");
-                }
+        GameState state = GameState.instance();
+        Dungeon dungeon = null;
+        try {
+            if (defaultZorkFile.endsWith(".sav")) {
+                state.restore(defaultZorkFile);
+                dungeon = state.getDungeon();
             } else {
-                if (lastSave != null) {
-                    do {
-                        System.out.print("Would you like to continue from your last save, start over, or quit? (continue/start over/q)? ");
-                        answer = stdin.nextLine();
-                    } while (!answer.equals("continue") && !answer.equals("start over") && !answer.equals("q"));
-                    if (answer.equals("continue")) {
-                        defaultZorkFile = lastSave;
-                        state.resetGame();
-                    } else if (answer.equals("start over")) {
-                        defaultZorkFile = dungeon.getFileName();
-                        state.resetGame();
-                    } else if (answer.equals("q")) {
-                        done = true;
-                        System.out.println("See you next time!");
-                    }
+                dungeon = new Dungeon(defaultZorkFile, true);
+                if (dungeon.getEntry() == null) {
+                    System.out.println(String.format("Dungeon (" + GameState.instance().getDungeon()) + ") is null");;
+                    return;
+                }
+                state.initialize(dungeon);
+            }
+        } catch (Exception e) {
+            System.out.println("Exception happened: " + e);
+            e.printStackTrace();
+            System.exit(1);
+        }
+
+        System.out.println(dungeon.getTitle());
+        System.out.println();
+        System.out.println(dungeon.getIntro());
+        System.out.println(dungeon.getEntry().describe());
+
+        String commandEntered = "";
+        while (!state.gameIsOver()) {
+            System.out.print("> ");
+            commandEntered = stdin.nextLine();
+            Command command;
+
+            switch (commandEntered) {
+                case "save":
+                    System.out.print("Enter the name of your save file: ");
+                    String saveFilename = stdin.nextLine();
+                    command = CommandFactory.instance().parse(String.join(" ", commandEntered, saveFilename));
+                    break;
+                case "unlock exit":
+                    System.out.print("Which exit? Enter a direction: ");
+                    String exitDir = stdin.nextLine();
+                    command = CommandFactory.instance().parse(String.join(" ", "unlock", exitDir, "exit"));
+                    break;
+                default:
+                    command = CommandFactory.instance().parse(commandEntered);
+                    break;
+            }
+            if (command != null) {
+                String output = command.execute();
+                if (output == null) {
+                    System.out.println("See you next time!");
                 } else {
-                    do {
-                        System.out.print("Would you like to start over or quit? (start over/q)? ");
-                        answer = stdin.nextLine();
-                    } while (!answer.equals("start over") && !answer.equals("q"));
-                    if (answer.equals("start over")) {
-                        state.resetGame();
-                    } else if (answer.equals("q")) {
-                        done = true;
-                        System.out.println("See you next time!");
-                    }
+                    System.out.println(output);
                 }
             }
         }
     }
 }
+
+

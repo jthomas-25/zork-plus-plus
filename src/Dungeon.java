@@ -14,7 +14,7 @@ import java.util.Scanner;
  * as an ArrayList does.
  * @author Object Oriented Optimists (OOO)
  * @version 2.9
- * 21 July 2020
+ * 22 July 2020
  */
 public class Dungeon {
     private String title = "Simple Dungeon";    //default
@@ -22,6 +22,8 @@ public class Dungeon {
     private ArrayList<Room> rooms;
     private String fileName;
     private Hashtable<String, Item> items;
+    private String intro = "";
+
 
 
     public Dungeon(String fileName) throws IllegalDungeonFormatException, FileNotFoundException, NoRoomException {
@@ -53,24 +55,23 @@ public class Dungeon {
                 String version = GameState.instance().getVersion();
                 if (line.equals(version)) {
                     continue;
-                } else {
+                }
+                else {
                     throw new IllegalDungeonFormatException("Dungeon file is incompatible with the current version of Zork (" + version + ")");
                 }
             }
 
-            if (lineNumber == 3) {
-                if (line.equals("===")) {
-                    continue;
-                } else {
-//                    System.out.println("Third line is wrong in the Dungeon file");
-                    break;
-                }
+            if (!line.equals("===")) {
+                intro += line + "\n";
+                continue;
+            }
+            else {
+                line = stdin.nextLine();
             }
 
             boolean firstRoom = true;
             if (line.equals("Items:")) {
                 while (!line.equals("===")) {
-
                     Item item;
                     try {
                         item = new Item(stdin);
@@ -131,11 +132,11 @@ public class Dungeon {
         items = new Hashtable<>();
     }
 
-    public ArrayList<Room> getRooms() {
+    ArrayList<Room> getRooms() {
         return rooms;
     }
 
-    public int getNumRooms() {
+    int getNumRooms() {
         return rooms.size();
     }
 
@@ -144,7 +145,7 @@ public class Dungeon {
      *
      * @return title;
      */
-    public String getTitle() {
+    String getTitle() {
         return title;
     }
 
@@ -153,7 +154,7 @@ public class Dungeon {
      *
      * @param room
      */
-    public void add(Room room) {
+    void add(Room room) {
         rooms.add(room);
     }
 
@@ -163,7 +164,7 @@ public class Dungeon {
      * @param roomName
      * @return room found
      */
-    public Room getRoom(String roomName) {
+    Room getRoom(String roomName) {
         for (int i = 0; i < rooms.size(); i++) {
             if (rooms.get(i).getName().equals(roomName)) {
                 return rooms.get(i);
@@ -177,7 +178,7 @@ public class Dungeon {
      *
      * @return fileName
      */
-    public String getFileName() {
+    private String getFileName() {
         return fileName;
     }
 
@@ -216,7 +217,7 @@ public class Dungeon {
      *
      * @return entry
      */
-    public Room getEntry() {
+    Room getEntry() {
         return entry;
     }
 
@@ -224,7 +225,7 @@ public class Dungeon {
      * setEntry - this method sets the room the user is entering
      * @param entry - room
      */
-    public void setEntry(Room entry) {
+    void setEntry(Room entry) {
         this.entry = entry;
     }
 
@@ -243,6 +244,12 @@ public class Dungeon {
         if (item != null) {
             this.removeItem(item);
         }
+    }
+    public String getIntro() {
+        return intro;
+    }
+    public void setIntro(String intro) {
+        this.intro = intro;
     }
 }
 

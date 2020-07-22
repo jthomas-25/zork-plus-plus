@@ -1,24 +1,46 @@
 Ritz-Carlton Hotel
 Zork++
+Welcome to the Ritz-Carlton Hotel, Zork Edition. Here you will go through obstacles and
+get rewarded.
+Your mission is to steal a wallet that belongs to hotel staff in a secured room protected
+by a guard to win. You will need to kill the guard with either a sword or dagger before 
+taking the wallet. *Spoiler* If you took a dagger or sword, it doesn't mean it 
+will stay forever with you as other guests can access your inventory and steal items.
+After taking the wallet, you will need to "steal" the wallet.
+
+*SAMPLE SPOILER ALERT*
+Clear instructions to win:
+1. Use "N" to go to room x
+2. use "S" to go to y
+3. take dagger
+4. Pay attention if you lose your dagger, and if you do, take it again
+5. Go to "w" to room a
+6. kill guard using "kill" command
+7. Take the wallet
+8. steal the wallet using "steal" command (if, you fail to kill the guard, you can not steal the wallet)
 ===
 Items:
 GoldSpoon,spoon
 16
-examine:This Renaissance-era spoon is still used by hotel chefs to prepare your food. 
+examine:This Renaissance-era gold spoon is still used by hotel chefs to prepare your food. 
+"I don't always invest in dangerously overpriced precious metals, but when I do, 
+I invest with Rosland Capital."
 take:Spoon taken.
 break[Wound(1)]:You broke your spoon. How will you eat ice cream, now?
-drop:You drop the spoon and gold pours out!
+drop:You drop the spoon and the price of gold goes down.!
 ---
 CopperSword,sword
 25
-examine:This sword has been here for the past 200 years.
+examine:This sword has been here for the past 200 years. Several guests have tried to take
+and sell it on eBay, but were ultimately caught by hotel security.
 take:Sword taken.
 drop:This sword is definitely worth more than a penny.
 You proceed to drop the sword.
 ---
 SableDagger,dagger
 19
-examine:This dagger was donated to the hotel by the UK 20 years ago. 
+examine:You are facing a centuries-old dagger. This dagger was donated to the hotel by the 
+UK 20 years ago. 
 take:You soak yourself in the Waterfall but manage to take the dagger.
 throw[Disappear]:The dagger hits someone in the neck, severely wounding them.
 Hotel management calls police. The wounded guest sues you.
@@ -26,10 +48,11 @@ drop:Dagger dropped.
 ---
 LaserNecklace,necklace
 14
-examine:This is a laser necklace you would wear in the disco club (currently under construction)
-outside the hotel.
+examine:This is not your usual laser necklace you would wear in a disco club.
+Beams spread for miles long, leaving you visible even during a power outage.
+outside the hotel.This necklace lights up and changes colors.
 take:Necklace taken.
-wear[Score(4)]:You look LIT!!
+wear[Score(2)]:You look LIT!!
 drop:Necklace dropped.
 ---
 GreenKnife,knife
@@ -45,10 +68,6 @@ examine:Yellow box with yellow powder and strong smell.
 take:Powder taken.
 drop:Powder dropped.
 ---
-BlackGodzillaEgg,BlackEgg
-30
-examine:This egg is as black as midnight sea, yet alive with scarlet ripples and swirls. 
----
 GasMask,mask
 14
 examine:This mask protect you against dangerous chemicals.
@@ -62,7 +81,7 @@ Antidote,antidote
 examine:This medicine is taken to counteract poison.
 take:Antidote taken.
 drop:Antidote dropped.
-drink[Health(2),Score(3)]:You should now be able to eat anything in the buffet without 
+drink[Health(2),Score(1)]:You should now be able to eat anything in the buffet without 
 worrying about food poisoning.
 ---
 RolexWatch,watch
@@ -79,7 +98,7 @@ YoMamaShirt,shirt
 examine:This one-size fits all shirt automatically adjusts to fit you. This is how we do it 
 at the Ritz!
 take:Shirt taken.
-wear[Score(4)]:OMG, you look so awesome!
+wear[Score(3)]:OMG, you look so awesome!
 drop:Shirt dropped.
 ---
 HavanaCigar,cigar
@@ -87,14 +106,14 @@ HavanaCigar,cigar
 examine:This is rare Cuban cigar. Just smell it!
 smell:Ahhhh!
 take:Cigar taken.
-smoke[Score(6)]:The cigar lights up and you start flashing your money!
+smoke[Score(4)]:The cigar lights up and you start flashing your money!
 drop:Cigar dropped.
 ---
 PoolSlide,slide
 0
 examine:Apparently the user has to take this so that they could use this, thus
-becoming a robbery suspect.
-take[Score(8)]:Slide taken from the pool. Really? Hotel management is going to be hyped tonight 
+becoming a robbery suspect. This game does not allow the user to slide down unless they possess a slide.
+take[Score(6)]:Slide taken from the pool. Really? Hotel management is going to be hyped tonight 
 when they go looking for you!
 ride[Drop,Teleport]:You slide to the bottom of the hotel.
 drop:Slide dropped. You are lucky there was no lifeguard watching you.
@@ -106,8 +125,8 @@ steal[Score(13),Win]:Congratulations, my guest! It has been a hard journey for y
 ---
 SecurityGuard,guard
 200
-examine:There is an armed guard guarding the hotel safe.
-kill[Wound(3),Score(9)]:You slash the guard's head wide open as he shoots you in the ribs.
+examine:There is an armed guard guarding the hotel safe. The guard will give you a pat down.
+kill[Wound(3),Score(8)]:You slash the guard's head wide open as he shoots you in the ribs.
 ---
 ===
 Rooms:
@@ -130,7 +149,8 @@ This is the hotel Casino. Gamble as if you rule the world!!
 ---
 Hotel Safe
 Contents: StaffWallet
-This is a special room to used by hotel personnel ONLY.
+This is a special room to used by hotel employees ONLY. This safe used to contain classified 
+documents during the Cold War.
 ---
 North Wing
 You are in the North Wing of the hotel. This wing contains security offices 
@@ -147,27 +167,38 @@ but it is closed for renovation. Go on!
 ---
 Hotel Security HeadQuarters
 Contents: SecurityGuard
-This bulletproof room is reserved for hotel security. Please go to the security guard (a very corrupt one) 
+This bulletproof room is reserved for hotel security. Please go to the security guard 
 who will search you for any weapons. 
 ---
 Maid Chapters
-This is where hotel personnel live.
+This is where hotel personnel live. There are mostly bunk beds, as well as double beds.
 ---
 The Grand Ballroom
-Every year, on the full moon, at 1 AM, guests gather here for the annual Mystic Ball.
+Every year, on the full moon, at 1 AM, guests gather here for the annual Mystic Ball. 
+Also, weddings and conferences are held here.
 ---
 Diamond Pool
 Contents: PoolSlide
-This is a diamond pool with a lazy river that goes around the entire hotel.
+This is a diamond pool with a lazy river that goes around the entire hotel. Have fun and remember,
+NO ROUGHHOUSING OF ANY KIND WILL BE TOLERATED. Violators will not have to leave the pool because
+the water will be sucked out of the pool by a rough-housing sensor, which notifies hotel management 
+to shut water off from the pool. 
+The pool is open everyday 7 AM - 11 PM.
 ---
 The Royal Jacuzzi
-This is a 100 foot jacuzzi with musical fountain and light performances.
+This is a 100 foot jacuzzi with musical fountain and light performances. 
+The jacuzzi is open everyday 7 AM - 10 PM.
 ---
 Dark Sauna
-This is a 200F sauna to relax and rejuvenate.
+This is a 200F sauna to relax and rejuvenate. 
+The sauna is open 7 AM - 10 PM during the summer 
+and 7 AM - 11 PM during the winter.
 ---
-Climbing Wall
-Hotel guests enjoy and improve their climbing skills using the climbing wall.
+Fitness Center
+This is the hotel fitness center, which consists of a weight room, basketball court, and a 
+volleyball court. During the winter, the basketball court is turned into an ice skating rink. 
+On New Year's Eve,the hotel hosts a Deck-the-Hallsathon, where guests compete for hotel bonus 
+points, free nights, and other prizes. Guests also take selfies with Santa. 
 ---
 Manager's Office
 Contents: YellowPowder
@@ -253,9 +284,9 @@ The Royal Jacuzzi
 ---
 The Royal Jacuzzi
 w
-Climbing Wall
+Fitness Center
 ---
-Climbing Wall
+Fitness Center
 e
 The Royal Jacuzzi
 ---
