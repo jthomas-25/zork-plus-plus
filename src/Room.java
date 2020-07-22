@@ -14,8 +14,8 @@ import java.util.Scanner;
  * Also, the Room Class contains lists of Exits.
  * @author Object Oriented Optimists (OOO)
  * @author Richard Volynski
- * @version 3.1
- * 16 July 2020
+ * @version 3.3
+ * 19 July 2020
  */
 public class Room {
     private Hashtable<String, Exit> exits;
@@ -134,7 +134,7 @@ public class Room {
      * getName - this method returns name of the room
      * @return name - room name
      */
-    String getName() {
+    public String getName() {
         return name;
     }
 
@@ -143,7 +143,7 @@ public class Room {
      * setDesc - this method sets room description
      * @param desc - room description
      */
-    void setDesc(String desc) {
+    public void setDesc(String desc) {
         this.desc = desc;
     }
 
@@ -168,7 +168,7 @@ public class Room {
         Enumeration<String> directions = exits.keys();
         while (directions.hasMoreElements()) {
             String dir = directions.nextElement();
-            Exit exit = exits.get(dir);
+            Exit exit = this.getExit(dir);
             output += "\n" + exit.describe();;
         }
         
@@ -189,7 +189,7 @@ public class Room {
      * @throws ExitLockedException if the exit connecting the two rooms is locked
      */
     Room leaveBy(String dir) throws Exit.ExitLockedException {
-        Exit exit = exits.get(dir);
+        Exit exit = this.getExit(dir);
         if (exit == null) {
             return this;
         } else {
@@ -202,6 +202,10 @@ public class Room {
         }
     }
 
+    public boolean hasNoExits() {
+        return exits.isEmpty();
+    }
+
     /**
      * addExit - this method adds an exit to the hashtable of the exits in the room
      * @param exit - exit
@@ -210,16 +214,29 @@ public class Room {
         exits.put(exit.getDir(), exit);
     }
 
+    /**
+     * Returns the {@link Exit} object associated with the given direction.
+     * @param dir the direction in which the exit lies
+     * @return the {@link Exit} object corresponding to this direction.
+     */
+    public Exit getExit(String dir) {
+        return exits.get(dir);
+    }
+
+    /**
+     * 
+     */
     public void lockExit(Exit exit) {
         exit.lock();
         lockedExits.put(exit.getDir(), exit);
     }
 
+    //hardcoded dungeon only
     public void lockExit(String dir) throws Exception {
         if (exits.isEmpty()) {
             throw new Exception("This room has no exits.");
         }
-        Exit exit = exits.get(dir);
+        Exit exit = this.getExit(dir);
         if (exit == null) {
             throw new Exception("No exit in that direction.");
         } else {
@@ -231,24 +248,39 @@ public class Room {
         }
     }
 
+    
     public void unlockExit(Exit exit) {
         exit.unlock();
-        lockedExits.remove(exit);
+        lockedExits.remove(exit.getDir());
     }
     
+    //hardcoded dungeon only
     public void unlockExit(String dir) throws Exception {
-        if (exits.isEmpty()) {
+        if (this.hasNoExits()) {
             throw new Exception("This room has no exits.");
         }
-        Exit exit = exits.get(dir);
+        Exit exit = this.getExit(dir);
         if (exit == null) {
             throw new Exception("No exit in that direction.");
         } else {
-            if (!exit.isLocked()) {
-                throw new Exception("Already unlocked.");
-            } else {
+            if (exit.isLocked()) {
                 this.unlockExit(exit);
+            } else {
+                throw new Exception("Already unlocked.");
             }
+        }
+    }
+
+    void unlockExit(String dir, Item item) throws Exception {
+        Exit exit = this.getExit(dir);
+        if (exit.requiresItemToUnlock()) {
+            if (exit.requiresThisItemToUnlock(item)) {
+                this.unlockExit(exit);
+            } else {
+                throw new Exception(String.format("Can’t unlock this exit with this item."));//%s.", item));
+            }
+        } else {
+            throw new Exception("Locked tight.");
         }
     }
 
@@ -277,7 +309,7 @@ public class Room {
             int i = 0;
             while (directions.hasMoreElements()) {
                 String dir = directions.nextElement();
-                Exit exit = exits.get(dir);
+                Exit exit = this.getExit(dir);
                 exit.storeState(w);
                 i++;
                 if (i < lockedExits.size() - 1) {
@@ -321,8 +353,8 @@ public class Room {
                 case "Locked exits":
                     String[] exitDirs = splitLine[1].split(",");
                     for (String dir : exitDirs) {
-                        Exit exit = exits.get(dir);
-                        exit.lock();
+                        Exit exit = this.getExit(dir);
+                        this.lockExit(exit);
                     }
                     break;
             }

@@ -181,8 +181,7 @@ public class Item {
         return weight;
     }
 
-    boolean hasItemSpecificCommand (String itemSpecificCommand) {
-//        return eventStringListHolder.containsKey(itemSpecificCommand);
+    boolean hasItemSpecificCommand(String itemSpecificCommand) {
         return messages.containsKey(itemSpecificCommand);
     }
 }

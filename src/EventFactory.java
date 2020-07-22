@@ -1,7 +1,5 @@
 //package com.company;
 
-import java.lang.reflect.Constructor;
-
 
 /**
  * An EventFactory represents a factory whose purpose is to parse text strings
@@ -14,7 +12,7 @@ import java.lang.reflect.Constructor;
  * @author John Thomas
  * @author Richard Volynski
  * @version 3.2
- * 17 July 2020
+ * 19 July 2020
  */
 public class EventFactory {
     private static EventFactory singleInstance = null;
@@ -50,24 +48,8 @@ public class EventFactory {
         String eventName = sa[0];
         ZorkEvent event = null;
         try {
-            //Reflection technique
-            Class clazz = null;
             if (sa.length == 1) {
-                try {
-                    switch (eventName) {
-                        case "Die":
-                        case "Teleport":
-                        case "Win":
-                            clazz = Class.forName(eventName + "Event");
-                            break;
-                        default:    //for nonstandard events
-                            clazz = Class.forName(eventName);
-                            break;
-                    }
-                    event = (ZorkEvent) clazz.newInstance();    //Deprecated in Java 11
-                } catch (Exception e) {
-                }
-/*
+                switch (eventName) {
                     case "Die":
                         event = new DieEvent();
                         break;
@@ -77,93 +59,51 @@ public class EventFactory {
                     case "Win":
                         event = new WinEvent();
                         break;
-*/
-            } else {
-                String eventParam = sa[1];
-                //Reflection technique
-                try {
-                    switch (eventName) {
-                        case "Die":
-                        case "Disappear":
-                        case "Drop":
-                        case "Score":
-                        case "Teleport":
-                        case "Transform":
-                        case "Unlock":
-                        case "Win":
-                        case "Wound":
-                            clazz = Class.forName(eventName + "Event");
-                            break;
-                        default:    //for nonstandard events
-                            clazz = Class.forName(eventName);
-                            break;
-                    }
-
-                    Constructor[] constructors = clazz.getDeclaredConstructors();
-                    for (Constructor c : constructors) {
-                        Class[] paramTypes = c.getParameterTypes();
-                        boolean hasIntParam = false;
-                        for (Class paramType : paramTypes) {
-                            if (paramType.equals(int.class)) {
-                                hasIntParam = true;
-                                break;
-                            }
-                        }
-                        if (hasIntParam) {
-                            int intParam = Integer.parseInt(eventParam);
-                            event = (ZorkEvent) c.newInstance(intParam);
-                        } else {
-                            event = (ZorkEvent) c.newInstance(eventParam);
-                        }
-                        if (event != null) {
-                            break;
-                        }
-                    }
-                } catch (Exception e) {
                 }
-/*
+            } else {
+                String[] eventParams = sa[1].split(",");
                 String message;
                 String itemName;
                 int points;
                 switch (eventName) {
                     case "Die":     //hardcoded dungeon only
-                        message = sa[1];
+                        message = eventParams[0];
                         event = new DieEvent(message);
                         break;
                     case "Disappear":
-                        itemName = sa[1];
+                        itemName = eventParams[0];
                         event = new DisappearEvent(itemName);
                         break;
                     case "Drop":
-                        itemName = sa[1];
+                        itemName = eventParams[0];
                         event = new DropEvent(itemName);
                         break;
                     case "Score":
-                        points = Integer.parseInt(sa[1]);
+                        points = Integer.parseInt(eventParams[0]);
                         event = new ScoreEvent(points);
                         break;
                     case "Teleport":    //hardcoded dungeon only
-                        String roomName = sa[1];
+                        String roomName = eventParams[0];
                         event = new TeleportEvent(roomName);
                         break;
                     case "Transform":
-                        String newItemName = sa[1];
+                        String newItemName = eventParams[0];
                         event = new TransformEvent(newItemName);
                         break;
                     case "Unlock":
-                        String exitDir = sa[1];
-                        event = new UnlockEvent(exitDir);
+                        String exitDir = eventParams[0];
+                        itemName = eventParams[1];
+                        event = new UnlockEvent(exitDir, itemName);
                         break;
                     case "Win":     //hardcoded dungeon only
-                        message = sa[1];
+                        message = eventParams[0];
                         event = new WinEvent(message);
                         break;
                     case "Wound":
-                        points = Integer.parseInt(sa[1]);
+                        points = Integer.parseInt(eventParams[0]);
                         event = new WoundEvent(points);
                         break;
                 }
-*/
             }
             return event;
         } catch (Exception e) {

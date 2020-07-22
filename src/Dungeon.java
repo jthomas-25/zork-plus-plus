@@ -134,11 +134,11 @@ public class Dungeon {
         items = new Hashtable<>();
     }
 
-    ArrayList<Room> getRooms() {
+    public ArrayList<Room> getRooms() {
         return rooms;
     }
 
-    int getNumRooms() {
+    public int getNumRooms() {
         return rooms.size();
     }
 
@@ -147,7 +147,7 @@ public class Dungeon {
      *
      * @return title;
      */
-    String getTitle() {
+    public String getTitle() {
         return title;
     }
 
@@ -156,7 +156,7 @@ public class Dungeon {
      *
      * @param room
      */
-    void add(Room room) {
+    public void add(Room room) {
         rooms.add(room);
     }
 
@@ -166,7 +166,7 @@ public class Dungeon {
      * @param roomName
      * @return room found
      */
-    Room getRoom(String roomName) {
+    public Room getRoom(String roomName) {
         for (int i = 0; i < rooms.size(); i++) {
             if (rooms.get(i).getName().equals(roomName)) {
                 return rooms.get(i);
@@ -180,7 +180,7 @@ public class Dungeon {
      *
      * @return fileName
      */
-    private String getFileName() {
+    public String getFileName() {
         return fileName;
     }
 
@@ -219,7 +219,7 @@ public class Dungeon {
      *
      * @return entry
      */
-    Room getEntry() {
+    public Room getEntry() {
         return entry;
     }
 
@@ -227,7 +227,7 @@ public class Dungeon {
      * setEntry - this method sets the room the user is entering
      * @param entry - room
      */
-    void setEntry(Room entry) {
+    public void setEntry(Room entry) {
         this.entry = entry;
     }
 

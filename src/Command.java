@@ -361,7 +361,7 @@ class ItemSpecificCommand extends Command {
                                     case "Drop":
                                     case "Disappear":
                                         eventString = String.format("%s(%s)", eventString, item);
-                                    break;
+                                        break;
                                 }
                                 ZorkEvent event = EventFactory.instance().parse(eventString);
                                 if (event != null) {
@@ -432,7 +432,8 @@ class ScoreCommand extends Command {
      */
     String execute() {
         GameState state = GameState.instance();
-        String scoreMsg = "You have accumulated " + state.getScore() + " point(s). ";
+        int currentScore = state.getScore();
+        String scoreMsg = "You have accumulated " + currentScore + " " + (currentScore == 1 ? "point" : "points") + ". ";
         if (state.rankAssigned()) {
             scoreMsg += "This gives you a rank of " + state.getRank() + ".";
         } else {
@@ -597,23 +598,57 @@ class KillCommand extends Command {
 /**
  * 
  * @author John Thomas
- * @version 1.0
- * 14 July 2020
+ * @version 1.3
+ * 20 July 2020
  */
 class UnlockCommand extends Command {
     private String dir;
+    private String nameOfObjectToUnlock;
+    private String prep;
+    private String itemName;
 
     /**
-     * Constructs a new UnlockCommand with the given exit.
-     * @param dir the direction of the exit to be unlocked
+     * Constructs a new UnlockCommand.
+     * @param dir if the name of the object is "exit", the direction of the exit to be unlocked
+     * @param nameOfObjectToUnlock the name of the object to be unlocked
+     * @param prep a preposition to link the object and item name
+     * @param itemName the name of the item required to unlock this object
      */
-    UnlockCommand(String dir) {
+    UnlockCommand(String dir, String nameOfObjectToUnlock, String prep, String itemName) {
         this.dir = dir;
+        this.nameOfObjectToUnlock = nameOfObjectToUnlock;
+        this.prep = prep;
+        this.itemName = itemName;
     }
 
     String execute() {
-        ZorkEvent event = EventFactory.instance().parse(String.format("Unlock(%s)", this.dir));
-        return event.trigger("");
+        switch (this.nameOfObjectToUnlock) {
+            case "":
+                return "Unlock what? (usage: unlock <noun>)";
+            case "exit":
+                if (this.dir.equals("")) {// && !this.prep.equals("with")) {
+                    return "Unlock which exit? (usage: unlock <direction> exit)";
+                }
+                Room currentRoom = GameState.instance().getAdventurersCurrentRoom();
+                if (currentRoom.hasNoExits()) {
+                    return "This room has no exits.";
+                }
+                Exit exit = currentRoom.getExit(this.dir);
+                if (exit == null) {
+                    return "No exit in that direction.";
+                }
+                if (exit.isLocked()) {
+                    if (this.itemName.equals("")) {
+                        return "What do you want to unlock this exit with? (usage: unlock <direction> exit with <noun>)";
+                    } else {
+                        ZorkEvent event = EventFactory.instance().parse(String.format("Unlock(%s,%s)", this.dir, this.itemName));
+                        return event.trigger("");
+                    }
+                } else {
+                    return "Already unlocked.";
+                }
+            default:
+                return String.format("Can't unlock %s.", this.nameOfObjectToUnlock);
+        }
     }
 }
-

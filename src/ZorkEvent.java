@@ -117,8 +117,15 @@ class WoundEvent extends ZorkEvent {
         int playersHealth = GameState.instance().getHealth();
         playersHealth -= damagePoints;
         GameState.instance().setHealth(playersHealth);
-        String healthMsg = GameState.instance().getHealthMsg();
-        this.message = String.format("Damage: %s"+ "\nHealth: %s", damagePoints, playersHealth);
+        if (playersHealth <= 0) {
+            ZorkEvent event = EventFactory.instance().parse("Die");
+            String dieMsg = event.trigger(noun);
+            this.message = String.format("\n%s", dieMsg);
+        } else {
+            //String healthMsg = GameState.instance().getHealthMsg();
+            //this.message = healthMsg;
+            this.message = String.format("Damage: %s"+ "\nHealth: %s", damagePoints, GameState.instance().getHealth());
+        }
         return this.message;
     }
 }
@@ -126,7 +133,7 @@ class WoundEvent extends ZorkEvent {
 /**
  * A DieEvent represents a {@link ZorkEvent} that, when triggered, ends the game with the player defeated.
  * Note that if the player loses the game, the {@link Interpreter} will stop processing typed commands;
- * it will instead prompt the player with a question asking them if they want to continue or start over.
+ * it will instead prompt the player with a question asking them if they want to continue, start over, or quit.
  * @author John Thomas
  * @version 1.4
  * 16 July 2020
@@ -359,7 +366,7 @@ class TeleportEvent extends ZorkEvent {
      * Constructs a new TeleportEvent with no room name.
      */
     TeleportEvent() {
-        rng = new Random();
+        rng = GameState.instance().getRng();
     }
 
     /**
@@ -374,6 +381,12 @@ class TeleportEvent extends ZorkEvent {
         }
     }
 
+    String trigger() {
+        GameState.instance().setAdventurersCurrentRoom(this.newRoom);
+        this.message = String.format("Teleported to %s.", this.newRoom);
+        return this.message;
+    }
+
     /**
      * Randomly moves the player to another room in the dungeon, if the room exists.
      * @return this event's message
@@ -382,24 +395,17 @@ class TeleportEvent extends ZorkEvent {
         ArrayList<Room> rooms = GameState.instance().getDungeon().getRooms();
         Room currentRoom = GameState.instance().getAdventurersCurrentRoom();
 
-        switch (rooms.size()) {
-            case 1:
-                this.message = String.format("\n%s", currentRoom.describe());
-                break;
-            default:
-                boolean sameRoom = false;
-                do {
-                    int randomNumber = rng.nextInt(rooms.size());
-                    this.newRoom = rooms.get(randomNumber);
-                    String newRoomName = this.newRoom.getName();
-                    String currentRoomName = currentRoom.getName();
-                    sameRoom = newRoomName.equals(currentRoomName);
-                } while (sameRoom);
-                    
-                GameState.instance().setAdventurersCurrentRoom(this.newRoom);
-                this.message = String.format("\n%s", this.newRoom.describe());
-                break;
-        }
+        boolean sameRoom = false;
+        do {
+            int randomNumber = rng.nextInt(rooms.size());
+            this.newRoom = rooms.get(randomNumber);
+            String newRoomName = this.newRoom.getName();
+            String currentRoomName = currentRoom.getName();
+            sameRoom = newRoomName.equals(currentRoomName);
+        } while (sameRoom);
+            
+        GameState.instance().setAdventurersCurrentRoom(this.newRoom);
+        this.message = String.format("\n%s", this.newRoom.describe());
         return this.message;
     }
 }
@@ -432,18 +438,21 @@ class PotionEffect extends ZorkEvent {
  * An UnlockEvent represents a {@link ZorkEvent} that, when triggered, opens a locked
  * exit in the current room.
  * @author John Thomas
- * @version 1.1
- * 14 July 2020
+ * @version 1.2
+ * 19 July 2020
  */
 class UnlockEvent extends ZorkEvent {
     private String dir;
+    private String itemName;
     
     /**
      * Constructs a new UnlockEvent with the given direction.
      * @param dir the direction of the exit to be unlocked
+     * @param itemName the name of the item required to unlock this exit
      */
-    UnlockEvent(String dir) {
+    UnlockEvent(String dir, String itemName) {
         this.dir = dir;
+        this.itemName = itemName;
     }
     
     /**
@@ -454,7 +463,8 @@ class UnlockEvent extends ZorkEvent {
     String trigger(String noun) {
         try {
             Room currentRoom = GameState.instance().getAdventurersCurrentRoom();
-            currentRoom.unlockExit(this.dir);
+            Item item = GameState.instance().getItemInVicinityNamed(this.itemName);
+            currentRoom.unlockExit(this.dir, item);
             this.message = "Exit unlocked.";
         } catch (Exception e) {
             this.message = e.getMessage();
