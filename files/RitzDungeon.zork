@@ -1,23 +1,30 @@
 Ritz-Carlton Hotel
 Zork++
 Welcome to the Ritz-Carlton Hotel, Zork Edition. Here you will go through obstacles and
-get rewarded.
-Your mission is to steal a wallet that belongs to hotel staff in a secured room protected
-by a guard to win. You will need to kill the guard with either a sword or dagger before 
-taking the wallet. *Spoiler* If you took a dagger or sword, it doesn't mean it 
-will stay forever with you as other guests can access your inventory and steal items.
-After taking the wallet, you will need to "steal" the wallet.
+get rewarded. Your mission is to steal a wallet that belongs to hotel staff in a secured 
+room protected by a guard. You will need to kill the guard with either a sword or 
+dagger before taking the wallet. *Spoiler* If you took a dagger or sword, it doesn't mean 
+it will stay forever with you as other guests can access your inventory and steal it.
+After taking the wallet, you will need to "steal" the wallet to win.
 
 *SAMPLE SPOILER ALERT*
-Clear instructions to win:
-1. Use "N" to go to room x
-2. use "S" to go to y
-3. take dagger
-4. Pay attention if you lose your dagger, and if you do, take it again
-5. Go to "w" to room a
-6. kill guard using "kill" command
-7. Take the wallet
-8. steal the wallet using "steal" command (if, you fail to kill the guard, you can not steal the wallet)
+Steps to win:
+1. Take dagger from Lobby (the room where you start)
+2. Use "s" to go to North Wing
+3. use "s" to go to Seven Corner Buffet
+3a. If your dagger was stolen, take it from your current room
+4. Use "s" to go to South Wing
+4a. If your dagger was stolen, take it from your current room
+5. Use "s" to go to Gift Shop
+5a. If your dagger was stolen, take it from your current room
+6. Use "e" to go to Manager's Office
+6a. If your dagger was stolen, take it from your current room
+7. Use "e" to go to Hotel Security Headquarters
+7a. If your dagger was stolen, take it from your current room
+8. Use "kill guard" to Kill security guard (you must have a dagger or sword)
+9. Use "e" to go to Hotel Safe
+10. Use "take wallet" to take the wallet
+11. Use "steal wallet" to steal the wallet and be rich! Congratulations you won!
 ===
 Items:
 GoldSpoon,spoon
@@ -157,7 +164,7 @@ You are in the North Wing of the hotel. This wing contains security offices
 and personnel to keep guests safe. 
 ---
 Seven Corner Buffet
-Contents: Antidote, LaserNecklace
+Contents: Antidote,LaserNecklace
 This buffet features seven different food categories to choose from. You can even order
 room service from the buffet 24/7.
 ---
@@ -165,7 +172,7 @@ South Wing
 The South Wing, also known as the fitness room, consists of free weights and a basketball court, 
 but it is closed for renovation. Go on!
 ---
-Hotel Security HeadQuarters
+Hotel Security Headquarters
 Contents: SecurityGuard
 This bulletproof room is reserved for hotel security. Please go to the security guard 
 who will search you for any weapons. 
@@ -205,7 +212,7 @@ Contents: YellowPowder
 This is office where Mr. Jabel Gibbon controls the hotel.
 ---
 Gift Shop
-Contents: RolexWatch, GreenKnife, GoldSpoon, YoMamaShirt
+Contents: RolexWatch,GreenKnife,GoldSpoon,YoMamaShirt
 This is the hotel gift shop. 
 ---
 ===
@@ -316,18 +323,18 @@ Lobby
 ---
 Manager's Office
 e
-Hotel Security HeadQuarters
+Hotel Security Headquarters
 ---
-Hotel Security HeadQuarters
+Hotel Security Headquarters
 w
 Manager's Office
 ---
-Hotel Security HeadQuarters
+Hotel Security Headquarters
 e
 Hotel Safe
 ---
 Hotel Safe
 w
-Hotel Security HeadQuarters
+Hotel Security Headquarters
 ---
 ===

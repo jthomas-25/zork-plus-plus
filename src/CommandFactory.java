@@ -36,7 +36,7 @@ class CommandFactory {
         String[] words = commandString.split(" ");
         switch (words.length) {
             case 1:
-                switch (words[0]) {
+                switch (words[0].toLowerCase()) {
                     case "n":
                     case "s":
                     case "w":
@@ -74,7 +74,7 @@ class CommandFactory {
                 }
             default:
                 String itemName = "";
-                switch (words[0]) {
+                switch (words[0].toLowerCase()) {
                     case "take":
                         itemName = words[1];
                         return new TakeCommand(itemName);
