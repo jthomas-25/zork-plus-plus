@@ -1,0 +1,302 @@
+Ritz-Carlton Hotel
+Zork++
+===
+Items:
+GoldSpoon,spoon
+16
+examine:This Renaissance-era spoon is still used by hotel chefs to prepare your food. 
+take:Spoon taken.
+break[Wound(1)]:You broke your spoon. How will you eat ice cream, now?
+drop:You drop the spoon and gold pours out!
+---
+CopperSword,sword
+25
+examine:This sword has been here for the past 200 years.
+take:Sword taken.
+drop:This sword is definitely worth more than a penny.
+You proceed to drop the sword.
+---
+SableDagger,dagger
+19
+examine:This dagger was donated to the hotel by the UK 20 years ago. 
+take:You soak yourself in the Waterfall but manage to take the dagger.
+throw[Disappear]:The dagger hits someone in the neck, severely wounding them.
+Hotel management calls police. The wounded guest sues you.
+drop:Dagger dropped.
+---
+LaserNecklace,necklace
+14
+examine:This is a laser necklace you would wear in the disco club (currently under construction)
+outside the hotel.
+take:Necklace taken.
+wear[Score(4)]:You look LIT!!
+drop:Necklace dropped.
+---
+GreenKnife,knife
+16
+examine:This sharp knife is a green toxic knife if used on animals.
+take:Knife taken.
+drop:Knife dropped.
+touch[Wound(1)]:OWWWWWWWW!
+---
+YellowPowder,powder
+9
+examine:Yellow box with yellow powder and strong smell.
+take:Powder taken.
+drop:Powder dropped.
+---
+BlackGodzillaEgg,BlackEgg
+30
+examine:This egg is as black as midnight sea, yet alive with scarlet ripples and swirls. 
+---
+GasMask,mask
+14
+examine:This mask protect you against dangerous chemicals.
+take:Gas mask taken.
+drop:Gas mask dropped.
+wear:Be careful when putting on the mask...
+You put on the mask.
+---
+Antidote,antidote
+12
+examine:This medicine is taken to counteract poison.
+take:Antidote taken.
+drop:Antidote dropped.
+drink[Health(2),Score(3)]:You should now be able to eat anything in the buffet without 
+worrying about food poisoning.
+---
+RolexWatch,watch
+18
+examine:This watch is worth a lot of money! Who does not want a Rolex watch?
+wear[Score(3)]:Nice swag you've got!
+take:Watch taken.
+stompon[Drop,Disappear]:Wow, you just broke a $10k watch! It's impressive how you did this 
+right under a surveillance camera.
+drop:The watch breaks into pieces.
+---
+YoMamaShirt,shirt
+9
+examine:This one-size fits all shirt automatically adjusts to fit you. This is how we do it 
+at the Ritz!
+take:Shirt taken.
+wear[Score(4)]:OMG, you look so awesome!
+drop:Shirt dropped.
+---
+HavanaCigar,cigar
+13
+examine:This is rare Cuban cigar. Just smell it!
+smell:Ahhhh!
+take:Cigar taken.
+smoke[Score(6)]:The cigar lights up and you start flashing your money!
+drop:Cigar dropped.
+---
+PoolSlide,slide
+0
+examine:Apparently the user has to take this so that they could use this, thus
+becoming a robbery suspect.
+take[Score(8)]:Slide taken from the pool. Really? Hotel management is going to be hyped tonight 
+when they go looking for you!
+ride[Drop,Teleport]:You slide to the bottom of the hotel.
+drop:Slide dropped. You are lucky there was no lifeguard watching you.
+---
+StaffWallet,wallet
+6
+examine:This wallet belongs to a hotel personnel. However, you can try to take it.
+steal[Score(13),Win]:Congratulations, my guest! It has been a hard journey for you.
+---
+SecurityGuard,guard
+200
+examine:There is an armed guard guarding the hotel safe.
+kill[Wound(3),Score(9)]:You slash the guard's head wide open as he shoots you in the ribs.
+---
+===
+Rooms:
+Lobby
+Contents: SableDagger
+You are standing in the hotel lobby, facing a waterfall.
+---
+The Royal Suite
+Contents: CopperSword
+You are facing a suite where everything from the blanket to the TV is made from gold. It is 
+huge and overlooks the ocean. But, be careful here...
+---
+Hotel Kitchen
+Contents: GoldSpoon
+You are in the hotel kitchen. Here, food from Michellin star restaurants is being cooked.
+---
+Casino
+Contents: HavanaCigar
+This is the hotel Casino. Gamble as if you rule the world!!
+---
+Hotel Safe
+Contents: StaffWallet
+This is a special room to used by hotel personnel ONLY.
+---
+North Wing
+You are in the North Wing of the hotel. This wing contains security offices 
+and personnel to keep guests safe. 
+---
+Seven Corner Buffet
+Contents: Antidote, LaserNecklace
+This buffet features seven different food categories to choose from. You can even order
+room service from the buffet 24/7.
+---
+South Wing
+The South Wing, also known as the fitness room, consists of free weights and a basketball court, 
+but it is closed for renovation. Go on!
+---
+Hotel Security HeadQuarters
+Contents: SecurityGuard
+This bulletproof room is reserved for hotel security. Please go to the security guard (a very corrupt one) 
+who will search you for any weapons. 
+---
+Maid Chapters
+This is where hotel personnel live.
+---
+The Grand Ballroom
+Every year, on the full moon, at 1 AM, guests gather here for the annual Mystic Ball.
+---
+Diamond Pool
+Contents: PoolSlide
+This is a diamond pool with a lazy river that goes around the entire hotel.
+---
+The Royal Jacuzzi
+This is a 100 foot jacuzzi with musical fountain and light performances.
+---
+Dark Sauna
+This is a 200F sauna to relax and rejuvenate.
+---
+Climbing Wall
+Hotel guests enjoy and improve their climbing skills using the climbing wall.
+---
+Manager's Office
+Contents: YellowPowder
+This is office where Mr. Jabel Gibbon controls the hotel.
+---
+Gift Shop
+Contents: RolexWatch, GreenKnife, GoldSpoon, YoMamaShirt
+This is the hotel gift shop. 
+---
+===
+Exits:
+Lobby
+s
+North Wing
+---
+North Wing
+n
+Lobby
+---
+North Wing
+s
+Seven Corner Buffet
+---
+Seven Corner Buffet
+n
+North Wing
+---
+South Wing
+n
+Seven Corner Buffet
+---
+Seven Corner Buffet
+s
+South Wing
+---
+Casino
+w
+Seven Corner Buffet
+---
+Seven Corner Buffet
+e
+Casino
+---
+Casino
+e
+Maid Chapters
+---
+Maid Chapters
+w
+Casino
+---
+The Grand Ballroom
+s
+Maid Chapters
+---
+Maid Chapters
+n
+The Grand Ballroom
+---
+Seven Corner Buffet
+w
+Diamond Pool
+---
+Diamond Pool
+e
+Seven Corner Buffet
+---
+Diamond Pool
+w
+Dark Sauna
+---
+Dark Sauna
+e
+Diamond Pool
+---
+The Royal Jacuzzi
+e
+Dark Sauna
+---
+Dark Sauna
+w
+The Royal Jacuzzi
+---
+The Royal Jacuzzi
+w
+Climbing Wall
+---
+Climbing Wall
+e
+The Royal Jacuzzi
+---
+Gift Shop
+n
+South Wing
+---
+South Wing
+s
+Gift Shop
+---
+Manager's Office
+n
+Gift Shop
+---
+Gift Shop
+s
+Manager's Office
+---
+Lobby
+n
+The Royal Suite
+---
+The Royal Suite
+s
+Lobby
+---
+Manager's Office
+e
+Hotel Security HeadQuarters
+---
+Hotel Security HeadQuarters
+w
+Manager's Office
+---
+Hotel Security HeadQuarters
+e
+Hotel Safe
+---
+Hotel Safe
+w
+Hotel Security HeadQuarters
+---
+===

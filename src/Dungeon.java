@@ -13,8 +13,8 @@ import java.util.Scanner;
  * A Hashtable is a class that makes it easy to look up entries by a "key" rather than by a numbered index,
  * as an ArrayList does.
  * @author Object Oriented Optimists (OOO)
- * @version 2.7
- * 16 July 2020
+ * @version 2.9
+ * 21 July 2020
  */
 public class Dungeon {
     private String title = "Simple Dungeon";    //default
@@ -68,49 +68,46 @@ public class Dungeon {
             }
 
             boolean firstRoom = true;
+            if (line.equals("Items:")) {
+                while (!line.equals("===")) {
 
-            if (lineNumber == 4) {
-                if (line.equals("Items:")) {
-                    while (!line.equals("===")) {
-                        
-                        Item item;
-                        try {
-                            item = new Item(stdin);
-                            this.add(item);
-                        } catch (NoItemException ex) {
-                            break;
-                        }
+                    Item item;
+                    try {
+                        item = new Item(stdin);
+                        this.add(item);
+                    } catch (NoItemException ex) {
+                        break;
                     }
                 }
+            }
 
-                line = stdin.nextLine();
-                if (line.equals("Rooms:")) {
-                    while (!line.equals("===")) {
-                        
-                        Room room;
-                        try {
-                            room = new Room(stdin, this, initState);
-                            rooms.add(room);
-                            if (firstRoom) {
-                                this.entry = room;
-                                firstRoom = false;
-                            }
-                        } catch (NoRoomException ex) {
-                            break;
+            line = stdin.nextLine();
+            if (line.equals("Rooms:")) {
+                while (!line.equals("===")) {
+
+                    Room room;
+                    try {
+                        room = new Room(stdin, this, initState);
+                        rooms.add(room);
+                        if (firstRoom) {
+                            this.entry = room;
+                            firstRoom = false;
                         }
+                    } catch (NoRoomException ex) {
+                        break;
                     }
                 }
+            }
 
-                line = stdin.nextLine();
-                if (line.equals("Exits:")) {
-                    while (!line.equals("===")) {
-                        
-                        Exit exit;
-                        try {
-                            exit = new Exit(stdin, this, initState);
-                        } catch (Exit.NoExitException ex) {
-                            break;
-                        }
+            line = stdin.nextLine();
+            if (line.equals("Exits:")) {
+                while (!line.equals("===")) {
+
+                    Exit exit;
+                    try {
+                        exit = new Exit(stdin, this, initState);
+                    } catch (Exit.NoExitException ex) {
+                        break;
                     }
                 }
             }

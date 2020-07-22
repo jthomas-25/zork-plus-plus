@@ -15,7 +15,7 @@ import java.util.Scanner;
  * @author Object Oriented Optimists (OOO)
  * @author Richard Volynski
  * @version 3.3
- * 19 July 2020
+ * 21 July 2020
  */
 public class Room {
     private Hashtable<String, Exit> exits;
@@ -85,7 +85,6 @@ public class Room {
     }
 
     /**
-     * Currently obsolete
      * Room - this constructor initializes itself, reading lines from .zork file using a scanner, which is provided
      * as a parameter.
      * This constructor throws an exception (NoRoomException) if a line
@@ -150,8 +149,10 @@ public class Room {
     /**
      * describe - this method generates user-friendly room description,
      items in the current room and gives all exits of the room object. This
-     method also tells the user if they visited the room. If this method is 	 called again, only the room name and exits will be returned.
-     * @return user-friendly room name, description (if user's first time in 	 Room), items (if applicable), and nearest exits
+     method also tells the user if they visited the room. If this method is
+     called again, only the room name and exits will be returned.
+     * @return user-friendly room name, description (if user's first time in
+     * Room), items (if applicable), and nearest exits
      */
     String describe() {
         String output = "";
@@ -183,7 +184,7 @@ public class Room {
     }
 
     /**
-     * leaveBy - this method returns the Room object from the direction PATH     String the user is going from the current room to the destination room
+     * leaveBy - this method returns the Room object from the direction PATH    String the user is going from the current room to the destination room
      * @param dir - direction ("n", "s", "w", "e", "u/up", "d/down")
      * @return room the user is going to
      * @throws ExitLockedException if the exit connecting the two rooms is locked

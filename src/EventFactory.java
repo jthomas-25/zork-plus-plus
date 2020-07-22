@@ -9,10 +9,10 @@
  * {@link EventFactory#instance()} method.
  * Note that the EventFactory class is the only class that should instantiate
  * {@link ZorkEvent} objects.
- * @author John Thomas
+ * @author John Thomas (for phase 1)
  * @author Richard Volynski
- * @version 3.2
- * 19 July 2020
+ * @version 3.4
+ * 21 July 2020
  */
 public class EventFactory {
     private static EventFactory singleInstance = null;

@@ -1,7 +1,5 @@
 //package com.company;
 
-import javax.xml.namespace.QName;
-import java.lang.reflect.GenericArrayType;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -11,8 +9,8 @@ import java.util.Iterator;
  * this abstract Command class.
  * @author Object Oriented Optimists (OOO)
  * @author Richard Volynski
- * @version 3.2
- * 15 July 2020
+ * @version 3.4
+ * 21 July 2020
  */
 abstract class Command {
     
@@ -68,7 +66,8 @@ class TakeCommand extends Command {
                             result += String.format("Took %s from %s.\n", item, currentRoom);
                         }
                     }
-                } else {
+                }
+                else {
                     result = String.format("There are no items in %s.", currentRoom);
                 }
                 return result;
@@ -76,13 +75,18 @@ class TakeCommand extends Command {
                 Item item = currentRoom.getItemNamed(itemName);
                 if (item != null) {
                     if (state.inventoryWeightLimitReached(item)) {
-                        return String.format("Your load is too heavy.");
-                    } else {
+                        return String.format("Your load is too heavy");
+                    }
+                    else {
                         state.addToInventory(item);
                         currentRoom.remove(item);
                         return String.format("Took %s from %s.", item, currentRoom);
                     }
-                } else {
+                }
+                else if (GameState.instance().itemExistsInInventory(itemName)) {
+                    return String.format("You already took %s", itemName);
+                }
+                else {
                     return String.format("%s not found in %s.", itemName, currentRoom);
                 }
         }
@@ -154,8 +158,8 @@ class DropCommand extends Command {
  * into/towards the direction they entered, if a valid command was entered
  * @author Object Oriented Optimists (OOO)
  * @author Richard Volynski
- * @version 1.0
- * 12 July 2020
+ * @version 1.1
+ * 19 July 2020
  */
 class MovementCommand extends Command {
     private String dir;
@@ -177,11 +181,21 @@ class MovementCommand extends Command {
      */
     String execute() {
         try {
+            boolean daggerDropped = false;
             Room room = GameState.instance().getAdventurersCurrentRoom().leaveBy(dir);
             GameState.instance().setAdventurersCurrentRoom(room);
             String execute = GameState.instance().getAdventurersCurrentRoom().describe();
+            if (GameState.instance().itemExistsInInventory("dagger") && GameState.instance().toDropOrNot()) {
+                DropCommand dropCommand = new DropCommand("dagger");
+                dropCommand.execute();
+                daggerDropped = true;
+            }
+            if (daggerDropped) {
+                execute+= "\n\nHotel guests stole some of your valuables";
+            }
             return execute;
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             return e.getMessage();
         }
     }
@@ -347,37 +361,49 @@ class ItemSpecificCommand extends Command {
                 return String.format("%s what? (usage: <verb> <noun>)", this.verb, this.noun);
             default:
                 String returnMessage = "";
-                try {
-                    Item item = GameState.instance().getItemInVicinityNamed(this.noun);
-                    String message = item.getMessageForVerb(this.verb);
-                    if (message != null) {
-                        returnMessage = message;
-                        String[] eventStrings = item.getEventStrings(this.verb);
-                        boolean verbHasEvents = eventStrings != null;
-                        if (verbHasEvents) {
-                            for (String eventString : eventStrings) {
-                                //System.out.println("Event string: " + eventString);
-                                switch (eventString) {
-                                    case "Drop":
-                                    case "Disappear":
-                                        eventString = String.format("%s(%s)", eventString, item);
-                                        break;
-                                }
-                                ZorkEvent event = EventFactory.instance().parse(eventString);
-                                if (event != null) {
-                                    String eventMessage = event.trigger(noun);
-                                    if (eventMessage != null) {
-                                        returnMessage += String.format("\n%s", eventMessage);
+                if (this.verb.equalsIgnoreCase("steal") && (this.noun.equalsIgnoreCase("wallet")
+                        || this.noun.equalsIgnoreCase("StaffWallet")) && GameState.instance().isGuardAlive()) {
+                    returnMessage = String.format("You cannot %s the %s because a guard is protecting it!", this.verb, this.noun);
+                    return returnMessage;
+                }
+                else {
+                    try {
+                        Item item = GameState.instance().getItemInVicinityNamed(this.noun);
+                        String message = item.getMessageForVerb(this.verb);
+                        if (message != null) {
+                            returnMessage = message;
+                            String[] eventStrings = item.getEventStrings(this.verb);
+                            boolean verbHasEvents = eventStrings != null;
+                            if (verbHasEvents) {
+                                for (String eventString : eventStrings) {
+                                    switch (eventString) {
+                                        case "Drop":
+                                        case "Disappear":
+                                            eventString = String.format("%s(%s)", eventString, item);
+                                            break;
+                                    }
+                                    ZorkEvent event = EventFactory.instance().parse(eventString);
+                                    if (event != null) {
+                                        String eventMessage = event.trigger(noun);
+                                        if (eventMessage != null) {
+                                            returnMessage += String.format("\n%s", eventMessage);
+                                        }
                                     }
                                 }
                             }
+                            else if (this.verb.equals("take") || this.verb.equals("drop") && (this.noun.equals("guard"))) {
+                                returnMessage = String.format("You cannot '%s' the %s. That would be " +
+                                        "stupid.", this.verb, this.noun);
+                            }
                         }
-                    } else {
-                        returnMessage = String.format("You cannot '%s' the %s.", this.verb, this.noun);
+                        else {
+                            returnMessage = String.format("You cannot '%s' the %s.", this.verb, this.noun);
+                        }
+                        return returnMessage;
                     }
-                    return returnMessage;
-                } catch (NoItemException e) {
-                    return e.getMessage();
+                    catch (NoItemException e) {
+                        return e.getMessage();
+                    }
                 }
         }
     }
@@ -554,14 +580,14 @@ class SwapCommand extends Command {
 }
 
 /**
- * KillCommand - this class extends Command class, implements kill command, which so far,
- * would kill a snake if it appeared in the room the user is currently in. If the user possesses a dagger
- * or sword, they will type “kill snake with sword” or “kill snake with dagger.” Once the user kills the snake,
- * the snake will be removed from the room.
- * @author Object Oriented Optimists (OOO)
+ * KillCommand - this class extends Command class, implements kill command, which
+ * would kill the security guard guarding a safe with a staff member's wallet.
+ * If the user possesses a dagger or sword, they will type “kill guard.”
+ * Once the user kills the guard, the guard will be removed from the room and the
+ * user will have to take the wallet from the safe.
  * @author Richard Volynski
- * @version 1.1
- * 16 July 2020
+ * @version 1.2
+ * 20 July 2020
  */
 class KillCommand extends Command {
     private String itemName;
@@ -578,15 +604,16 @@ class KillCommand extends Command {
      * @return string
      */
     String execute() {
-        if (GameState.instance().getAdventurersCurrentRoom().hasItemNamed("snake")) {
+        if (GameState.instance().getAdventurersCurrentRoom().hasItemNamed("guard")) {
             if (GameState.instance().itemExistsInInventory("dagger") ||
-            GameState.instance().itemExistsInInventory("sword")) {
-                GameState.instance().getAdventurersCurrentRoom().removeItem("snake");
-                return String.format("%s killed in %s and removed from %s",
-                        itemName,GameState.instance().getAdventurersCurrentRoom(),GameState.instance().getAdventurersCurrentRoom());
+                    GameState.instance().itemExistsInInventory("sword")) {
+                GameState.instance().getAdventurersCurrentRoom().removeItem("guard");
+                GameState.instance().setGuardAlive(false);
+                return String.format("%s killed in %s", itemName.replace(itemName.charAt(0), itemName.toUpperCase().charAt(0)),
+                        GameState.instance().getAdventurersCurrentRoom());
             }
             else {
-                return "You don't have a dagger or sword to kill the snake.";
+                return "You don't have a dagger or sword to kill the guard";
             }
         }
         else {

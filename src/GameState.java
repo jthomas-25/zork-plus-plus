@@ -8,9 +8,9 @@ import java.util.*;
  * GameState Class - represents the current state of the game: which dungeon is being played
  * and what room the adventurer is currently in.
  * @author Object Oriented Optimists (OOO)
- * @author John Thomas
+ * @author John Thomas (for phase 1)
  * @author Richard Volynski
- * @version 3.6
+ * @version 3.7
  * 21 July 2020
  */
 class GameState {
@@ -19,7 +19,7 @@ class GameState {
     private Room currentRoom = null;
     private String dungeonDesc = "Welcome to the Dungeon. Enjoy but you won't come out how you came in!";
     private ArrayList<Item> inventory;
-    private final int MAX_INVENTORY_WEIGHT = 500000;
+    private final int MAX_INVENTORY_WEIGHT = 50;
     private int inventoryWeight;
     private int score;
     private int health;
@@ -28,8 +28,9 @@ class GameState {
     private Hashtable<Integer, String> healthMsgs;
     private boolean gameOver;
     private boolean playerDead;
-    private final Random RNG;
-    private final int SEED = 13;
+    private final Random random;
+    private final int SEED = 4;
+    private boolean guardAlive = true;
 
 
     //Singleton instance of GameState class
@@ -56,11 +57,11 @@ class GameState {
         ranks = new Hashtable<>();
         healthMsgs = new Hashtable<>();
 
-        setRank(0, "Amateur Scout");
-        setRank(10, "Future Hunter");
-        setRank(20, "Treasure Expert");
-        setRank(30, "\"How did you get this far\" Adventurer");
-        setRank(40, "Dungeon Tour Guide");
+        setRank(0, "Amateur Guest");
+        setRank(10, "Bronze Status Member");
+        setRank(20, "Silver Status Member");
+        setRank(30, "Gold Member");
+        setRank(40, "Platinum Member");
 
         setHealthMsg(5,   "You are perfectly healthy! Keep it up!");
         setHealthMsg(4,   "You are almost at perfect health. Do something!!");
@@ -71,8 +72,7 @@ class GameState {
 
         gameOver = false;
         playerDead = false;
-        RNG = new Random();
-        RNG.setSeed(SEED);
+        random = new Random(SEED);
     }
     
     String getVersion() {
@@ -80,7 +80,7 @@ class GameState {
     }
 
     Random getRng() {
-        return RNG;
+        return random;
     }
 
     /**
@@ -264,7 +264,8 @@ class GameState {
         try {
             Item item = getItemFromInventoryNamed(itemName);
             removeFromInventory(item);
-        } catch (NoItemException e) {
+        }
+        catch (NoItemException e) {
         }
     }
 
@@ -485,6 +486,18 @@ class GameState {
         if (!gameOver) {
             gameOver = true;
         }
+    }
+    boolean toDropOrNot() {
+        int x = random.nextInt(9);
+        return x == 7;
+    }
+
+    public boolean isGuardAlive() {
+        return guardAlive;
+    }
+
+    public void setGuardAlive(boolean guardAlive) {
+        this.guardAlive = guardAlive;
     }
 }
 

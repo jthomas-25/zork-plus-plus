@@ -1,5 +1,7 @@
 //package com.company;
 
+import org.ietf.jgss.GSSContext;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -32,8 +34,8 @@ import java.util.Random;
  * player when the player enters a room). This is so the users of this API have greater
  * flexibility in adding their own features.</p>
  * @author John Thomas
- * @version 1.6
- * 16 July 2020
+ * @version 1.7
+ * 21 July 2020
  */
 public abstract class ZorkEvent {
     protected String message;
@@ -79,7 +81,7 @@ class ScoreEvent extends ZorkEvent {
         int currentScore = GameState.instance().getScore();
         currentScore += points;
         GameState.instance().setScore(currentScore);
-        this.message = String.format("Score: %d", currentScore);
+        this.message = String.format("Score +%s", points);
         return this.message;
     }
 }
@@ -88,10 +90,10 @@ class ScoreEvent extends ZorkEvent {
  * A WoundEvent represents a {@link ZorkEvent} that, when triggered, changes the player's health
  * by a nonzero number of points.
  * Note that a negative number of points will effectively heal the player.
- * @author John Thomas
+ * @author John Thomas (for phase 1)
  * @author Richard Volynski
- * @version 1.6
- * 16 July 2020
+ * @version 1.7
+ * 21 July 2020
  */
 class WoundEvent extends ZorkEvent {
     private int damagePoints;
@@ -124,7 +126,7 @@ class WoundEvent extends ZorkEvent {
         } else {
             //String healthMsg = GameState.instance().getHealthMsg();
             //this.message = healthMsg;
-            this.message = String.format("Damage: %s"+ "\nHealth: %s", damagePoints, GameState.instance().getHealth());
+            this.message = String.format("Damage: %s"+ "\nHealth: %s", damagePoints, playersHealth);
         }
         return this.message;
     }
@@ -144,6 +146,7 @@ class DieEvent extends ZorkEvent {
      * Constructs a new DieEvent with the default message.
      */
     DieEvent() {
+        GameState.instance().setHealth(0);
         this.message = GameState.instance().getHealthMsg();
     }
 
@@ -201,8 +204,13 @@ class WinEvent extends ZorkEvent {
      * @return this event's "win" message
      */
     String trigger(String noun) {
-        GameState.instance().endGame();
-        return this.message;
+        if (GameState.instance().isGuardAlive() && GameState.instance().itemExistsInInventory("wallet")) {
+            return "You cannot steal the wallet because a guard is protecting it!";
+        }
+        else {
+            GameState.instance().endGame();
+            return this.message;
+        }
     }
 }
 
@@ -238,7 +246,7 @@ class DropEvent extends ZorkEvent {
             item = GameState.instance().getItemFromInventoryNamed(this.itemName);
             GameState.instance().removeFromInventory(item);
             currentRoom.add(item);
-            this.message = String.format("\"%s\" was dropped from inventory and placed in %s",
+            this.message = String.format("%s was dropped from inventory and placed in %s",
                     item, currentRoom);
         } catch (NoItemException e) {
             item = currentRoom.getItemNamed(this.itemName);
@@ -287,7 +295,7 @@ class DisappearEvent extends ZorkEvent {
         } catch (Exception e) {
         }
         GameState.instance().getDungeon().removeItem(this.itemName);
-        this.message = String.format("%s was removed from user's inventory, %s, and %s",
+        this.message = String.format("\n%s was removed from user's inventory, %s, and %s.",
                 this.itemName, currentRoom, GameState.instance().getDungeon().getTitle());
         return this.message;
     }
@@ -336,7 +344,8 @@ class TransformEvent extends ZorkEvent {
             }
             this.message = String.format("%s was removed from user's inventory and replaced by %s",
                     itemToReplace, newItem);
-        } else if (currentRoom.hasItemNamed(this.nameOfItemToReplace)) {
+        }
+        else if (currentRoom.hasItemNamed(this.nameOfItemToReplace)) {
             itemToReplace = currentRoom.getItemNamed(this.nameOfItemToReplace);
             currentRoom.removeItem(this.nameOfItemToReplace);
             currentRoom.addItem(primaryNameOfNewItem);

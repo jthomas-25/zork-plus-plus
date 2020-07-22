@@ -13,8 +13,11 @@ import java.util.Scanner;
  * inputs a command, it should use the CommandFactory to instantiate a new Command object and execute it.
  * If the user enters "q", it terminates the program.
  * @author Object Oriented Optimists (OOO)
- * @version 3.2
- * 20 July 2020
+ * @author John Thomas
+ * @author Robert Carroll
+ * @author Richard Volynski
+ * @version 3.4
+ * 21 July 2020
  */
 public class Interpreter {
     private String commandEntered;
@@ -30,7 +33,7 @@ public class Interpreter {
     public static void main(String[] args) throws Exception {
         Scanner stdin = new Scanner(System.in);
 
-        String defaultZorkFile = "../files/westeros.zork";
+        String defaultZorkFile = "*.zork";
         if (args.length > 0) {
             defaultZorkFile = args[0];
         } else {
@@ -50,6 +53,7 @@ public class Interpreter {
                 } else {
                     dungeon = new Dungeon(defaultZorkFile, true);
                     if (dungeon.getEntry() == null) {
+                        System.out.println(String.format("Dungeon (" + GameState.instance().getDungeon()) + ") is null");
                         return;
                     }
                     state.initialize(dungeon);
