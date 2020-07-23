@@ -5,8 +5,8 @@
  * and produce the appropriate {@link Command} objects.
  * CommandFactory is a Singleton class.
  * @author Object Oriented Optimists (OOO)
- * @version 3.7
- * 19 July 2020
+ * @version 3.8
+ * 23 July 2020
  */
 class CommandFactory {
     private static CommandFactory single_instance = null;

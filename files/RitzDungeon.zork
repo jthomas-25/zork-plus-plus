@@ -4,27 +4,38 @@ Welcome to the Ritz-Carlton Hotel, Zork Edition. Here you will go through obstac
 get rewarded. Your mission is to steal a wallet that belongs to hotel staff in a secured 
 room protected by a guard. You will need to kill the guard with either a sword or 
 dagger before taking the wallet. *Spoiler* If you took a dagger or sword, it doesn't mean 
-it will stay forever with you as other guests can access your inventory and steal it.
+it will stay forever with you as other guests can access your inventory and steal items.
 After taking the wallet, you will need to "steal" the wallet to win.
 
-*SAMPLE SPOILER ALERT*
+
+*SAMPLE SPOILER ALERT (directions are case-insensitive)*
 Steps to win:
 1. Take dagger from Lobby (the room where you start)
 2. Use "s" to go to North Wing
 3. use "s" to go to Seven Corner Buffet
 3a. If your dagger was stolen, take it from your current room
+or remember where it was stolen so that you have it when you 
+go kill the security guard
 4. Use "s" to go to South Wing
 4a. If your dagger was stolen, take it from your current room
+or remember where it was stolen so that you have it when you 
+go kill the security guard
 5. Use "s" to go to Gift Shop
 5a. If your dagger was stolen, take it from your current room
+or remember where it was stolen so that you have it when you 
+go kill the security guard
 6. Use "e" to go to Manager's Office
 6a. If your dagger was stolen, take it from your current room
+or remember where it was stolen so that you have it when you 
+go kill the security guard
 7. Use "e" to go to Hotel Security Headquarters
 7a. If your dagger was stolen, take it from your current room
+or remember where it was stolen so that you have it when you 
+go kill the security guard
 8. Use "kill guard" to Kill security guard (you must have a dagger or sword)
 9. Use "e" to go to Hotel Safe
 10. Use "take wallet" to take the wallet
-11. Use "steal wallet" to steal the wallet and be rich! Congratulations you won!
+11. Use "steal wallet" to steal the wallet and be rich! Congratulations, you won!
 ===
 Items:
 GoldSpoon,spoon
@@ -33,8 +44,9 @@ examine:This Renaissance-era gold spoon is still used by hotel chefs to prepare 
 "I don't always invest in dangerously overpriced precious metals, but when I do, 
 I invest with Rosland Capital."
 take:Spoon taken.
-break[Wound(1)]:You broke your spoon. How will you eat ice cream, now?
-drop:You drop the spoon and the price of gold goes down.!
+break[Wound(1)]:You fracture your wrist as you break your spoon. How will you 
+eat ice cream, now?
+drop:You drop the spoon and the price of gold goes down!
 ---
 CopperSword,sword
 25
@@ -71,7 +83,7 @@ touch[Wound(1)]:OWWWWWWWW!
 ---
 YellowPowder,powder
 9
-examine:Yellow box with yellow powder and strong smell.
+examine:This is a box with yellow-looking powder with a strong smell.
 take:Powder taken.
 drop:Powder dropped.
 ---
@@ -118,11 +130,11 @@ drop:Cigar dropped.
 ---
 PoolSlide,slide
 0
-examine:Apparently the user has to take this so that they could use this, thus
-becoming a robbery suspect. This game does not allow the user to slide down unless they possess a slide.
-take[Score(6)]:Slide taken from the pool. Really? Hotel management is going to be hyped tonight 
-when they go looking for you!
-ride[Drop,Teleport]:You slide to the bottom of the hotel.
+examine:Apparently you to take this so that they could use this, thus becoming a robbery suspect. 
+This game does not allow you to slide down unless you possess a slide.
+take:Slide taken from the pool. Really? Hotel management is going to be hyped tonight 
+when they go looking for it and you!
+ride[Score(6),Drop,Teleport]:You slide to the bottom of the hotel.
 drop:Slide dropped. You are lucky there was no lifeguard watching you.
 ---
 StaffWallet,wallet
@@ -131,8 +143,8 @@ examine:This wallet belongs to a hotel personnel. However, you can try to take i
 steal[Score(13),Win]:Congratulations, my guest! It has been a hard journey for you.
 ---
 SecurityGuard,guard
-200
-examine:There is an armed guard guarding the hotel safe. The guard will give you a pat down.
+220
+examine:There is a 6'5 220lb armed guard guarding the hotel safe. The guard will give you a pat down.
 kill[Wound(3),Score(8)]:You slash the guard's head wide open as he shoots you in the ribs.
 ---
 ===
@@ -204,7 +216,7 @@ and 7 AM - 11 PM during the winter.
 Fitness Center
 This is the hotel fitness center, which consists of a weight room, basketball court, and a 
 volleyball court. During the winter, the basketball court is turned into an ice skating rink. 
-On New Year's Eve,the hotel hosts a Deck-the-Hallsathon, where guests compete for hotel bonus 
+Every Christmas, the hotel hosts a Deck-the-Halls-athon, where guests compete for hotel bonus 
 points, free nights, and other prizes. Guests also take selfies with Santa. 
 ---
 Manager's Office

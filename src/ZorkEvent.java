@@ -92,8 +92,8 @@ class ScoreEvent extends ZorkEvent {
  * Note that a negative number of points will effectively heal the player.
  * @author John Thomas (for phase 1)
  * @author Richard Volynski
- * @version 1.7
- * 21 July 2020
+ * @version 1.8
+ * 23 July 2020
  */
 class WoundEvent extends ZorkEvent {
     private int damagePoints;
@@ -124,9 +124,9 @@ class WoundEvent extends ZorkEvent {
             String dieMsg = event.trigger(noun);
             this.message = String.format("\n%s", dieMsg + "\nFinal Score: %s", GameState.instance().getScore());
         } else {
-            //String healthMsg = GameState.instance().getHealthMsg();
-            //this.message = healthMsg;
-            this.message = String.format("Damage: %s"+ "\nHealth: %s", damagePoints, playersHealth);
+            String healthMsg = String.format("\n%s", GameState.instance().getHealthMsg());
+            this.message = healthMsg;
+            //this.message = String.format("Damage: %s"+ "\nHealth: %s", damagePoints, GameState.instance().getHealth());
         }
         return this.message;
     }
@@ -184,7 +184,7 @@ class WinEvent extends ZorkEvent {
      * Constructs a new WinEvent with the default message.
      */
     WinEvent() {
-        this.message = "You have won! \nFinal score: " + GameState.instance().getScore()
+        this.message = "You have won!\nFinal score: " + GameState.instance().getScore()
                 + "\nRank: " + GameState.instance().getRank();
     }
 

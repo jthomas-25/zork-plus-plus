@@ -10,8 +10,8 @@ import java.util.*;
  * @author Object Oriented Optimists (OOO)
  * @author John Thomas (for phase 1)
  * @author Richard Volynski
- * @version 3.7
- * 21 July 2020
+ * @version 3.8
+ * 23 July 2020
  */
 class GameState {
     private final String VERSION = "Zork++";
@@ -363,8 +363,12 @@ class GameState {
      */
     void setHealth(int health) {
         if (health < 0) {
-            health = 0;
-        } else {
+            this.health = 0;
+        }
+        else if (health > 5) {
+            this.health = 5;
+        }
+        else {
             this.health = health;
         }
     }
@@ -420,7 +424,11 @@ class GameState {
     String getHealthMsg() {
         if (this.health >= 5) {
             return healthMsgs.get(5);
-        } else {
+        }
+        else if (this.health <= 0) {
+            return healthMsgs.get(0);
+        }
+        else {
             return healthMsgs.get(this.health);
         }
     }
