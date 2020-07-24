@@ -8,10 +8,10 @@ import java.util.*;
  * GameState Class - represents the current state of the game: which dungeon is being played
  * and what room the adventurer is currently in.
  * @author Object Oriented Optimists (OOO)
- * @author John Thomas
+ * @author John Thomas (for phase 1)
  * @author Richard Volynski
- * @version 3.3
- * 16 July 2020
+ * @version 3.8
+ * 23 July 2020
  */
 class GameState {
     private final String VERSION = "Zork++";
@@ -19,14 +19,18 @@ class GameState {
     private Room currentRoom = null;
     private String dungeonDesc = "Welcome to the Dungeon. Enjoy but you won't come out how you came in!";
     private ArrayList<Item> inventory;
-    private final int MAX_INVENTORY_WEIGHT = 100;
+    private final int MAX_INVENTORY_WEIGHT = 50;
     private int inventoryWeight;
     private int score;
     private int health;
+    //private final int MAX_HEALTH = 5;
     private Hashtable<Integer, String> ranks;
     private Hashtable<Integer, String> healthMsgs;
     private boolean gameOver;
     private boolean playerDead;
+    private final Random random;
+    private final int SEED = 4;
+    private boolean guardAlive = true;
 
 
     //Singleton instance of GameState class
@@ -53,11 +57,11 @@ class GameState {
         ranks = new Hashtable<>();
         healthMsgs = new Hashtable<>();
 
-        setRank(0, "Amateur Scout");
-        setRank(10, "Future Hunter");
-        setRank(20, "Treasure Expert");
-        setRank(30, "\"How did you get this far\" Adventurer");
-        setRank(40, "Dungeon Tour Guide");
+        setRank(0, "Amateur Guest");
+        setRank(10, "Bronze Status Member");
+        setRank(20, "Silver Status Member");
+        setRank(30, "Gold Member");
+        setRank(40, "Platinum Member");
 
         setHealthMsg(5,   "You are perfectly healthy! Keep it up!");
         setHealthMsg(4,   "You are almost at perfect health. Do something!!");
@@ -68,10 +72,15 @@ class GameState {
 
         gameOver = false;
         playerDead = false;
+        random = new Random(SEED);
     }
     
     String getVersion() {
         return VERSION;
+    }
+
+    Random getRng() {
+        return random;
     }
 
     /**
@@ -125,7 +134,7 @@ class GameState {
         try {
             File saveFile = new File(saveName + ".sav");
             PrintWriter printWriter = new PrintWriter(saveFile);
-            printWriter.write("Zork++ save data\n");
+            printWriter.write(VERSION + " save data\n");
             dungeon.storeState(printWriter);
             printWriter.write("Adventurer:\n");
             printWriter.write("Current room: " + currentRoom + "\n");
@@ -140,6 +149,8 @@ class GameState {
                 }
                 printWriter.write("\n");
             }
+            printWriter.write("Score: " + score + "\n");
+            printWriter.write("Health: " + health + "\n");
             printWriter.flush();
             printWriter.close();
         }
@@ -176,17 +187,25 @@ class GameState {
         String currentRoomName = currentRoomSplit[1];
         currentRoom = dungeon.getRoom(currentRoomName);
         dungeon.setEntry(currentRoom);
-        if (gameScanner.hasNextLine()) {
+        while (gameScanner.hasNextLine()) {
             String[] splitLine = gameScanner.nextLine().split(": ");
-            if (splitLine[0].equals("Inventory")) {
-                try {
-                    String[] itemNames = splitLine[1].split(",");
-                    for (String itemName : itemNames) {
-                        Item item = dungeon.getItem(itemName);
-                        this.addToInventory(item);
+            switch (splitLine[0]) {
+                case "Inventory":
+                    try {
+                        String[] itemNames = splitLine[1].split(",");
+                        for (String itemName : itemNames) {
+                            Item item = dungeon.getItem(itemName);
+                            this.addToInventory(item);
+                        }
+                    } catch (Exception e) {
                     }
-                } catch (Exception e) {
-                }
+                    break;
+                case "Score":
+                    score = Integer.parseInt(splitLine[1]);
+                    break;
+                case "Health":
+                    health = Integer.parseInt(splitLine[1]);
+                    break;
             }
         }
         gameScanner.close();
@@ -245,7 +264,8 @@ class GameState {
         try {
             Item item = getItemFromInventoryNamed(itemName);
             removeFromInventory(item);
-        } catch (NoItemException e) {
+        }
+        catch (NoItemException e) {
         }
     }
 
@@ -343,9 +363,14 @@ class GameState {
      */
     void setHealth(int health) {
         if (health < 0) {
-            health = 0;
+            this.health = 0;
         }
-        this.health = health;
+        else if (health > 5) {
+            this.health = 5;
+        }
+        else {
+            this.health = health;
+        }
     }
 
     /**
@@ -397,11 +422,15 @@ class GameState {
      * @return String, representing the player's {@link #health health} as a message.
      */
     String getHealthMsg() {
-
-//        Enumeration<Integer>
-//        for (Integer healthBound : healthMsgs.keys())
-//        }
-        return healthMsgs.get(this.health);
+        if (this.health >= 5) {
+            return healthMsgs.get(5);
+        }
+        else if (this.health <= 0) {
+            return healthMsgs.get(0);
+        }
+        else {
+            return healthMsgs.get(this.health);
+        }
     }
 
     /**
@@ -446,6 +475,16 @@ class GameState {
     void killPlayer() {
         health = 0;
         playerDead = true;
+        endGame();
+    }
+
+    void resetGame() {
+        gameOver = false;
+        health = 5;
+        inventory.clear();
+        inventoryWeight = 0;
+        playerDead = false;
+        score = 0;
     }
 
     /**
@@ -455,6 +494,18 @@ class GameState {
         if (!gameOver) {
             gameOver = true;
         }
+    }
+    boolean toDropOrNot() {
+        int x = random.nextInt(9);
+        return x == 7;
+    }
+
+    public boolean isGuardAlive() {
+        return guardAlive;
+    }
+
+    public void setGuardAlive(boolean guardAlive) {
+        this.guardAlive = guardAlive;
     }
 }
 

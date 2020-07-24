@@ -13,8 +13,8 @@ import java.util.Scanner;
  * A Hashtable is a class that makes it easy to look up entries by a "key" rather than by a numbered index,
  * as an ArrayList does.
  * @author Object Oriented Optimists (OOO)
- * @version 2.7
- * 16 July 2020
+ * @version 2.9
+ * 22 July 2020
  */
 public class Dungeon {
     private String title = "Simple Dungeon";    //default
@@ -22,6 +22,8 @@ public class Dungeon {
     private ArrayList<Room> rooms;
     private String fileName;
     private Hashtable<String, Item> items;
+    private String intro = "";
+
 
 
     public Dungeon(String fileName) throws IllegalDungeonFormatException, FileNotFoundException, NoRoomException {
@@ -53,64 +55,60 @@ public class Dungeon {
                 String version = GameState.instance().getVersion();
                 if (line.equals(version)) {
                     continue;
-                } else {
+                }
+                else {
                     throw new IllegalDungeonFormatException("Dungeon file is incompatible with the current version of Zork (" + version + ")");
                 }
             }
 
-            if (lineNumber == 3) {
-                if (line.equals("===")) {
-                    continue;
-                } else {
-//                    System.out.println("Third line is wrong in the Dungeon file");
-                    break;
-                }
+            if (!line.equals("===")) {
+                intro += line + "\n";
+                continue;
+            }
+            else {
+                line = stdin.nextLine();
             }
 
             boolean firstRoom = true;
-
-            if (lineNumber == 4) {
-                if (line.equals("Items:")) {
-                    while (!line.equals("===")) {
-                        
-                        Item item;
-                        try {
-                            item = new Item(stdin);
-                            this.add(item);
-                        } catch (NoItemException ex) {
-                            break;
-                        }
+            if (line.equals("Items:")) {
+                while (!line.equals("===")) {
+                    Item item;
+                    try {
+                        item = new Item(stdin);
+                        this.add(item);
+                    } catch (NoItemException ex) {
+                        break;
                     }
                 }
+            }
 
-                line = stdin.nextLine();
-                if (line.equals("Rooms:")) {
-                    while (!line.equals("===")) {
-                        
-                        Room room;
-                        try {
-                            room = new Room(stdin, this, initState);
-                            rooms.add(room);
-                            if (firstRoom) {
-                                this.entry = room;
-                                firstRoom = false;
-                            }
-                        } catch (NoRoomException ex) {
-                            break;
+            line = stdin.nextLine();
+            if (line.equals("Rooms:")) {
+                while (!line.equals("===")) {
+
+                    Room room;
+                    try {
+                        room = new Room(stdin, this, initState);
+                        rooms.add(room);
+                        if (firstRoom) {
+                            this.entry = room;
+                            firstRoom = false;
                         }
+                    } catch (NoRoomException ex) {
+                        break;
                     }
                 }
+            }
 
-                line = stdin.nextLine();
-                if (line.equals("Exits:")) {
-                    while (!line.equals("===")) {
-                        
-                        Exit exit;
-                        try {
-                            exit = new Exit(stdin, this, initState);
-                        } catch (Exit.NoExitException ex) {
-                            break;
-                        }
+            line = stdin.nextLine();
+            if (line.equals("Exits:")) {
+                while (!line.equals("===")) {
+
+                    Exit exit;
+                    try {
+                        exit = new Exit(stdin, this, initState);
+                    } catch (Exit.NoExitException ex) {
+                        break;
                     }
                 }
             }
@@ -246,6 +244,12 @@ public class Dungeon {
         if (item != null) {
             this.removeItem(item);
         }
+    }
+    public String getIntro() {
+        return intro;
+    }
+    public void setIntro(String intro) {
+        this.intro = intro;
     }
 }
 

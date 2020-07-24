@@ -13,14 +13,16 @@ import java.util.Scanner;
  * which direction they can go and the name of the surrounding room(s). Also, Exit class initializes itself by
  * reading from the .zork file.
  * @author Richard Volynski (OOO)
- * @version 2.9
- * 16 July 2020
+ * @version 3.2
+ * 20 July 2020
  */
-class Exit {
+public class Exit {
     private String dir;
     private Room src;
     private Room dest;
     private boolean locked;
+    private boolean requiresItemToUnlock;
+    private String nameOfItemRequiredToUnlock;
     
     /**
      * Thrown when an Exit constructor, given a Scanner object,
@@ -77,9 +79,18 @@ class Exit {
         this.src.addExit(this);
 
         line = s.nextLine();
-        if (line.equals("locked")) {
-            if (initState) {
-                this.src.lockExit(this);
+        while (!line.equals("---")) {
+            String[] splitLine = line.split(": ");
+            switch (splitLine[0]) {
+                case "locked":
+                    if (initState) {
+                        this.src.lockExit(this);
+                    }
+                    break;
+                case "Requires":
+                    this.nameOfItemRequiredToUnlock = splitLine[1];
+                    requiresItemToUnlock = true;
+                    break;
             }
             line = s.nextLine();
         }
@@ -106,6 +117,7 @@ class Exit {
 
     private void init() {
         locked = false;
+        requiresItemToUnlock = false;
     }
 
     /**
@@ -151,6 +163,19 @@ class Exit {
 */
     }
 
+    void restoreState() {
+        
+    }
+
+    boolean requiresItemToUnlock() {
+        return requiresItemToUnlock;
+    }
+
+    boolean requiresThisItemToUnlock(Item item) {
+        return item.goesBy(nameOfItemRequiredToUnlock);
+        //return locked && requiresItemToUnlock && item.goesBy(nameOfItemRequiredToUnlock);
+    }
+
     /**
      * Checks to see if the exit cannot be passed through.
      * @return true if and only if the exit is locked, false otherwise
@@ -180,18 +205,3 @@ class Exit {
  * @author John Thomas
  */
 class NoExitException extends Exception {}
-
-/**
- * Thrown when the player attempts to leave the current room through a locked exit.
- * @author John Thomas
- */
-class ExitLockedException extends Exception {
-
-    /**
-     * Constructs a new ExitLockedException with the given message.
-     * @param message the message to be printed if this exception is thrown
-     */
-    ExitLockedException(String message) {
-        super(message);
-    }
-}

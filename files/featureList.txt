@@ -1,0 +1,85 @@
+OOO Supplemental Features
+
+Swap -- this command allows to exchange items in the user's inventory 
+with items in the user's current room. Swap can exchange one item 
+at a time or all items simultaneously. 
+
+Examples:
+
+> swap shirt with powder
+Swapped shirt (from user's inventory) with powder (in user's current room).
+
+> swap all
+Swapped all items 
+
+All items in the user's current room will appear in the user's inventory and 
+item(s) in the user's inventory will appear in the user's current room. 
+This command is handy when you need to exchange many items at once.
+
+
+To test swap, you will need to:
+
+1. Take dagger from Lobby (entry room)
+2. Use "s" to go to North Wing
+2a. If your dagger was stolen, take it from your current room
+or remember where it was stolen so that you have it when you 
+go kill the security guard
+3. Use "swap dagger with necklace"
+4. Use "i" to check that you're carrying a necklace
+
+
+To test swap all, you will need to:
+
+1. Take dagger from Lobby (entry room)
+2. Use "s" to go to North Wing
+2a. If your dagger was stolen, take it from your current room
+or remember where it was stolen so that you have it when you 
+go kill the security guard
+3. Use "s" to go to Seven Corner Buffet
+3a. If your dagger was stolen, take it from your current room
+or remember where it was stolen so that you have it when you 
+go kill the security guard
+4. Use "S" to go to South Wing
+4a. If your dagger was stolen, take it from your current room
+or remember where it was stolen so that you have it when you 
+go kill the security guard
+5. Use "s" to go to Gift Shop
+5a. If your dagger was stolen, take it from your current room
+or remember where it was stolen so that you have it when you 
+go kill the security guard
+6. Use "swap all"
+7. Use "i" to check that you swapped all items
+=================================================================
+
+
+Kill -- this important commands allows you to clear the way to 
+the Hotel Safe. The Hotel Safe is where you will find a hotel 
+personnel's wallet (you will need to steal this to win the game)
+
+To test kill, you will need to:
+1. Possess a dagger or sword
+1a. Take dagger from Lobby (entry room)
+2. Use "s" to go to North Wing
+2a. If your dagger was stolen, take it from your current room
+or remember where it was stolen so that you have it when you 
+go kill the security guard
+3. Use "s" to go to Seven Corner Buffet
+3a. IIf your dagger was stolen, take it from your current room
+or remember where it was stolen so that you have it when you 
+go kill the security guard
+4. Use "s" to go to Gift Shop
+4a. If your dagger was stolen, take it from your current room
+or remember where it was stolen so that you have it when you 
+go kill the security guard
+5. Use "s" to go to Manager's Office
+5a. If your dagger was stolen, take it from your current room
+or remember where it was stolen so that you have it when you 
+go kill the security guard
+6. Use "e" to go to Hotel Security Headquarters
+6a. If your dagger was stolen, take it from your current room
+or remember where it was stolen so that you have it when you 
+go kill the security guard
+7. Use "kill guard" Use "kill guard" to Kill security guard
+=======================================================================================
+
+

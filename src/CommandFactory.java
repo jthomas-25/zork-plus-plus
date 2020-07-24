@@ -2,11 +2,11 @@
 
 /**
  * CommandFactory Class - A factory class whose purpose is to parse text strings
- * and produce the appropriate Command objects.
+ * and produce the appropriate {@link Command} objects.
  * CommandFactory is a Singleton class.
  * @author Object Oriented Optimists (OOO)
- * @version 3.6
- * 16 July 2020
+ * @version 3.8
+ * 23 July 2020
  */
 class CommandFactory {
     private static CommandFactory single_instance = null;
@@ -28,15 +28,15 @@ class CommandFactory {
     }
 
     /**
-     * parse - this method parses entered commands and produces Command objects
+     * parse - this method parses entered commands and produces {@link Command} objects
      * @param commandString - user input
-     * @return - Command objects
+     * @return - {@link Command} objects
      */
     Command parse(String commandString) {
         String[] words = commandString.split(" ");
         switch (words.length) {
             case 1:
-                switch (words[0]) {
+                switch (words[0].toLowerCase()) {
                     case "n":
                     case "s":
                     case "w":
@@ -62,6 +62,8 @@ class CommandFactory {
                         return new SwapCommand("", "");
                     case "kill":
                         return new KillCommand("");
+                    case "unlock":
+                        return new UnlockCommand("", "", "", "");
                     default:
                         if (GameState.instance().hasItemSpecificCommand(words[0])) {
                             return new ItemSpecificCommand(words[0], "");
@@ -70,36 +72,9 @@ class CommandFactory {
                             return new UnknownCommand(words[0]);
                         }
                 }
-            case 3:
-                switch (words[0]) {
-                    case "unlock":
-                        switch (words[2]) {
-                            case "exit":
-                                return new UnlockCommand(words[1]);
-                            default:
-                                return new UnknownCommand(commandString);
-                        }
-                    default:
-                        return new UnknownCommand(words[0]);
-                }
-/*
-            case 4:
-                switch (words[0]) {
-                    case "use":
-                        switch (words[2]) {
-                            case "on":
-                                switch (words[3]) {
-                                    case "exit":
-                                        return new UnlockCommand();
-                                }
-                            break;
-                        }
-                    break;
-                }
-*/
             default:
-                String itemName;
-                switch (words[0]) {
+                String itemName = "";
+                switch (words[0].toLowerCase()) {
                     case "take":
                         itemName = words[1];
                         return new TakeCommand(itemName);
@@ -127,6 +102,39 @@ class CommandFactory {
                     case "kill":
                         String noun = words[1];
                         return new KillCommand(noun);
+                    case "unlock":
+                        String exitDir = "";
+                        String objectToUnlock = "";
+                        String prep = "";
+                        itemName = "";
+                        if (words.length == 2) {
+                            //unlock exit
+                            objectToUnlock = words[1];
+                        } else if (words.length == 3) {
+                            if (words[2].equals("with")) {
+                                //unlock exit with
+                                objectToUnlock = words[1];
+                                prep = words[2];
+                            } else {
+                                //unlock e exit
+                                exitDir = words[1];
+                                objectToUnlock = words[2];
+                            }
+                        } else if (words.length == 4) {
+                            //unlock exit with <itemName>
+                            exitDir = words[1];
+                            objectToUnlock = words[2];
+                            prep = words[3];
+                        } else if (words.length == 5) {
+                            //unlock e exit with <itemName>
+                            exitDir = words[1];
+                            objectToUnlock = words[2];
+                            prep = words[3];
+                            itemName = words[4];
+                        } else {
+                            return new UnknownCommand(commandString);
+                        }
+                        return new UnlockCommand(exitDir, objectToUnlock, prep, itemName);
                     default:
                         String verb = words[0];
                         String word2 = words[1];
@@ -135,6 +143,3 @@ class CommandFactory {
         }
     }
 }
-
-
-
