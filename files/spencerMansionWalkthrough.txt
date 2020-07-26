@@ -1,0 +1,43 @@
+Spencer Mansion
+
+Note: Text inside quotation marks represents a typed command.
+
+Steps:
+1. Go "u" to the second floor (2F).
+2. Type "take lockpick".
+3. Go "d" to the Foyer.
+4. Go "w" to the Dining Room.
+5. Type "take emblem".
+6. Go "n" to the Bar.
+7. Okay, here's where it gets tricky (or tedious, as you'll soon find out).
+   A LOT of backtracking to the Bar is involved. For that reason, I encourage
+   you to draw your own map. I've provided a few hints below:
+   
+   7a. Type "push bookshelf", which will teleport you to a random room in the
+       mansion. Keep track of the number of times you push the bookshelf. When
+       you're done, you will have pushed the bookshelf a total of 9 times.
+   7b. You can take the wolfMedal in the Secret Passage (type "take wolfMedal")
+       if you want; you'll need it later anyway.
+   7c. Eventually, you'll end up in the Study. If you're not there yet, keep
+       pushing the bookshelf and making your way back to the Bar each time.
+8. DO NOT "read" the Necronomicon! If you do, it will teleport you out of the
+   Study and you'll have to get back there by pushing the bookshelf all over
+   again. I'd recommend restarting the game at that point.
+   Instead, first type "open Necronomicon", then type "take eagleMedal" to
+   obtain the eagleMedal. Phew! The worst of it is over, I promise.
+9. Type "polish eagleMedal" to be teleported out of this room.
+10. Make your way back to the Bar.
+11. Type "unlock e exit with lockpick".
+12. Go "e" to the Secret Passage.
+13. Type "take wolfMedal" if you decided not to take it earlier.
+14. Type "unlock n exit with lockpick".
+15. Go "n" to the Courtyard.
+16. Type "unlock d exit with eagleMedal".
+17. Go "d" to the Underground Lab Entrance.
+18. Type "unlock n exit with wolfMedal".
+19. Go "n" to the Underground Lab.
+20. Go "w" to the Emergency Tunnel.
+21. Type "unlock u exit with battery".
+22. Go "u" to the Helipad.
+23. Type "light flare".
+24. Type "getIn helicopter" or "jumpIn helicopter" to win the game!

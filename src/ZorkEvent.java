@@ -162,8 +162,7 @@ class DieEvent extends ZorkEvent {
      * @return this event's "lose" message
      */
     String trigger(String noun) {
-        GameState.instance().killPlayer();
-        GameState.instance().endGame();
+        GameState.instance().killPlayer();  //calls .endGame()
         return this.message;
     }
 }
@@ -401,17 +400,8 @@ class TeleportEvent extends ZorkEvent {
      */
     String trigger(String noun) {
         ArrayList<Room> rooms = GameState.instance().getDungeon().getRooms();
-        Room currentRoom = GameState.instance().getAdventurersCurrentRoom();
-
-        boolean sameRoom = false;
-        do {
-            int randomNumber = rng.nextInt(rooms.size());
-            this.newRoom = rooms.get(randomNumber);
-            String newRoomName = this.newRoom.getName();
-            String currentRoomName = currentRoom.getName();
-            sameRoom = newRoomName.equals(currentRoomName);
-        } while (sameRoom);
-            
+        int randomNumber = rng.nextInt(rooms.size());
+        this.newRoom = rooms.get(randomNumber);
         GameState.instance().setAdventurersCurrentRoom(this.newRoom);
         this.message = String.format("\n%s", this.newRoom.describe());
         return this.message;
