@@ -1,6 +1,6 @@
 DC Labs
 
-Image based map:
+Image based map: https://github.com/rvolynsk/CPSC-240/blob/master/files/DCLabs_Map.png
 (might be useful!)
 
 Steps to win:
