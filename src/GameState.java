@@ -10,8 +10,8 @@ import java.util.*;
  * @author Object Oriented Optimists (OOO)
  * @author John Thomas (for phase 1)
  * @author Richard Volynski
- * @version 3.7
- * 21 July 2020
+ * @version 3.8
+ * 23 July 2020
  */
 class GameState {
     private final String VERSION = "Zork++";
@@ -31,6 +31,7 @@ class GameState {
     private final Random random;
     private final int SEED = 4;
     private boolean guardAlive = true;
+    private ArrayList<NPC> npcs = new ArrayList<>();
 
 
     //Singleton instance of GameState class
@@ -91,6 +92,15 @@ class GameState {
 //        this.dungeon = new Dungeon(currentRoom, dungeonDesc);
         this.dungeon = dungeon;
         this.currentRoom = dungeon.getEntry();
+
+        // Populate NPCs
+        if (dungeon.getTitle().contains("Labs")) {
+            ArrayList<Room> rooms = dungeon.getRooms();
+            Integer randomInt = (int)(Math.random() * (rooms.size() + 1) + 0);
+            String randRoom = rooms.get(randomInt).getName();
+            this.npcs.add(new NPC("ThePresence", randRoom));
+
+        }
     }
 
     /**
@@ -363,8 +373,12 @@ class GameState {
      */
     void setHealth(int health) {
         if (health < 0) {
-            health = 0;
-        } else {
+            this.health = 0;
+        }
+        else if (health > 5) {
+            this.health = 5;
+        }
+        else {
             this.health = health;
         }
     }
@@ -420,7 +434,11 @@ class GameState {
     String getHealthMsg() {
         if (this.health >= 5) {
             return healthMsgs.get(5);
-        } else {
+        }
+        else if (this.health <= 0) {
+            return healthMsgs.get(0);
+        }
+        else {
             return healthMsgs.get(this.health);
         }
     }
@@ -447,6 +465,11 @@ class GameState {
     void setHealthMsg(int health, String healthMsg) {
         healthMsgs.put(health, healthMsg);
     }
+
+    ArrayList<NPC> getNpcs() {
+        return this.npcs;
+    }
+
 
     /**
      * Checks to see if the game has ended.

@@ -5,8 +5,8 @@
  * and produce the appropriate {@link Command} objects.
  * CommandFactory is a Singleton class.
  * @author Object Oriented Optimists (OOO)
- * @version 3.7
- * 19 July 2020
+ * @version 3.8
+ * 23 July 2020
  */
 class CommandFactory {
     private static CommandFactory single_instance = null;
@@ -32,11 +32,12 @@ class CommandFactory {
      * @param commandString - user input
      * @return - {@link Command} objects
      */
-    Command parse(String commandString) {
+    Command parse(String commandString) throws InterruptedException {
         String[] words = commandString.split(" ");
+
         switch (words.length) {
             case 1:
-                switch (words[0]) {
+                switch (words[0].toLowerCase()) {
                     case "n":
                     case "s":
                     case "w":
@@ -74,7 +75,7 @@ class CommandFactory {
                 }
             default:
                 String itemName = "";
-                switch (words[0]) {
+                switch (words[0].toLowerCase()) {
                     case "take":
                         itemName = words[1];
                         return new TakeCommand(itemName);

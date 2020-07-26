@@ -224,6 +224,10 @@ public class Room {
         return exits.get(dir);
     }
 
+    public Hashtable<String, Exit> getExits() {
+        return this.exits;
+    }
+
     /**
      * 
      */

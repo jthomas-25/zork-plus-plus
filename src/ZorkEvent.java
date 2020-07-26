@@ -2,8 +2,7 @@
 
 import org.ietf.jgss.GSSContext;
 
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.*;
 
 
 /**
@@ -92,8 +91,8 @@ class ScoreEvent extends ZorkEvent {
  * Note that a negative number of points will effectively heal the player.
  * @author John Thomas (for phase 1)
  * @author Richard Volynski
- * @version 1.7
- * 21 July 2020
+ * @version 1.8
+ * 23 July 2020
  */
 class WoundEvent extends ZorkEvent {
     private int damagePoints;
@@ -122,11 +121,11 @@ class WoundEvent extends ZorkEvent {
         if (playersHealth <= 0) {
             ZorkEvent event = EventFactory.instance().parse("Die");
             String dieMsg = event.trigger(noun);
-            this.message = String.format("\n%s", dieMsg);
+            this.message = String.format("\n%s", dieMsg + "\nFinal Score: %s", GameState.instance().getScore());
         } else {
-            //String healthMsg = GameState.instance().getHealthMsg();
-            //this.message = healthMsg;
-            this.message = String.format("Damage: %s"+ "\nHealth: %s", damagePoints, playersHealth);
+            String healthMsg = String.format("\n%s", GameState.instance().getHealthMsg());
+            this.message = healthMsg;
+            //this.message = String.format("Damage: %s"+ "\nHealth: %s", damagePoints, GameState.instance().getHealth());
         }
         return this.message;
     }
@@ -183,7 +182,7 @@ class WinEvent extends ZorkEvent {
      * Constructs a new WinEvent with the default message.
      */
     WinEvent() {
-        this.message = "You have won! \nFinal score: " + GameState.instance().getScore()
+        this.message = "You have won!\nFinal score: " + GameState.instance().getScore()
                 + "\nRank: " + GameState.instance().getRank();
     }
 
@@ -417,19 +416,41 @@ class TeleportEvent extends ZorkEvent {
  */
 class PotionEffect extends ZorkEvent {
     private String effect;
+    private String output;
 
     /**
      * Constructs a new PotionEffect based on the given effect.
      */
-    PotionEffect(String effect) {
-        //TODO implement
+    PotionEffect(String effect, String input) {
+
+        
+        if (effect.equals("gib")) {
+            String[] words = input.split(" ");
+
+            ArrayList<String> newWords = new ArrayList<>();
+            for (String word : words) {
+                List<String> letters = Arrays.asList(word.split(""));
+                Collections.shuffle(letters);
+                String shuffled = "";
+                for (String letter : letters) {
+                    shuffled += letter;
+                }
+                newWords.add(shuffled);
+            }
+
+
+
+
+            output = String.join(" ", newWords);
+
+        }
     }
 
     /**
      * Triggers the PotionEffect.
      */
     String trigger(String noun) {
-        return "Event will be implemented soon";    //TODO implement
+        return this.output;
     }
 }
 

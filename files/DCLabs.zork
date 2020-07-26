@@ -1,0 +1,377 @@
+DC Lab
+Zork++
+===
+Items:
+firstPotion
+9999
+drink[Die]:Unfortunately, you drank the poison.
+examine:This bottle is round, with a clear liquid inside it.
+---
+secondPotion,second
+9999
+drink[disappear]:Lucky for you, the potion was just wine. You have another chance.
+examine:A slender, matte red vial.  Impossible to see the color..
+---
+sixthPotion,sixth
+9999
+drink[disappear]:Lucky for you, the potion was just wine. You have another chance.
+examine:A large, dark gray opaque bottle.  It Looks dangerous... but looks are just that.
+---
+firstPotion,first
+9999
+drink[Die]:Unfortunately, you drank a poison.
+examine:A medium sized, round vial with clear liquid.
+---
+fourthPotion,fourth
+9999
+drink[Die]:Unfortunately, you drank a poison.
+examine:A tall, beige vase like vial, with tan liquid inside.
+---
+fifthPotion,fifth
+9999
+drink[Die]:Unfortunately, you drank a poison.
+examine:A pyramid shaped green bottle with a classic cork.
+---
+seventhPotion,seventh
+9999
+drink[Teleport]:This one tastes really strange... almost like its teleporting you to a random room... uh oh.
+examine:An almost ball shaped bright purple bottle. The reflections are sharp on its smooth exterior.
+---
+thirdPotion,third
+9999
+drink[Win]:This one tastes amazing... and you can almost feel yourself getting better instantly.  Having gotten what you came for, you can leave this terrible place in peace.
+examine:A tiny blue vial.  Its contents a stunning aqua.
+---
+FloppyDisk,floppy,floppydisk
+3
+examine:This is some ancient technology here, neat... but doesn't look too useful.
+throw[Score(1), Disappear]:Like a Frisbee! 
+---
+Stickynote
+3
+examine[Score(1)]: You've found another clue: 
+<<start of clue>>Second, different are those who stand at either end, but if you would move onwards, neither is your friend;<<end of clue>>
+---
+Postcard,postcard,card
+3
+examine[Score(1)]: You've found another clue: 
+<<start of clue>>Third, as you see clearly, all are different size neither dwarf nor giant holds death in their insides;<<end of clue>>
+---
+Document,document,doc
+3
+examine[Score(1)]: You've found another clue: 
+<<start of clue>>Fourth, the second left and the second on the right are twins once you taste them, though different at first sight.<<end of clue>>
+---
+Hazmatsuit,suit,hazmatsuit
+10
+examine:This looks like it would come in really useful if there ever happened to be another outbreak... like the one in 2020.
+wear[Score(1)]:Eh, why not!
+---
+Bandages,bandages
+2
+examine:These bandages look like they've been here for years.  They've gone pretty soft.
+use[Disappear]:The bandages, seemingly dissolve in your hands.  Not fun.
+---
+Handgun,gun,handgun
+10
+examine:This would do the trick, should you run into anyone looking to hurt you.
+shoot: *Bang* The gun fires!
+---
+CannedFood
+5
+examine:Canned food is supposed to last forever... right?
+eat[Score(1)]:Ok, well I'm not dead yet.
+---
+Grenade,grenade
+10
+examine:Ok, well now this just looks extra dangerous.
+throw[Transform(DudGrenade), Wound(1)]:This is a dumb idea, but here it goes! *Throw* ... nothing happened.  I guess grenades expire? *pop* Ow! Ok, maybe not... but it definitely didn't have the power of a real grenade, lucky me I guess.
+---
+DudGrenade,dud
+10
+examine:At least it could be thrown at something... it might hurt.
+throw[drop]:The dud of a grenade hits the ground with a disappointing thud.
+---
+note
+1
+examine:This note contains the first clue, it would be wise to take it to recall the clue.
+<<start of clue>>First, however slyly the poison tries to hide. You will always find some on nettle wine’s left side;<<end of clue>>
+---
+IronThrone,throne
+400000
+examine:The great metallic throne, forged from a thousand swords of imperial enemies,
+dominates the room and makes you feel considerably smaller.
+There are still sharp edges, so you are wary of touching it.
+touch[Wound(1)]:Ouch! Sharp steel opens a red line in your finger.
+sit[Win]:Hail to the Queen!
+sitOn[Win]:Hail to the Queen!
+---
+===
+Rooms:
+Lab Entrance
+Contents: note
+You enter the lab with one goal in mind.  To cure yourself of a most dangerous infliction.
+Find the room of Potions and choose which to drink wisely.
+You must first gather clues to solve the riddle which will ultimately determine your fate.
+The first is this (which totally might or might not be copied from somewhere)
+
+<<start of clue>>
+Danger lies before you, while safety lies behind,
+Two of us will help you, whichever you would find,
+One among us seven will let you move ahead,
+Another will transport the drinker back instead,
+Two among our number hold only nettle wine,
+Three of us are killers, waiting hidden in line.
+Choose, unless you wish to stay here for evermore,
+To help you in your choice, we give you these clues four:
+First, however slyly the poison tries to hide
+You will always find some on nettle wine’s left side;
+<<end of clue>>
+---
+Decontamination Room
+Contents: Hazmatsuit
+The room is a mess.  The once clean tile is now stained with what looks like years of chemical abuse.
+The drains tried their best, but there's still  liquid covering the floor.  Burst pipes, broken glass... this room has got it all.
+---
+Library
+This is one of the most amazing libraries you've ever seen. 
+Books flank you on all sides.  The amount of knowledge in this room must be extraordinary.
+It seems strange that they would still have books though.  At this point in time, everything should be digital, right?
+---
+X-Ray Room
+X-Rays machines everywhere you turn.  Who would need so many X-Ray machines?
+Why would you need so many X-Ray machines?  This room is darker than the others too.
+Makes sense, considering how they work... still very unsettling.
+---
+Office 200
+Contents: Postcard
+This office was so well kept, you can tell even after the complete disarray that went on here.
+All the paintings and posters are framed and arranged in a particular way... very formal.
+---
+Right Hall bottom half
+This hallway is long... however its cut short by what looks like a wall of debris.
+There is definitely no way through the debris.  Speaking of debris, it seems to be everywhere.
+Something really trashed this hallway.
+---
+Food Court
+Contents: CannedFood
+This place looks like a food court... or what is left of one anyways.
+It is easy to imagine how active this place must have been.  There are signs for all sorts of food.
+At a second glance though, something about this food court seems off.
+I guess there's no need for marketing or aesthetic in a "top secret" lab though.
+---
+Right Hall top half
+The top half the right hall.  Just as trashed as the bottom half, maybe even more so.
+The wall of debris on this side is just as impenetrable.
+---
+Armory
+Contents: Handgun,Grenade
+It would be nice to come across this first.  The very room itself looks "tough".
+There's weapons of all types everywhere... on shelves, desks, lockers... all brand new by the looks of it...
+enough for a small army!  However, on second thought, something tells
+me none of these weapons would actually help me down here...
+---
+Office 300
+Contents: Document
+This office is dull.  It looks like it belonged to someone *very* important though.
+Its by far the largest office here, with the most impressive furniture.
+Wonder what important business stuff went down here in its prime.
+---
+Potion Room
+Contents: firstPotion,secondPotion,thirdPotion,fourthPotion,fifthPotion,sixthPotion,seventhPotion
+This is it.  The room that will either let you escape or seal your fate.
+Once you have all the clues, pick your poison! ... or cure!
+Before you lies these 7 potions.
+- First, a medium sized, round vial with clear liquid.
+- Second, a slender, matte red vial.  Impossible to see the color.
+- Third, a tiny blue vial.  Its contents a stunning aqua.
+- Fourth, A tall, beige vase like vial, with tan liquid inside.
+- Fifth, A pyramid shaped green bottle with a classic cork.
+- Sixth, a large, dark gray opaque bottle.  It Looks dangerous... but looks are just that.
+- Seventh, an almost ball shaped bright purple bottle. The reflections are sharp on its smooth exterior.
+---
+Medical Ward
+Contents: Bandages
+Rows of uncomfortable beds are pushed against the wall. 
+All with their own restraints and devious looking medical equipment, positioned
+in a way that seems it would bear down on whoever was unfortunate enough to occupy the bed.
+---
+Left Hall
+This hallway stretches for what seems like miles.
+The tiles on a floor and ceiling make a dizzying pattern that only accentuates the length of the hall.
+Dozens of doors line each side.  Most of them are barricaded shut.
+---
+Chemical Experiments
+This room would look fun... if it weren't so creepy.  It looks like a mad scientist lived here.
+So many bottles, vials and beakers of liquid.  Some dried out... some hardened... but some still seem to be left intact.  
+There are a lot of spills and broken glass around here though, should be careful.
+---
+Office 100
+Contents: Stickynote
+This office looks like it belonged to one of the more cheery types here.  Its not just all dark wood
+with a dark desk, surrounded by dull lights.  It has a bit of color to it.  The desk looks very cluttered though.
+---
+Computer Lab
+Contents: FloppyDisk
+The buzz of electronics is strong in here.  It looks like it was quite busy in its heyday.
+---
+Server Room
+This is perhaps the most peaceful room here.  
+The room isn't very well lit... but there are tons of LEDs on all sorts of computer equipment.
+The servers are still somehow on... quietly humming, working on whatever tasks their programmers instructed them to do, so long ago.
+---
+===
+Exits:
+Lab Entrance
+n
+Decontamination Room
+---
+Decontamination Room
+s
+Lab Entrance
+---
+Decontamination Room
+e
+Library
+---
+Library
+w
+Decontamination Room
+---
+Decontamination Room
+w
+Computer Lab
+---
+Computer Lab
+e
+Decontamination Room
+---
+Library
+e
+X-Ray Room
+---
+X-Ray Room
+w
+Library
+---
+X-Ray Room
+n
+Office 200
+---
+Office 200
+s
+X-Ray Room
+---
+Office 200
+e
+Right Hall bottom half
+---
+Right Hall bottom half
+w
+Office 200
+---
+Office 200
+n
+Food Court
+---
+Food Court
+s
+Office 200
+---
+Food Court
+e
+Right Hall bottom half
+---
+Right Hall bottom half
+w
+Food Court
+---
+Food Court
+n
+Right Hall top half
+---
+Right Hall top half
+s
+Food Court
+---
+Right Hall top half
+n
+Armory
+---
+Armory
+s
+Right Hall top half
+---
+Armory
+e
+Office 300
+---
+Office 300
+w
+Armory
+---
+Armory
+w
+Potion Room
+---
+Potion Room
+e
+Armory
+---
+Potion Room
+w
+Medical Ward
+---
+Medical Ward
+e
+Potion Room
+---
+Medical Ward
+s
+Left Hall
+---
+Left Hall
+n
+Medical Ward
+---
+Medical Ward
+w
+Chemical Experiments
+---
+Chemical Experiments
+e
+Medical Ward
+---
+Chemical Experiments
+e
+Left Hall
+---
+Left Hall
+w
+Chemical Experiments
+---
+Chemical Experiments
+s
+Office 100
+---
+Office 100
+n
+Chemical Experiments
+---
+Left Hall
+s
+Computer Lab
+---
+Computer Lab
+n
+Left Hall
+---
+Computer Lab
+s
+Server Room
+---
+Server Room
+n
+Computer Lab
+---
+===

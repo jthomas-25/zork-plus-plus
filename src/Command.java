@@ -18,7 +18,7 @@ abstract class Command {
      * execute - this is an abstract command, which will be implemented at the subclass level.
      * @return String command message
      */
-    abstract String execute();
+    abstract String execute() throws InterruptedException;
 }
 
 /**
@@ -179,7 +179,7 @@ class MovementCommand extends Command {
      * in response to that command being executed
      * @return text description about where the user is going
      */
-    String execute() {
+    String execute() throws InterruptedException {
         try {
             boolean daggerDropped = false;
             Room room = GameState.instance().getAdventurersCurrentRoom().leaveBy(dir);
@@ -193,6 +193,26 @@ class MovementCommand extends Command {
             if (daggerDropped) {
                 execute+= "\n\nHotel guests stole some of your valuables";
             }
+
+
+            // Should really be in a gamestate counter or something.
+            if (GameState.instance().getNpcs().size() > 0) {
+                NPC onlyNPC = GameState.instance().getNpcs().get(0);
+                if ((int)(Math.random() * (5 + 1) + 0) == 1) {
+                    onlyNPC.moveTowards(GameState.instance().getAdventurersCurrentRoom().getName());
+                }
+                if (onlyNPC.inSameRoom()) {
+                    String npcText = "";
+//                    npcText += new PotionEffect("gib", execute).trigger("none");
+                    npcText += onlyNPC.sameRoom();
+
+
+                    return npcText;
+                }
+                return execute += "\n\n" + onlyNPC.getLogistics("evil presence");
+            }
+
+
             return execute;
         }
         catch (Exception e) {
@@ -546,14 +566,25 @@ class SwapCommand extends Command {
                     while (itr.hasNext()) {
                         Item roomItem = itr.next();
                         state.addToInventory(roomItem);
+                    }
+                    while (itr.hasNext()) {
+                        Item roomItem = itr.next();
                         currentRoom.remove(roomItem);
                     }
                     for (int i = 0; i < numItemsInUserInventory; i++) {
                         Item itemInInventory = GameState.instance().getInventory().get(i);
-                        GameState.instance().removeFromInventory(itemInInventory);
                         currentRoom.add(itemInInventory);
                     }
-                    result += String.format("Swapped %s with %s.\n", userItemName, itemInRoomName);
+                    for (int i = numItemsInUserInventory-1; i >= 0; i--) {
+                        Item itemInInventory = GameState.instance().getInventory().get(i);
+                        GameState.instance().removeFromInventory(itemInInventory);
+                    }
+                    if (userItemName.equalsIgnoreCase("all")) {
+                        result += String.format("Swapped all items");
+                    }
+                    else {
+                        result += String.format("Swapped %s with %s", userItemName, itemInRoomName);
+                    }
                 }
                 else {
                     result = String.format("There are no items in %s.", currentRoom);
@@ -574,7 +605,12 @@ class SwapCommand extends Command {
                 state.addToInventory(itemInRoom);
                 currentRoom.remove(itemInRoom);
                 currentRoom.add(userItem);
-                return String.format("Swapped %s with %s.\n", userItemName, itemInRoomName);
+                if (userItemName.equalsIgnoreCase("all")) {
+                    return String.format("Swapped all items");
+                }
+                else {
+                    return String.format("Swapped %s with %s.", userItemName, itemInRoomName);
+                }
         }
     }
 }
