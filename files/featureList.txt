@@ -1,5 +1,5 @@
 OOO Supplemental Features
-
+===========================================================================================
 Swap -- this command allows to exchange items in the user's inventory 
 with items in the user's current room. Swap can exchange one item 
 at a time or all items simultaneously. 
@@ -49,8 +49,7 @@ or remember where it was stolen so that you have it when you
 go kill the security guard
 6. Use "swap all"
 7. Use "i" to check that you swapped all items
-=================================================================
-
+===========================================================================================
 
 Kill -- this important commands allows you to clear the way to 
 the Hotel Safe. The Hotel Safe is where you will find a hotel 
@@ -80,7 +79,7 @@ go kill the security guard
 or remember where it was stolen so that you have it when you 
 go kill the security guard
 7. Use "kill guard" Use "kill guard" to Kill security guard
-=======================================================================================
+===========================================================================================
 
 (not working as of 7/26)
 ThePresence -- This is an NPC of sorts, similar to a gru.
@@ -93,6 +92,22 @@ To test, you will need to:
 3. You will see a message, telling you how close to danger you are.
 4. If you continue moving towards the danger, you will eventually be in the same room.
 5. Once you are in the same room, the game is instantly lost.
-=======================================================================================
+===========================================================================================
 
+Locked exits -- Some exits may require a specific item to unlock them. Others can
+be permanently locked (e.g. the ones connected to the Study in the Spencer Mansion),
+forcing the player to figure out another way to access their desired destination.
 
+Note: Text inside quotation marks represents a typed command.
+
+Test Case:
+1. Load spencerMansion.zork
+2. Attempt to go "e" to the Art Showroom. "The exit to Art Showroom is locked." is printed.
+3. Go "u" to the second floor (2F).
+4. Type "take lockpick".
+5. Go "d" to the Foyer.
+6. Type "unlock e exit with lockpick".
+7. The exit to the Art Showroom is now unlocked. "Exit unlocked." is printed.
+8. Go "e" to the Art Showroom.
+9. You are now in the Art Showroom.
+===========================================================================================
