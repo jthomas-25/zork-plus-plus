@@ -6,11 +6,11 @@ Image based map: https://github.com/rvolynsk/CPSC-240/blob/master/files/DCLabs_M
 Steps to win:
 1. Go "n, w, n, w, s" to arrive at "Office 100"
 2. Take stickynote, examine the clue.
-3. Go "n, e, s, e, e, e, n" to arrive at "Office 200"
-4. Take postcard, examine the clue.
-5. Go "n, n, n, e" to arrive at "Office 300"
-6. Take Document, examine the clue.
-7. Travel "w, w"  to arrive at "Potion Room"
+3. Go "n, e, n, e, e, e" to arrive at "Office 300"
+4. Take Document, examine the clue.
+5. Go "w, s, s, s" to arrive at "Office 200"
+6. Take Postcard, examine the clue.
+7. Travel "n, n, n, e"  to arrive at "Potion Room"
 8. Attempt riddle, using clues.
 
 
