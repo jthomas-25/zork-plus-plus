@@ -81,7 +81,6 @@ go kill the security guard
 7. Use "kill guard" Use "kill guard" to Kill security guard
 ===========================================================================================
 
-(not working as of 7/26)
 ThePresence -- This is an NPC of sorts, similar to a gru.
 It will chase the player around the dungeon, forcing them
 to keep moving and avoid warnding around aimlessly.
