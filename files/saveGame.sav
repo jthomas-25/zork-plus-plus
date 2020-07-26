@@ -1,0 +1,65 @@
+Zork III save data
+Dungeon file: sample.zork
+Room states:
+Winterfell:
+beenHere=true
+Contents: dagger
+---
+The Wall:
+beenHere=false
+Contents: BastardSword,dragonglass
+---
+The Dreadfort:
+beenHere=false
+---
+Dragonstone:
+beenHere=true
+---
+Pentos:
+beenHere=true
+Contents: GreenDragonEgg,WhiteDragonEgg
+---
+Moat Cailin:
+beenHere=false
+---
+North Kingsroad:
+beenHere=true
+---
+Crossroads Inn:
+beenHere=true
+---
+South Kingsroad:
+beenHere=true
+---
+Mountains of the Moon:
+beenHere=false
+---
+Bloody Gate:
+beenHere=false
+---
+The Eyrie:
+beenHere=false
+---
+East River Road:
+beenHere=false
+---
+West River Road:
+beenHere=false
+---
+Riverrun:
+beenHere=false
+---
+Casterly Rock:
+beenHere=false
+---
+King's Landing:
+beenHere=true
+Contents: wildfire,IronThrone
+---
+Harrenhal:
+beenHere=true
+---
+===
+Adventurer:
+Current room: Pentos
+Inventory: SapphireNecklace,BabyDragon

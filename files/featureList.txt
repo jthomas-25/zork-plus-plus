@@ -83,3 +83,16 @@ go kill the security guard
 =======================================================================================
 
 
+ThePresence -- This is an NPC of sorts, similar to a gru.
+It will chase the player around the dungeon, forcing them
+to keep moving and avoid warnding around aimlessly.
+
+To test, you will need to:
+1. Load DCLabs.zork
+2. Travle n (Decontamination Room)
+3. You will see a message, telling you how close to danger you are.
+4. If you continue moving towards the danger, you will eventually be in the same room.
+5. Once you are in the same room, the game is instantly lost.
+=======================================================================================
+
+
