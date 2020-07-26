@@ -1,0 +1,29 @@
+Ritz-Carlton Hotel
+
+Steps to win:
+1. Take dagger from Lobby (the room where you start)
+2. Use "s" to go to North Wing
+3. use "s" to go to Seven Corner Buffet
+3a. If your dagger was stolen, take it from your current room
+or remember where it was stolen so that you have it when you 
+go kill the security guard
+4. Use "s" to go to South Wing
+4a. If your dagger was stolen, take it from your current room
+or remember where it was stolen so that you have it when you 
+go kill the security guard
+5. Use "s" to go to Gift Shop
+5a. If your dagger was stolen, take it from your current room
+or remember where it was stolen so that you have it when you 
+go kill the security guard
+6. Use "e" to go to Manager's Office
+6a. If your dagger was stolen, take it from your current room
+or remember where it was stolen so that you have it when you 
+go kill the security guard
+7. Use "e" to go to Hotel Security Headquarters
+7a. If your dagger was stolen, take it from your current room
+or remember where it was stolen so that you have it when you 
+go kill the security guard
+8. Use "kill guard" to Kill security guard (you must have a dagger or sword)
+9. Use "e" to go to Hotel Safe
+10. Use "take wallet" to take the wallet
+11. Use "steal wallet" to steal the wallet and be rich! Congratulations, you won!
