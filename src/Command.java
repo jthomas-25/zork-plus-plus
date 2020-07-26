@@ -18,7 +18,7 @@ abstract class Command {
      * execute - this is an abstract command, which will be implemented at the subclass level.
      * @return String command message
      */
-    abstract String execute();
+    abstract String execute() throws InterruptedException;
 }
 
 /**
@@ -179,7 +179,7 @@ class MovementCommand extends Command {
      * in response to that command being executed
      * @return text description about where the user is going
      */
-    String execute() {
+    String execute() throws InterruptedException {
         try {
             boolean daggerDropped = false;
             Room room = GameState.instance().getAdventurersCurrentRoom().leaveBy(dir);
@@ -193,6 +193,26 @@ class MovementCommand extends Command {
             if (daggerDropped) {
                 execute+= "\n\nHotel guests stole some of your valuables";
             }
+
+
+            // Should really be in a gamestate counter or something.
+            if (GameState.instance().getNpcs().size() > 0) {
+                NPC onlyNPC = GameState.instance().getNpcs().get(0);
+                if ((int)(Math.random() * (5 + 1) + 0) == 1) {
+                    onlyNPC.moveTowards(GameState.instance().getAdventurersCurrentRoom().getName());
+                }
+                if (onlyNPC.inSameRoom()) {
+                    String npcText = "";
+//                    npcText += new PotionEffect("gib", execute).trigger("none");
+                    npcText += onlyNPC.sameRoom();
+
+
+                    return npcText;
+                }
+                return execute += "\n\n" + onlyNPC.getLogistics("evil presence");
+            }
+
+
             return execute;
         }
         catch (Exception e) {

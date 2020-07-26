@@ -31,6 +31,7 @@ class GameState {
     private final Random random;
     private final int SEED = 4;
     private boolean guardAlive = true;
+    private ArrayList<NPC> npcs = new ArrayList<>();
 
 
     //Singleton instance of GameState class
@@ -91,6 +92,15 @@ class GameState {
 //        this.dungeon = new Dungeon(currentRoom, dungeonDesc);
         this.dungeon = dungeon;
         this.currentRoom = dungeon.getEntry();
+
+        // Populate NPCs
+        if (dungeon.getTitle().contains("Labs")) {
+            ArrayList<Room> rooms = dungeon.getRooms();
+            Integer randomInt = (int)(Math.random() * (rooms.size() + 1) + 0);
+            String randRoom = rooms.get(randomInt).getName();
+            this.npcs.add(new NPC("ThePresence", randRoom));
+
+        }
     }
 
     /**
@@ -455,6 +465,11 @@ class GameState {
     void setHealthMsg(int health, String healthMsg) {
         healthMsgs.put(health, healthMsg);
     }
+
+    ArrayList<NPC> getNpcs() {
+        return this.npcs;
+    }
+
 
     /**
      * Checks to see if the game has ended.

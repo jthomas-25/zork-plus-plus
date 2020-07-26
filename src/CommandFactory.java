@@ -32,8 +32,9 @@ class CommandFactory {
      * @param commandString - user input
      * @return - {@link Command} objects
      */
-    Command parse(String commandString) {
+    Command parse(String commandString) throws InterruptedException {
         String[] words = commandString.split(" ");
+
         switch (words.length) {
             case 1:
                 switch (words[0].toLowerCase()) {

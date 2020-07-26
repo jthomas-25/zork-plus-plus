@@ -2,8 +2,7 @@
 
 import org.ietf.jgss.GSSContext;
 
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.*;
 
 
 /**
@@ -427,19 +426,41 @@ class TeleportEvent extends ZorkEvent {
  */
 class PotionEffect extends ZorkEvent {
     private String effect;
+    private String output;
 
     /**
      * Constructs a new PotionEffect based on the given effect.
      */
-    PotionEffect(String effect) {
-        //TODO implement
+    PotionEffect(String effect, String input) {
+
+        
+        if (effect.equals("gib")) {
+            String[] words = input.split(" ");
+
+            ArrayList<String> newWords = new ArrayList<>();
+            for (String word : words) {
+                List<String> letters = Arrays.asList(word.split(""));
+                Collections.shuffle(letters);
+                String shuffled = "";
+                for (String letter : letters) {
+                    shuffled += letter;
+                }
+                newWords.add(shuffled);
+            }
+
+
+
+
+            output = String.join(" ", newWords);
+
+        }
     }
 
     /**
      * Triggers the PotionEffect.
      */
     String trigger(String noun) {
-        return "Event will be implemented soon";    //TODO implement
+        return this.output;
     }
 }
 
