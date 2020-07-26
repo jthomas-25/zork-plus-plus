@@ -48,7 +48,12 @@ public class NPC {
     }
 
     public String getLogistics(String noun) throws InterruptedException {
-        return "There is an " + noun + " " + this.findPath(GameState.instance().getAdventurersCurrentRoom().getName()).size() + " rooms away...";
+        int roomNum = this.findPath(GameState.instance().getAdventurersCurrentRoom().getName()).size();
+        if (roomNum == 1) {
+            return "There is an " + noun + " behind one of these doors...";
+        } else {
+            return "There is an " + noun + " " + roomNum + " rooms away...";
+        }
     }
 
 }
