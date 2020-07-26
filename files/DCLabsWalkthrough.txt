@@ -4,7 +4,7 @@ Image based map: https://github.com/rvolynsk/CPSC-240/blob/master/files/DCLabs_M
 (might be useful!)
 
 Steps to win:
-1. Go "n, e, n, e, s" to arrive at "Office 100"
+1. Go "n, w, n, w, s" to arrive at "Office 100"
 2. Take stickynote, examine the clue.
 3. Go "n, e, s, e, e, e, n" to arrive at "Office 200"
 4. Take postcard, examine the clue.
