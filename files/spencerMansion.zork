@@ -1,5 +1,14 @@
 Spencer Mansion
 Zork++
+Welcome to the Spencer Mansion...
+You're a member of an elite special forces team that was sent to investigate
+this mysterious estate in the mountains after a bizarre incident wiped out an
+entire nearby city. Most of your teammates were killed in an ambush soon after
+arriving in a helicopter, except for the pilot, who was forced to leave you
+behind and land elsewhere. In the ensuing chaos, you fled inside the mansion.
+Your mission is to find a way to contact your missing teammate while exploring
+the mansion, so you both can escape safely from this horrible nightmare
+together.
 ===
 Items:
 Beretta,M9,pistol,handgun
@@ -13,15 +22,15 @@ holster:You gently place the gun back in its holster.
 ---
 shotgun,boomstick
 25
-examine:S-Mart's top of the line--a Remington M870 12-gauge pump-action shotgun.
+examine:Hey, it's S-Mart's top of the line--a Remington M870 12-gauge pump-action shotgun.
 aim:This is my BOOMSTICK!
 fire:You stumble backwards as the shotgun discharges a powerful blast!
 ---
-combatKnife,knife
-5
-examine:Dangerous in the wrong hands, lethal in the right ones.
-swing:The knife cuts through the air like--well, you know...
-throw:The knife sails across the room in a graceful arc.
+combatDagger,dagger,knife
+10
+examine:It's dangerous in the wrong hands, but lethal in the right ones.
+swing:The dagger cuts through the air like--well, you know...
+throw[Drop]:The dagger sails across the room in a graceful arc.
 ---
 typewriter
 20
@@ -29,17 +38,28 @@ examine:Many of the keys are scratched due to frequent typing.
 use:It's missing some ink, so you can't use it right now.
 ---
 inkRibbon
-1
-examine:A typical ribbon of ink for a typewriter.
+2
+examine:This is a typical ribbon of ink for a typewriter.
 ---
-woodenEmblem
-20
+woodenEmblem,emblem
+15
 examine:It's in the shape of a shield. An intricate, golden coat of arms is emblazoned on the front. The edges are all worn, as if it's been fitted multiple times.
-set:You try to place the emblem, but there isn't a shield-shaped indentation anywhere nearby.
+set:You try to place the emblem, but there isn't a shield-shaped indentation anywhere in sight.
 ---
 firstFloorMap
 4
 examine:The map reveals a bizarre, confusing layout.
+---
+zombie
+150
+examine:An emaciated, rotting corpse wearing a tattered green jacket meets your gaze.
+approach[Wound(1)]:You end up getting too close, and the ravenous zombie takes a bite out of your arm!
+murder:Can you kill something that's already (un)dead?
+---
+firstAidSpray,medicine
+5
+examine:This is useful for healing in a pinch.
+use[Wound(-5),Disappear]:Ahh, how refreshing!
 ---
 musicalScore,sheetMusic,musicNotes
 3
@@ -48,23 +68,74 @@ read:It's written in the key of C# minor and consists of three movements.
 play:This piece requires a certain instrument to play it...
 ---
 grandPiano,piano
-100
+500
+examine:Try as you might, you can't think of 88 reasons not to play it.
 play:Your hands drift across the keys as the piano emits a beautiful melody.
 lift:You must be joking.
+move:You must be joking.
 ---
 bookshelf,bookcase
 60
-push:With a low rumble and some effort, the bookshelf moves.
+examine:Hmm, it's crooked. Give it a nudge and see if you can straighten it.
+push[Teleport]:With a low rumble and some effort, the bookshelf moves.
+move[Teleport]:With a low rumble and some effort, the bookshelf moves.
 ---
 lockpick
-2
-examine:Perfect for you, the Master of Unlocking.
-use:Not a lock in sight.
+1
+examine:It's the perfect tool for you, the Master of Unlocking.
+---
+Necronomicon,BookOfTheDead
+666
+examine:To attempt to describe this evil grimoire in its entirety would drive even the most rational mind to madness, but perhaps you'll be okay.
+read[Teleport]:Unholy incantations spill forth from your lips as darkness envelops you.
+open[Score(10),Transform(eagleMedal)]:Flipping through the book, whose pages are inscribed with lengthy passages of arcane magic spells, you discover a shiny gold medallion nestled between its pages in a hidden compartment.
+---
+eagleMedal,goldMedal
+5
+examine:It's a gold medal engraved with a majestic eagle.
+polish[Teleport]:The resulting glare blinds you, briefly rendering you unconscious.
+---
+wolfMedal,silverMedal
+5
+examine:It's a silver medal engraved with a noble wolf.
+---
+securityGuard,guard
+200
+examine:A quick glance at the guard's ID badge reveals he's an employee of the dreaded Umbrella Corporation.
+talkTo[Wound(2)]:He's not in the mood for chitchat, apparently.
+kill[Score(15),Disappear]:The guard's body crumples to the floor.
+---
+Tyrant,mutant
+1000
+examine:This is a towering, grotesque monster with a sinister claw for a left hand. Its only weakness is its heart, which is clearly exposed on the outside of its chest.
+attack[Wound(4)]:Your attacks prove futile and bounce off the nigh invulnerable creature, who responds by charging straight towards you, picking you up, and hurling you across the room. Watch out for its razor-sharp claw, lest you risk becoming Swiss cheese.
+taunt[Die]:You pay the ultimate price for your arrogance; the Tyrant tears you to bloody shreds.
+blowUp[Score(25),Disappear]:Grabbing the nearby rocket launcher as a last resort, you take aim directly at the mutant's pulsating heart and open fire. The Tyrant explodes into a hundred gory pieces! Unfortunately, defeating your powerful adversary somehow also activates a self-destruct sequence!
+---
+battery
+25
+examine:Use this to restore power to the nearby elevator.
+---
+rocketLauncher
+50
+examine:Behold, a four-chambered weapon reserved for the biggest and baddest foes.
+fire:Hoisting the rocket launcher onto your shoulder, you fire a deadly explosive projectile!
+---
+signalFlare,flare
+1
+examine:Lighting this will alert your teammate to come and rescue you, so you can get out of here!
+light[Score(20),Transform(helicopter)]:After holding the brightly burning flare aloft for a few minutes, you hear the whirring blades of a helicopter in the distance. It's your teammate! He lands the helicopter without hesitation, and frantically motions for you to climb aboard.
+---
+helicopter,chopper
+5000
+examine:There's no time! Get in the chopper!
+getIn[Win]:The helicopter manages to lift off and fly just out of range of the massive explosions erupting throughout the mansion! You have survived the night's horrors and have reunited with your teammate.
+jumpIn[Win]:The helicopter manages to lift off and fly just out of range of the massive explosions erupting throughout the mansion! You have survived the night's horrors and have reunited with your teammate.
 ---
 ===
 Rooms:
 Foyer
-Contents: Beretta,combatKnife,typewriter,inkRibbon
+Contents: Beretta,combatDagger,typewriter,inkRibbon
 You find yourself in a large entrance hall, which is quite drafty. A red carpet
 in the middle leads to a split staircase. White columns and arches line the
 walls, supporting the upper level. To the left side of the staircase, on a
@@ -94,10 +165,11 @@ Although nothing catches your eye, you hear distant sounds of flesh being torn
 from bone...
 ---
 Sitting Area
+Contents: zombie
 A corner sectional is the only piece of furniture in sight in this little nook,
 but more importantly ——
 A shadowy figure is crouched over something, and it appears not to notice you.
-You should probably get out of there...!
+You should probably leave while you still can...!
 ---
 Bar
 Contents: musicalScore,grandPiano,bookshelf
@@ -107,12 +179,19 @@ the shelves behind the counter. A beautiful grand piano occupies one corner of
 the room. It looks like it hasn't been played in a while, yet has remained in
 surprisingly pristine condition.
 ---
+Secret Passage
+Contents: wolfMedal
+Until you came along, this particular area had long been abandoned. A gentle
+breeze blows through the bars of the intimidating wrought iron gate that's
+blocking the path north.
+---
 Winding Corridor
 Weaving its way westward, a serpentine hallway passes by many other rooms.
 ---
 Marble Room
 A feeling of claustrophobia washes over you while you contemplate the purpose
-of this boxlike space made of polished stone.
+of this boxlike space made of polished stone. The ceiling's unusually low
+height doesn't help, either...
 ---
 Living Room
 Contents: shotgun
@@ -121,10 +200,49 @@ cozy!). The floor is covered with a decorative rug. A well-crafted shotgun
 hangs on two metal hooks attached to the back wall.
 ---
 Back Passage
-no desc
+This is a narrow passage leading further into the mansion. It is meant for
+private use, probably by the owner, their close friends, or special guests.
 ---
-Gallery
-no desc
+Study
+Contents: Necronomicon
+Considering how frustrating it was to get here, you wonder who could have
+possibly used this room. An ominous book with a pentagram on its cover lies on
+a small mahogany desk.
+---
+Courtyard
+Contents: firstAidSpray
+A gorgeous fountain commands your attention upon entering. Oddly enough, the
+water has been drained from it. Peering inside the fountain, your eyes follow a
+series of stone steps leading down to two imposing steel doors. On the wall
+beside them is carved a circular indentation.
+---
+Underground Lab Entrance
+Contents: securityGuard
+Startled by your sudden presence, a sleepy security guard fumbles for his gun.
+While he's distracted, you spot a set of doors behind him with yet
+another circular indentation.
+---
+Underground Lab
+Contents: rocketLauncher,Tyrant
+You're surrounded by strange, humming machines, near each of which a computer
+monitor flickers eerily. Multiple disfigured specimens float in large, murky
+test tubes. Broken glass is scattered before one shattered cryotube. Be
+careful, for a dangerous enemy lurks within...
+---
+Emergency Tunnel
+Contents: battery
+A cacophony of blaring sirens as well as the hissing steam from some burst
+pipes assault your senses. Squinting hard while covering your ears to protect
+them from the din, you barely detect the faint outline of an elevator at the
+other end of the tunnel. When you finally reach the elevator through the dense
+mist, however, you realize it has run out of power. Oh no! Luckily, someone
+was kind enough to leave a battery behind. What a relief!
+---
+Helipad
+Contents: signalFlare
+Dawn breaks as you emerge from the elevator onto the platform attached to the
+mansion's rooftop. Find a way to contact your teammate, or else you'll be
+engulfed in flames!
 ---
 ===
 Exits:
@@ -206,16 +324,87 @@ Bar
 s
 Hallway
 ---
+Bar
+e
+Secret Passage
+locked
+Requires: woodenEmblem
+---
+Secret Passage
+w
+Bar
+---
+Secret Passage
+e
+Back Passage
+locked
+---
+Secret Passage
+n
+Courtyard
+locked
+Requires: lockpick
+---
+Back Passage
+w
+Secret Passage
+locked
+Requires: woodenEmblem
+---
 Back Passage
 e
 Winding Corridor
 ---
 Back Passage
-s
-Gallery
----
-Gallery
 n
+Study
+locked
+---
+Study
+s
 Back Passage
+locked
+---
+Courtyard
+s
+Secret Passage
+---
+Courtyard
+d
+Underground Lab Entrance
+locked
+Requires: eagleMedal
+---
+Underground Lab Entrance
+u
+Courtyard
+---
+Underground Lab Entrance
+n
+Underground Lab
+locked
+Requires: wolfMedal
+---
+Underground Lab
+s
+Underground Lab Entrance
+---
+Underground Lab
+w
+Emergency Tunnel
+---
+Emergency Tunnel
+e
+Underground Lab
+---
+Emergency Tunnel
+u
+Helipad
+locked
+Requires: battery
+---
+Helipad
+d
+Emergency Tunnel
 ---
 ===
