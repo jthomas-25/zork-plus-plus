@@ -1,3 +1,4 @@
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class NPC {
@@ -17,13 +18,26 @@ public class NPC {
     }
 
     void moveTowards(String dest) throws InterruptedException {
+
+
         ArrayList<Room> path = this.findPath(dest);
         if (path.size() == 1) {
             assert true;
         } else {
             this.loc = path.get(1);
         }
+
+
     }
+
+    void moveRandom() {
+        ArrayList<Exit> exitList = new ArrayList<>();
+        for (Exit exit : this.loc.getExits().values()) {
+            exitList.add(exit);
+        }
+        this.loc = exitList.get((int)(Math.random() * (exitList.size() + 1) + 0)).getDest();
+    }
+
 
     boolean inSameRoom() {
         return this.loc == GameState.instance().getAdventurersCurrentRoom();
@@ -48,7 +62,8 @@ public class NPC {
     }
 
     public String getLogistics(String noun) throws InterruptedException {
-        int roomNum = this.findPath(GameState.instance().getAdventurersCurrentRoom().getName()).size();
+        int roomNum = this.findPath(GameState.instance().getAdventurersCurrentRoom().getName()).size() - 1;
+//        System.out.println("ITS IN: " + this.loc);
         if (roomNum == 1) {
             return "There is an " + noun + " behind one of these doors...";
         } else {

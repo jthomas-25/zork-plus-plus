@@ -1,3 +1,4 @@
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Pathfinding {
@@ -5,7 +6,6 @@ public class Pathfinding {
 
     // Bootleg dijkstra
     public ArrayList<Room> getPath(Room start, Room end) throws InterruptedException {
-//        System.out.println("Start: " + start + "End: " + end);
 
         if (start == end) {
             ArrayList<Room> path = new ArrayList<>();
@@ -14,41 +14,63 @@ public class Pathfinding {
         }
 
         for (Room room : GameState.instance().getDungeon().getRooms()) {
-
+            Room currRoom = room;
+            ArrayList<String> marked = new ArrayList<>();
+            ArrayList<String> path = new ArrayList<>();
             // Get starting room
             if (room.getName().equals(start.getName())) {
-                Room currRoom = room;
-                ArrayList<String> visited = new ArrayList<>();
-                visited.add(room.getName());
-                ArrayList<Room> path = new ArrayList<>();
-                ArrayList<Room> exits = new ArrayList<>();
 
-                // Just loop till a path is found.  Not ideal for large dungeons, or complex path finding.
-                // Adds a bit of randomness to the mix too.
+                path.add(room.getName());
+
                 while (currRoom != end) {
-//                    System.out.println("---");
-//                    System.out.println(visited);
-//                    System.out.println("---");
-                    visited.add(currRoom.getName());
-                    path.add(currRoom);
-                    exits.clear();
-                    for (Exit exit : currRoom.getExits().values()) {
-                        exits.add(exit.getDest());
-                    }
-                    for (Room exit : exits) {
-//                        System.out.println(exit);
-                        if (exits.size() == 1 && visited.contains(exits.get(0).getName())) {
-//                            System.out.println("dead end");
-                            path.clear();
-                            currRoom = start;
-                        }
 
-                        if (!visited.contains(exit.getName())) {
-                            currRoom = exit;
+//                    System.out.println("Starting While Loop");
+//                    System.out.println("===================");
+//                    System.out.println("Current Room: " + currRoom);
+
+//                    Thread.sleep(1000);
+
+                    ArrayList<String> destinations = new ArrayList<>();
+
+
+                    for (Exit exit : currRoom.getExits().values()) {
+                        String exitString = exit.getDest().getName();
+//                        System.out.println("if " + path + " doesn't contain " + exitString);
+                        if (!path.contains(exitString) && !marked.contains(exitString)) {
+                            destinations.add(exitString);
                         }
                     }
+
+//                    System.out.println(("Path: " + path));
+//                    System.out.println("Destinations: " + destinations);
+
+                    if (destinations.size() == 0) {
+                        marked.add(currRoom.getName());
+                        path.clear();
+                    }
+
+                    else {
+
+//                        System.out.println("Setting new room to: " + destinations.get(0));
+                        currRoom = GameState.instance().getDungeon().getRoom(destinations.get(0));
+                        path.add(destinations.get(0));
+
+                    }
+
+//                    System.out.println(".");
+
                 }
-                return path;
+
+            ArrayList<Room> finalPath = new ArrayList<>();
+            for (String roomName : path) {
+                finalPath.add(GameState.instance().getDungeon().getRoom(roomName));
+
+            }
+
+
+            return finalPath;
+
+
             }
         }
 
